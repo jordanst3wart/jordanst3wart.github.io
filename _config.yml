@@ -1,3 +1,4 @@
+
 # Site settings
 title: Jordan Stewart
 description: 'Stuff about Jordan Stewart'
@@ -26,3 +27,6 @@ kramdown:
   hard_wrap: false
 
 exclude: ['README.md', 'Gemfile', 'Gemfile.lock', 'screenshot.png']
+
+# Gems
+#gems: [jekyll-paginate] # should include this but I haven't loaded it

@@ -1,24 +1,52 @@
----
-layout: default
----
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<title>Jordan Stewart Website</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="assets/css/main.css" />
+		<noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
+	</head>
+	<body class="is-preload">
 
-<div class="main-post-list">
+		<!-- Wrapper -->
+			<div id="wrapper">
 
-  <ol class="post-list">
-    {% for post in paginator.posts %}
-      <li>
-        <h2 class="post-list__post-title post-title"><a href="{{ site.baseurl }}{{ post.url | remove_first: '/' }}" title="{{ post.title }}">{{ post.title }}</a></h2>
-        <p class="excerpt">{{ post.excerpt | remove: '<p>' | remove: '</p>' }}&hellip;</p>
-        <div class="post-list__meta"><time datetime="{{ post.date | date: "%-d %b %Y" }}" class="post-list__meta--date date">{{ post.date | date: "%-d %b %Y" }}</time> &#8226; <span class="post-meta__tags">on {% for tag in post.tags %}<a href="{{ site.baseurl }}tags/#{{ tag }}">{{ tag }}</a> {% endfor %}</span></div>
-        <hr class="post-list__divider">
-      </li>
-    {% endfor %}
-  </ol>
+				<!-- Main -->
+					<section id="main">
+						<header>
+							<span class="avatar"><img src="images/avatar2.jpg" alt="" /></span>
+							<h1>Jordan Stewart</h1>
+							<p>Some Engineer</p>
+						</header>
 
-  <hr class="post-list__divider ">
+						<footer>
+							<ul class="icons">
+								<li><a href="https://www.instagram.com/jordanst3wart/" class="fa-instagram">Instagram</a></li>
+								<li><a href="https://www.facebook.com/jordanst3wart" class="fa-facebook">Facebook</a></li>
+                                <li><a href="https://github.com/jordanst3wart" class="fa-github">GitHub</a></li>
+                                <li><a href="https://www.linkedin.com/in/jordanst3wart/" class="fa-linkedin">LinkedIn</a></li>
+							</ul>
+						</footer>
+                        I don't use Instagram much ¯\_(ツ)_/¯
+                    </section>
 
-  {% if paginator.previous_page or paginator.next_page %}
-      {% include pagination.html %}
-  {% endif %}
+				<!-- Footer -->
+					<footer id="footer">
+						<ul class="copyright">
+							<!--<li>&copy; Jordan Stewart</li>--><li>Design: <a href="http://html5up.net">HTML5 UP</a></li>
+						</ul>
+					</footer>
 
-</div>
+			</div>
+
+		<!-- Scripts -->
+			<script>
+				if ('addEventListener' in window) {
+					window.addEventListener('load', function() { document.body.className = document.body.className.replace(/\bis-preload\b/, ''); });
+					document.body.className += (navigator.userAgent.match(/(MSIE|rv:11\.0)/) ? ' is-ie' : '');
+				}
+			</script>
+
+	</body>
+</html>

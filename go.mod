@@ -8,11 +8,6 @@ require (
 )
 
 require (
-	github.com/PierreZ/goStatic v0.0.0-20220303131946-72ed8fa4a9f5 // indirect
-	github.com/rs/zerolog v1.26.1 // indirect
-)
-
-require (
 	github.com/gosimple/unidecode v1.0.1 // indirect
 	github.com/yuin/goldmark v1.8.2
 )

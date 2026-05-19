@@ -1,0 +1,11 @@
+[misc]
+startup_banner = ""
+clean_on_exit = true
+
+[build]
+cmd = "templ generate && rm -rf public && go build -o ./tmp/main"
+entrypoint = "./tmp/main"
+exclude_dir = ["public"]
+
+[log]
+time = false

@@ -31,7 +31,7 @@ func main() {
 	posts := []Post{
 		{
 			Date:  time.Date(2023, time.January, 1, 0, 0, 0, 0, time.UTC),
-			Title: "Happy New Year!",
+			Title: "Happy New Year2!",
 			Content: `New Year is a widely celebrated occasion in the United Kingdom, marking the end of one year and the beginning of another.
 
 Top New Year Activities in the UK include:

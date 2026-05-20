@@ -3,6 +3,7 @@ package main
 import (
 	"bytes"
 	"context"
+	"errors"
 	"io"
 	"log"
 	"os"
@@ -31,7 +32,7 @@ func main() {
 	posts := []Post{
 		{
 			Date:  time.Date(2023, time.January, 1, 0, 0, 0, 0, time.UTC),
-			Title: "Happy New Year2!",
+			Title: "Happy New Year3!",
 			Content: `New Year is a widely celebrated occasion in the United Kingdom, marking the end of one year and the beginning of another.
 
 Top New Year Activities in the UK include:
@@ -45,7 +46,7 @@ Top New Year Activities in the UK include:
 		},
 		{
 			Date:  time.Date(2023, time.May, 1, 0, 0, 0, 0, time.UTC),
-			Title: "May Day",
+			Title: "May Day Yoo 2",
 			Content: `May Day is an ancient spring festival celebrated on the first of May in the United Kingdom, embracing the arrival of warmer weather and the renewal of life.
 
 Top May Day Activities in the UK:
@@ -58,8 +59,12 @@ Top May Day Activities in the UK:
 		},
 	}
 
-	// Output path.
 	rootPath := "public"
+	if fileExists(rootPath) {
+		if err := os.RemoveAll(rootPath); err != nil {
+			log.Fatalf("failed to remove rootPath %v directory", rootPath)
+		}
+	}
 	if err := os.Mkdir(rootPath, 0o755); err != nil {
 		log.Fatalf("failed to create output directory: %v", err)
 	}
@@ -106,4 +111,16 @@ Top May Day Activities in the UK:
 			log.Fatalf("failed to write output file: %v", err)
 		}
 	}
+}
+
+func fileExists(path string) bool {
+	_, err := os.Stat(path)
+	if err == nil {
+		return true // File exists
+	}
+	if errors.Is(err, os.ErrNotExist) {
+		return false // File does not exist
+	}
+	// File may or may not exist (e.g., permission denied)
+	return false
 }

@@ -6,6 +6,7 @@ clean_on_exit = true
 cmd = "templ generate && rm -rf public && go build -o ./tmp/main"
 entrypoint = "./tmp/main"
 exclude_dir = ["public"]
+include_ext = ["go", "templ"]
 
 [log]
 time = false

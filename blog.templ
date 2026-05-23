@@ -47,7 +47,7 @@ templ indexPage(posts []Post) {
 		<body class="bg-stone-50 text-stone-900 dark:bg-stone-900 dark:text-stone-50">
 			<h1>Jordan Stewart</h1>
 			for _, post := range posts {
-				<div><a href={ templ.SafeURL(path.Join("writing", slug.Make(post.Title), "/")) }>{ post.Title }</a></div>
+				<div><a href={ templ.SafeURL(path.Join("writing", slug.Make(post.Metadata.Title), "/")) }>{ post.Metadata.Title }</a></div>
 			}
 		</body>
 		@footer()

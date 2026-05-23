@@ -16,14 +16,21 @@ what is up?
 
 	`
 	source := []byte(str)
-	_, metadata, err := ParseMarkdownWriting(source)
+	post2, err := ParseMarkdownWriting(source)
 	if err != nil {
 		t.Errorf("failed with error: %v", err)
 	}
-	if metadata.Title != "Hello, world!" {
+	if post2.Metadata.Title != "Hello, world!" {
 		t.Error("title failed with")
 	}
 	//if got != want {
 	//	t.Errorf("got %d, want %d", got, want)
 	//}
+}
+
+func TestGetWriting(t *testing.T) {
+	content := GetWritings()
+	if content[0].Content == "" {
+		t.Errorf("failed to get content")
+	}
 }

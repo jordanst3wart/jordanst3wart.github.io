@@ -4,22 +4,20 @@ import (
 	"bytes"
 	"context"
 	"errors"
+	"fmt"
 	"io"
 	"log"
 	"os"
 	"path"
+	"strings"
 	"time"
 
 	"github.com/a-h/templ"
 	"github.com/gosimple/slug"
 	"github.com/yuin/goldmark"
+	"github.com/yuin/goldmark/parser"
+	"go.abhg.dev/goldmark/frontmatter"
 )
-
-type Post struct {
-	Date    time.Time
-	Title   string
-	Content string
-}
 
 func Unsafe(html string) templ.Component {
 	return templ.ComponentFunc(func(ctx context.Context, w io.Writer) (err error) {
@@ -29,35 +27,7 @@ func Unsafe(html string) templ.Component {
 }
 
 func main() {
-	posts := []Post{
-		{
-			Date:  time.Date(2023, time.January, 1, 0, 0, 0, 0, time.UTC),
-			Title: "Happy New Year3!",
-			Content: `New Year is a widely celebrated occasion in the United Kingdom, marking the end of one year and the beginning of another.
-
-Top New Year Activities in the UK include:
-
-* Attending a Hogmanay celebration in Scotland
-* Taking part in a local First-Foot tradition in Scotland and Northern England
-* Setting personal resolutions and goals for the upcoming year
-* Going for a New Year's Day walk to enjoy the fresh start
-* Visiting a local pub for a celebratory toast and some cheer
-`,
-		},
-		{
-			Date:  time.Date(2023, time.May, 1, 0, 0, 0, 0, time.UTC),
-			Title: "May Day Yoo 2",
-			Content: `May Day is an ancient spring festival celebrated on the first of May in the United Kingdom, embracing the arrival of warmer weather and the renewal of life.
-
-Top May Day Activities in the UK:
-
-* Dancing around the Maypole, a traditional folk activity
-* Attending local village fetes and fairs
-* Watching or participating in Morris dancing performances
-* Enjoying the day off as a public holiday, known as Early May Bank Holiday
-`,
-		},
-	}
+	posts := GetWritings()
 
 	rootPath := "public"
 	if fileExists(rootPath) {
@@ -69,14 +39,13 @@ Top May Day Activities in the UK:
 		log.Fatalf("failed to create output directory: %v", err)
 	}
 
-	// Create an index page.
 	name := path.Join(rootPath, "index.html")
-	f, err := os.Create(name)
+	file, err := os.Create(name)
 	if err != nil {
 		log.Fatalf("failed to create output file: %v", err)
 	}
-	// Write it out.
-	err = indexPage(posts).Render(context.Background(), f)
+
+	err = indexPage(posts).Render(context.Background(), file)
 	if err != nil {
 		log.Fatalf("failed to write index page: %v", err)
 	}
@@ -84,29 +53,22 @@ Top May Day Activities in the UK:
 	// Create a page for each post.
 	for _, post := range posts {
 		// Create the output directory.
-		dir := path.Join(rootPath, "writing", slug.Make(post.Title))
+		dir := path.Join(rootPath, "writing", slug.Make(post.Metadata.Title))
 		if err := os.MkdirAll(dir, 0o755); err != nil && err != os.ErrExist {
 			log.Fatalf("failed to create dir %q: %v", dir, err)
 		}
 
 		// Create the output file.
 		name := path.Join(dir, "index.html")
-		f, err := os.Create(name)
+		file, err := os.Create(name)
 		if err != nil {
 			log.Fatalf("failed to create output file: %v", err)
 		}
 
-		// Convert the markdown to HTML, and pass it to the template.
-		var buf bytes.Buffer
-		if err := goldmark.Convert([]byte(post.Content), &buf); err != nil {
-			log.Fatalf("failed to convert markdown to HTML: %v", err)
-		}
-
 		// Create an unsafe component containing raw HTML.
-		content := Unsafe(buf.String())
+		content := Unsafe(post.Content)
 
-		// Use templ to render the template containing the raw HTML.
-		err = contentPage(post.Title, content).Render(context.Background(), f)
+		err = contentPage(post.Metadata.Title, content).Render(context.Background(), file)
 		if err != nil {
 			log.Fatalf("failed to write output file: %v", err)
 		}
@@ -123,4 +85,60 @@ func fileExists(path string) bool {
 	}
 	// File may or may not exist (e.g., permission denied)
 	return false
+}
+
+type Metadata struct {
+	Title string
+	Tags  []string // might not need tags
+	Date  time.Time
+}
+
+type Post struct {
+	Content  string
+	Metadata Metadata
+}
+
+func GetWritings() []Post {
+	var posts []Post
+	files, err := os.ReadDir("writing")
+	if err != nil {
+		log.Fatal(err)
+	}
+	for _, file := range files {
+		if file.IsDir() {
+			continue
+		}
+		if strings.HasSuffix(file.Name(), ".md") {
+			fmt.Printf("reading file: %s\n", file.Name())
+			source, err := os.ReadFile(path.Join("writing", file.Name()))
+			if err != nil {
+				log.Fatalf("error using file %v", err)
+			}
+			post, err := ParseMarkdownWriting(source)
+			if err != nil {
+				log.Fatalf("error parsing post %v", err)
+			}
+			posts = append(posts, post)
+		}
+	}
+	return posts
+}
+
+func ParseMarkdownWriting(source []byte) (Post, error) {
+	md := goldmark.New(goldmark.WithExtensions(&frontmatter.Extender{}))
+	parserCtx := parser.NewContext()
+	var buf bytes.Buffer
+	if err := md.Convert(source, &buf, parser.WithContext(parserCtx)); err != nil {
+		// handle error
+		log.Fatal("convert failed...")
+	}
+	data := frontmatter.Get(parserCtx)
+	if data == nil {
+		log.Fatalf("no front matter") //return errors.New("no front matter")
+	}
+	var metadata Metadata
+	if err := data.Decode(&metadata); err != nil {
+		log.Fatalf("decode failed") //	return err
+	}
+	return Post{Content: buf.String(), Metadata: metadata}, nil
 }

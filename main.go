@@ -130,7 +130,7 @@ func GetWritings() []Post {
 func ParseMarkdownWriting(source []byte) (Post, error) {
 	md := goldmark.New(goldmark.WithExtensions(&frontmatter.Extender{},
 		highlighting.NewHighlighting(
-			highlighting.WithStyle("monokai"), // TODO change...
+			highlighting.WithStyle("catppuccin-macchiato"), // TODO change...
 			highlighting.WithFormatOptions(
 				chromahtml.WithLineNumbers(true),
 			),

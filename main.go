@@ -17,6 +17,9 @@ import (
 	"github.com/yuin/goldmark"
 	"github.com/yuin/goldmark/parser"
 	"go.abhg.dev/goldmark/frontmatter"
+
+	chromahtml "github.com/alecthomas/chroma/v2/formatters/html"
+	highlighting "github.com/yuin/goldmark-highlighting/v2" // TODO fork and maintain
 )
 
 func Unsafe(html string) templ.Component {
@@ -68,7 +71,7 @@ func main() {
 		// Create an unsafe component containing raw HTML.
 		content := Unsafe(post.Content)
 
-		err = contentPage(post.Metadata.Title, content).Render(context.Background(), file)
+		err = contentPage(post.Metadata.Title, post.Metadata.Date.Format("April 7, 2026"), content).Render(context.Background(), file)
 		if err != nil {
 			log.Fatalf("failed to write output file: %v", err)
 		}
@@ -125,7 +128,14 @@ func GetWritings() []Post {
 }
 
 func ParseMarkdownWriting(source []byte) (Post, error) {
-	md := goldmark.New(goldmark.WithExtensions(&frontmatter.Extender{}))
+	md := goldmark.New(goldmark.WithExtensions(&frontmatter.Extender{},
+		highlighting.NewHighlighting(
+			highlighting.WithStyle("monokai"), // TODO change...
+			highlighting.WithFormatOptions(
+				chromahtml.WithLineNumbers(true),
+			),
+		),
+	))
 	parserCtx := parser.NewContext()
 	var buf bytes.Buffer
 	if err := md.Convert(source, &buf, parser.WithContext(parserCtx)); err != nil {

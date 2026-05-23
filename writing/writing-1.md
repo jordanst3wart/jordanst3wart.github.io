@@ -7,3 +7,8 @@ tags:
 ### hi
 
 what is up?
+
+
+```js
+var foo = "hi";
+```

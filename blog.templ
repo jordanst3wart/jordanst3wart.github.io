@@ -14,19 +14,20 @@ templ headerComponent(title string) {
 	</head>
 }
 
-templ contentComponent(title string, body templ.Component) {
+templ contentComponent(title string, date string, body templ.Component) {
 	<body class="bg-stone-50 text-stone-900 dark:bg-stone-900 dark:text-stone-50">
-		<h1>{ title }</h1>
+		<h1 class="text-2xl/7 font-bold text-white sm:truncate sm:text-3xl sm:tracking-tight">{ title }</h1>
+		<h3 class="md:w-9/12 text-sm text-stone-500 flex justify-between items-center">{ date }</h3>
 		<div class="content">
 			@body
 		</div>
 	</body>
 }
 
-templ contentPage(title string, body templ.Component) {
+templ contentPage(title string, date string, body templ.Component) {
 	<html>
 		@headerComponent(title)
-		@contentComponent(title, body)
+		@contentComponent(title, date, body)
 		@footer()
 	</html>
 }

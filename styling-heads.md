@@ -1,3 +1,22 @@
+Just use a writing.css file for consistent styling. ie.
+
+```css
+@theme {
+  /* Tailwind v4 theme configurations go here */
+}
+
+@layer base {
+  h2 {
+    @apply text-3xl font-bold text-gray-900 tracking-tight mb-4;
+  }
+  
+  p {
+    @apply text-base text-gray-600 leading-relaxed;
+  }
+}
+```
+
+It saves doing this below...
 Style headings consistency:
 ```go
 package main

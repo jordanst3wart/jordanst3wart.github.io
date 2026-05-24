@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Three Nights in a Small Town — Jordan Hall</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400;1,500&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+tailwind.config = {
+  theme: {
+    extend: {
+      fontFamily: {
+        display: ['EB Garamond', 'Georgia', 'serif'],
+        mono: ['JetBrains Mono', 'monospace'],
+      },
+      colors: {
+        ink: '#24273a',
+        paper: '#cad3f5',
+        gold: '#c6a0f6',
+        'gold-light': '#b7bdf8',
+        muted: '#6e738d',
+        dim: '#5b6078',
+        faint: '#363a4f',
+        body: '#b8c0e0',
+        excerpt: '#8087a2',
+        'border': '#1e2030',
+        'border-light': '#494d64',
+      }
+    }
+  }
+}
+</script>
+<style>
+::selection { background: #c6a0f6; color: #24273a; }
+.back::before { content: '\2190  '; color: #c6a0f6; }
+</style>
+</head>
+<body class="bg-ink text-paper font-display text-lg leading-relaxed antialiased">
+
+<main class="max-w-[680px] mx-auto px-6 pt-16 pb-24">
+  <h1 class="text-4xl font-medium tracking-tight leading-tight mb-1">Three Nights in a Small Town</h1>
+  <p class="font-mono text-xs tracking-wide text-dim mb-8">21 Apr 2026</p>
+
+  <p class="mb-5 text-body">The diner closes at nine. The bartender knows my name by the second night. By the third, I realise I've been running from something that doesn't know how to chase.</p>
+
+  <p class="mb-5 text-body">I arrived by accident. A wrong turn on a highway I had driven a hundred times before, a detour that kept extending itself until I was sixty miles from where I meant to be. The town had one motel with a neon sign that buzzed and flickered. I took it as a sign and checked in.</p>
+
+  <p class="mb-5 text-body">The first night I ate at the diner — eggs, hash browns, coffee that had been sitting too long. The waitress asked if I was passing through. I said yes, though I was beginning to wonder. After dinner I walked the main street, which took eleven minutes end to end. There was a library, a hardware store, a church with a bell tower that had stopped keeping time. Everything was quiet in a way that felt deliberate, as if the town had decided long ago that silence was its best offering.</p>
+
+  <p class="mb-5 text-body">The second night I sat at the bar. The bartender poured without asking and told me about the flood of '98, the year the river rose and took half the main street with it. They rebuilt, he said, but things were never quite the same. I nodded like I understood. Maybe I did.</p>
+
+  <p class="mb-5 text-body">The third night I stayed in my room and watched the neon buzz through the curtains. I thought about all the places I had been and all the places I hadn't. I thought about whether running and searching were the same thing, or whether they only looked alike from a distance. I fell asleep with the light on and dreamed of the river.</p>
+
+  <p class="mb-5 text-body">I left the next morning. The bartender waved from across the street. The waitress smiled. I drove back to the highway and did not take the detour this time. But I have not forgotten the town, or the way it felt to be unknown for three days. Sometimes I think that was the point of the whole trip — to be somewhere where no one expected anything of me, where I could be a stranger even to myself.</p>
+
+  <a href="../index.html" class="back fixed bottom-8 left-1/2 -translate-x-1/2 py-3 px-5 font-mono text-sm tracking-wide text-gold border border-border-light rounded-sm hover:border-gold transition-colors focus-visible:outline-2 focus-visible:outline-gold focus-visible:outline-offset-2 bg-ink/80 backdrop-blur-sm" aria-label="Back to homepage">BACK <span class="text-dim text-xs not-italic">[B]</span></a>
+</main>
+
+<script>
+document.addEventListener('keydown', e => {
+  if (e.key === 'b' || e.key === 'B') document.querySelector('.back').click()
+})
+</script>
+</body>
+</html>

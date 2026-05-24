@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Art of Disappearing — Jordan Hall</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400;1,500&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+tailwind.config = {
+  theme: {
+    extend: {
+      fontFamily: {
+        display: ['EB Garamond', 'Georgia', 'serif'],
+        mono: ['JetBrains Mono', 'monospace'],
+      },
+      colors: {
+        ink: '#24273a',
+        paper: '#cad3f5',
+        gold: '#c6a0f6',
+        'gold-light': '#b7bdf8',
+        muted: '#6e738d',
+        dim: '#5b6078',
+        faint: '#363a4f',
+        body: '#b8c0e0',
+        excerpt: '#8087a2',
+        'border': '#1e2030',
+        'border-light': '#494d64',
+      }
+    }
+  }
+}
+</script>
+<style>
+::selection { background: #c6a0f6; color: #24273a; }
+.back::before { content: '\2190  '; color: #c6a0f6; }
+</style>
+</head>
+<body class="bg-ink text-paper font-display text-lg leading-relaxed antialiased">
+
+<main class="max-w-[680px] mx-auto px-6 pt-16 pb-24">
+  <h1 class="text-4xl font-medium tracking-tight leading-tight mb-1">The Art of Disappearing</h1>
+  <p class="font-mono text-xs tracking-wide text-dim mb-8">22 Mar 2026</p>
+
+  <p class="mb-5 text-body">There is a particular skill to leaving a room without anyone noticing. I have perfected it to the point where I sometimes wonder if I was ever really here at all.</p>
+
+  <p class="mb-5 text-body">I learned early that visibility is a kind of vulnerability. To be seen is to be judged, categorised, held to account. Disappearing is a defence mechanism, a way of moving through the world without leaving fingerprints. I am good at it. I have had years of practice.</p>
+
+  <p class="mb-5 text-body">But lately I have been wondering if the art of disappearing is really an art at all, or just a more sophisticated form of cowardice. To leave no trace is also to leave no mark. To be forgotten is to have never been present in the first place.</p>
+
+  <p class="mb-5 text-body">I remember a conversation from years ago, in a crowded room I was about to slip out of. A friend caught my arm and said, Stay. Just this once, stay. I did not stay. I made an excuse and left, and I have been thinking about that moment ever since. What would have happened if I had stayed? What small connection might have formed, what ordinary moment might have become a memory?</p>
+
+  <p class="mb-5 text-body">I am trying to be more visible now. It is harder than disappearing. It means showing up when you could leave, speaking when you could stay silent, letting yourself be seen even when you know you are not at your best. It means accepting that the risk of being judged is the price of being known.</p>
+
+  <p class="mb-5 text-body">I still leave rooms early sometimes. Old habits. But I am learning to pause at the door, to turn back, to let someone catch my eye. I am learning that the art of disappearing is less impressive than the simple, terrifying act of staying.</p>
+
+  <a href="../index.html" class="back fixed bottom-8 left-1/2 -translate-x-1/2 py-3 px-5 font-mono text-sm tracking-wide text-gold border border-border-light rounded-sm hover:border-gold transition-colors focus-visible:outline-2 focus-visible:outline-gold focus-visible:outline-offset-2 bg-ink/80 backdrop-blur-sm" aria-label="Back to homepage">BACK <span class="text-dim text-xs not-italic">[B]</span></a>
+</main>
+
+<script>
+document.addEventListener('keydown', e => {
+  if (e.key === 'b' || e.key === 'B') document.querySelector('.back').click()
+})
+</script>
+</body>
+</html>

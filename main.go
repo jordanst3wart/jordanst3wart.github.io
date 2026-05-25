@@ -48,7 +48,15 @@ func main() {
 		log.Fatalf("failed to create output file: %v", err)
 	}
 
-	err = indexPage(posts).Render(context.Background(), file)
+	var links []string
+	for index, post := range posts {
+		// supports number 1 to 9
+		if index > 8 {
+			break
+		}
+		links = append(links, post.Metadata.Link)
+	}
+	err = indexPage(posts, links).Render(context.Background(), file)
 	if err != nil {
 		log.Fatalf("failed to write index page: %v", err)
 	}
@@ -94,6 +102,7 @@ type Metadata struct {
 	Title string
 	Tags  []string // might not need tags
 	Date  time.Time
+	Link  string
 }
 
 type Post struct {
@@ -121,6 +130,7 @@ func GetWritings() []Post {
 			if err != nil {
 				log.Fatalf("error parsing post %v", err)
 			}
+			post.Metadata.Link = path.Join("writing", slug.Make(post.Metadata.Title), "/")
 			posts = append(posts, post)
 		}
 	}

@@ -1,10 +1,5 @@
 package main
 
-import (
-	"github.com/gosimple/slug"
-	"path"
-)
-
 templ headerComponent(title string) {
 	<head>
 		<title>{ title }</title>
@@ -40,13 +35,11 @@ templ headerComponent(title string) {
 }
 
 templ contentComponent(title string, date string, body templ.Component) {
-	<body class="bg-stone-50 text-stone-900 dark:bg-stone-900 dark:text-stone-50">
-		<h1 class="text-2xl/7 font-bold text-white sm:truncate sm:text-3xl sm:tracking-tight">{ title }</h1>
-		<h3 class="md:w-9/12 text-sm text-stone-500 flex justify-between items-center">{ date }</h3>
-		<div class="content">
-			@body
-		</div>
-	</body>
+	<h1 class="text-4xl font-medium tracking-tight leading-tight mb-1">{ title }</h1>
+	<h3 class="font-mono text-sm tracking-wide text-dim mb-8">{ date }</h3>
+	<div class="content">
+		@body
+	</div>
 }
 
 templ footer() {
@@ -80,31 +73,62 @@ templ about() {
 
 templ writing(posts []Post) {
 	<section id="writings" class="py-10">
-		<h2 class="text-2xl font-medium mb-6 flex items-center gap-3 before:inline before:content-['*'] before:text-gold before:font-mono before:font-normal before:text-[1.75rem]">Writings <span class="text-dim">[W]</span></h2>
-		for _, post := range posts {
-			<div><a href={ templ.SafeURL(path.Join("writing", slug.Make(post.Metadata.Title), "/")) }>{ post.Metadata.Title }</a></div>
+		<h2 class="text-3xl font-medium mb-6 flex items-center gap-3 before:inline before:content-['*'] before:text-gold before:font-mono before:font-normal before:text-[1.75rem]">Writings <span class="text-dim">[W]</span></h2>
+		for index, post := range posts {
+			@writingArticle(post, index)
 		}
 	</section>
+}
+
+templ writingArticle(post Post, index int) {
+	<!-- border border is weird -->
+	<div class="py-3 border-b border-border last:border-0">
+		<p class="text-xl font-medium mb-1">
+			<a href={ templ.SafeURL(post.Metadata.Link) } class="text-paper hover:text-gold">{ post.Metadata.Title } <span class="text-dim">[{ index + 1 }]</span></a>
+		</p>
+		<p class="font-mono text-xs tracking-wide text-dim mb-1">{ post.Metadata.Date.Format("03 May 2026") }</p>
+	</div>
 }
 
 templ contentPage(title string, date string, body templ.Component) {
 	<html>
 		@headerComponent(title)
-		@contentComponent(title, date, body)
-		@footer()
+		<body class="bg-ink text-paper font-display text-lg leading-relaxed antialiased">
+			<main class="max-w-[680px] mx-auto px-6 pt-16 pb-24">
+				@contentComponent(title, date, body)
+				<!-- this back button has a lot of styles to it... -->
+				<a href="../../" class="back fixed bottom-8 left-1/2 -translate-x-1/2 py-3 px-5 font-mono text-sm tracking-wide text-gold border border-border-light rounded-sm hover:border-gold transition-colors focus-visible:outline-2 focus-visible:outline-gold focus-visible:outline-offset-2 bg-ink/80 backdrop-blur-sm" aria-label="Back to homepage">BACK <span class="text-dim text-xs not-italic">[B]</span></a>
+			</main>
+			@footer()
+			<script>
+				document.addEventListener('keydown', e => {
+				  if (e.key === 'b' || e.key === 'B') document.querySelector('.back').click()
+				})
+			</script>
+		</body>
 	</html>
 }
 
-templ indexPage(posts []Post) {
+templ indexPage(posts []Post, links []string) {
 	<html>
 		@headerComponent("Jordan Stewart")
-		<body class="bg-stone-50 text-stone-900 dark:bg-stone-900 dark:text-stone-50">
-			@nav()
+		<body class="bg-ink text-paper font-display text-lg leading-relaxed antialiased">
+			/* @nav() */
 			<main class="max-w-[680px] mx-auto px-6">
 				@about()
 				@writing(posts)
 			</main>
+			<script>
+		        const pages = {{ links }}
+				document.addEventListener('keydown', e => {
+				  if (e.key === 'a' || e.key === 'A') document.getElementById('about').scrollIntoView({ behavior: 'smooth' })
+				  if (e.key === 'w' || e.key === 'W') document.getElementById('writings').scrollIntoView({ behavior: 'smooth' })
+				  // templ. { templ.SafeURL(path.Join("writing", slug.Make(post.Metadata.Title), "/")) }
+				  // const pages = ['writings/on-keeping-a-notebook.html', 'writings/three-nights-in-a-small-town.html', 'writings/letters-from-the-long-dark.html', 'writings/the-art-of-disappearing.html', 'writings/notes-on-forgetting.html']
+                  if (e.key >= '1' && e.key <= '9') location.href = pages[parseInt(e.key) - 1]
+				})
+			</script>
+			@footer()
 		</body>
-		@footer()
 	</html>
 }

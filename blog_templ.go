@@ -463,7 +463,7 @@ func indexPage(posts []Post, links []string) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 26, "\n\t\t\t\tdocument.addEventListener('keydown', e => {\n\t\t\t\t  if (e.key === 'a' || e.key === 'A') document.getElementById('about').scrollIntoView({ behavior: 'smooth' })\n\t\t\t\t  if (e.key === 'w' || e.key === 'W') document.getElementById('writings').scrollIntoView({ behavior: 'smooth' })\n\t\t\t\t  // templ. { templ.SafeURL(path.Join(\"writing\", slug.Make(post.Metadata.Title), \"/\")) }\n\t\t\t\t  // const pages = ['writings/on-keeping-a-notebook.html', 'writings/three-nights-in-a-small-town.html', 'writings/letters-from-the-long-dark.html', 'writings/the-art-of-disappearing.html', 'writings/notes-on-forgetting.html']\n                  if (e.key >= '1' && e.key <= '9') location.href = pages[parseInt(e.key) - 1]\n\t\t\t\t})\n\t\t\t</script>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 26, "\n\t\t\t\tdocument.addEventListener('keydown', e => {\n\t\t\t\t  if (e.key === 'a' || e.key === 'A') document.getElementById('about').scrollIntoView({ behavior: 'smooth' })\n\t\t\t\t  if (e.key === 'w' || e.key === 'W') document.getElementById('writings').scrollIntoView({ behavior: 'smooth' })\n                  if (e.key >= '1' && e.key <= '9') location.href = pages[parseInt(e.key) - 1]\n\t\t\t\t})\n\t\t\t</script>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

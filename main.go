@@ -17,8 +17,8 @@ import (
 	"github.com/yuin/goldmark"
 	"github.com/yuin/goldmark/parser"
 	"go.abhg.dev/goldmark/frontmatter"
+	"gopkg.in/yaml.v3"
 
-	chromahtml "github.com/alecthomas/chroma/v2/formatters/html"
 	highlighting "github.com/yuin/goldmark-highlighting/v2" // TODO fork and maintain
 )
 
@@ -79,7 +79,7 @@ func main() {
 		// Create an unsafe component containing raw HTML.
 		content := Unsafe(post.Content)
 
-		err = contentPage(post.Metadata.Title, post.Metadata.Date.Format("April 7, 2026"), content).Render(context.Background(), file)
+		err = contentPage(post.Metadata.Title, post.Metadata.Date.Format("January 2, 2006"), content).Render(context.Background(), file)
 		if err != nil {
 			log.Fatalf("failed to write output file: %v", err)
 		}
@@ -100,8 +100,8 @@ func fileExists(path string) bool {
 
 type Metadata struct {
 	Title string
-	Tags  []string // might not need tags
-	Date  time.Time
+	Tags  []string   // might not need tags
+	Date  CustomDate // `yaml:"date"`
 	Link  string
 }
 
@@ -141,16 +141,13 @@ func ParseMarkdownWriting(source []byte) (Post, error) {
 	md := goldmark.New(goldmark.WithExtensions(&frontmatter.Extender{},
 		highlighting.NewHighlighting(
 			highlighting.WithStyle("catppuccin-macchiato"), // TODO change...
-			highlighting.WithFormatOptions(
-				chromahtml.WithLineNumbers(true),
-			),
 		),
 	))
 	parserCtx := parser.NewContext()
 	var buf bytes.Buffer
 	if err := md.Convert(source, &buf, parser.WithContext(parserCtx)); err != nil {
 		// handle error
-		log.Fatal("convert failed...")
+		log.Fatalf("convert failed...%v", err)
 	}
 	data := frontmatter.Get(parserCtx)
 	if data == nil {
@@ -158,7 +155,24 @@ func ParseMarkdownWriting(source []byte) (Post, error) {
 	}
 	var metadata Metadata
 	if err := data.Decode(&metadata); err != nil {
-		log.Fatalf("decode failed") //	return err
+		log.Fatalf("decode failed %v", err) //	return err
 	}
 	return Post{Content: buf.String(), Metadata: metadata}, nil
+}
+
+// parsing the date in a different format.. :/
+type CustomDate struct {
+	time.Time
+}
+
+func (d *CustomDate) UnmarshalYAML(value *yaml.Node) error {
+	// Custom layout: Change this to match your YAML's date format
+	const layout = "2006-01-02"
+
+	t, err := time.Parse(layout, strings.TrimSpace(value.Value))
+	if err != nil {
+		return err
+	}
+	d.Time = t
+	return nil
 }

@@ -1,0 +1,112 @@
+<html><!doctype html><head><title>Alternative jdk project layouts</title><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400;1,500&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet"><script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script><link rel="icon" type="image/png" sizes="32x32" href="/static/favicon-32x32.png"><link rel="icon" type="image/png" sizes="16x16" href="/static/favicon-16x16.png"><!-- add more random shit there that does in the header site meta things https://github.com/jordanst3wart/stewart.bot/blob/main/data/siteMetadata.ts --><!--TODO move to something like: <link rel="stylesheet" href="app.css"> if you feel like it--><style type="text/tailwindcss">
+		  @import "tailwindcss";
+          @theme {
+            --font-display: 'EB Garamond', Georgia, serif;
+            --font-mono: 'JetBrains Mono', monospace;
+            /* 'border' might clash with a tailwind thingy...
+            TODO change the names of these colours to the cattppuccino names
+            */
+
+            --color-ink: #24273a;
+            --color-paper: #cad3f5;
+            --color-gold: #c6a0f6;
+            --color-gold-light: #b7bdf8;
+            --color-muted: #6e738d;
+            --color-dim: #5b6078;
+            --color-faint: #363a4f;
+            --color-body: #b8c0e0;
+            --color-excerpt: #8087a2;
+            --color-border: #1e2030;
+            --color-border-light: #494d64;
+          }
+
+          p {
+            margin-block-start: 1em;
+            margin-block-end: 1em;
+          }
+
+          code {
+              background: #363a4f;
+              /*border-2 border-solid*/
+          }
+
+          /*h3 {
+              text-4xl
+          }*/
+          /* need to style ul and ol, and probably different headings as well
+          */
+        </style></head><body class="bg-ink text-paper font-display text-lg leading-relaxed antialiased"><main class="max-w-[680px] mx-auto px-6 pt-16 pb-24"><h1 class="text-4xl font-medium tracking-tight leading-tight mb-1">Alternative jdk project layouts</h1><h3 class="font-mono text-sm tracking-wide text-dim mb-8">January 19, 2025</h3><!-- trying the exact formatting of mitchellh.com... i will change it soon added "content" --><div class="content"><p>I saw this project layout in Clojure using the Leiningen build tool:</p>
+<pre><code>$ tree -F -a --dirsfirst my-stuff/
+
+my-stuff/
+├── doc/
+│   └── intro.md
+├── resources/
+├── src/
+│   └── my_stuff/
+│       └── core.clj
+├── test/
+│   └── my_stuff/
+│       └── core_test.clj
+├── CHANGELOG.md
+├── .gitignore
+├── .hgignore
+├── LICENSE
+├── project.clj
+└── README.md
+</code></pre>
+<p>ref: https://codeberg.org/leiningen/leiningen/src/branch/stable/doc/TUTORIAL.md#creating-a-project</p>
+<p>It blows my mind that you can have a single folder <code>my_stuff</code> as the namespace folder. I learn the importance of jdk namespaces from Rich Hickey, the creator of clojure. He said it's really important to not have namespaces leak out into the system. So It's surprising to see this. I always assume there is some hidden danger in not using really long namespaces. But if a well used build tools recommends this approach we might be able to skip at least some of the long namespaces around. Such as you can see in enterprise buzzfizz here: https://github.com/EnterpriseQualityCoding/FizzBuzzEnterpriseEdition/tree/uinverse/src/main/java/com/seriouscompany/business/java/fizzbuzz/packagenamingpackage/interfaces/parameters</p>
+<p>The standard layout of JDK projects is the maven layout looks like:</p>
+<pre><code>src/main/java/         # Application/Library sources
+src/main/resources/    # Application/Library resources
+src/main/filters/     # Resource filter files
+src/main/webapp/      # Web application sources
+src/test/java/        # Test sources
+src/test/resources/   # Test resources
+src/test/filters/    # Test resource filter files
+src/it/              # Integration Tests
+src/assembly/        # Assembly descriptors
+src/site/           # Site documentation
+target/             # Generated output (compiled classes, JAR files, etc.)
+pom.xml             # Project Object Model (project configuration)
+</code></pre>
+<p>You can see it here: https://maven.apache.org/guides/introduction/introduction-to-the-standard-directory-layout.html</p>
+<p>The standard maven layout has things I have never seen in a JDK project in the maybe 8 years I have been an engineer, like <code>src/main/filters</code>.</p>
+<p>The addition of Reverse Domain Convention, having projects named like com.example, makes this directory layout always seem very verbose, but you don't want a conflict on namespaces.</p>
+<p>Kotlin actually has a very sane approach to this as well. If you have a package called <code>org.example.kotlin.network.socket</code>, and <code>org.example.kotlin</code> is common, it should be stored in <code>network/socket</code>
+ref: https://kotlinlang.org/docs/coding-conventions.html#directory-structure</p>
+<p>I want to see if I can create a single directory layout in kotlin and gradle copying leinengen's layout.</p>
+<p>So I created a kotlin project with not too much effort with a flat directory layout. I created a <code>test-resources</code> folder as leiningen uses profiles to manage that.
+ref: https://stackoverflow.com/questions/33482647/leiningen-missing-test-resources</p>
+<p>It was surprisingly easy, and I only get one intellij warning, which is slightly annoying. The jar file contains all the metadata that it should have too.</p>
+<p>Let's try with bazel...</p>
+<p>I got it working with bazel with slightly more effort, mostly because I don't know it that well.</p>
+<p>So that it's. I got a simpler jdk layout working with kotlin, and bazel in a few hours.</p>
+<p>The project using kotlin, gradle, and bazel here:
+https://github.com/jordanst3wart/alternative-jdk-layout</p>
+<p>The way to setup gradle to use different directories is just:</p>
+<pre><code>sourceSets {
+    main {
+        kotlin {
+            srcDirs(&quot;src&quot;) // use src in the base
+        }
+        resources {
+            srcDirs(&quot;resources&quot;) // use resources in the base
+        }
+    }
+    test {
+        kotlin {
+            srcDirs(&quot;test&quot;) // use test in the base
+        }
+        resources {
+            srcDirs(&quot;test-resources&quot;)
+        }
+    }
+}
+</code></pre>
+</div><!-- this back button has a lot of styles to it... --><a href="../../" class="back fixed bottom-8 left-1/2 -translate-x-1/2 py-3 px-5 font-mono text-sm tracking-wide text-gold border border-border-light rounded-sm hover:border-gold transition-colors focus-visible:outline-2 focus-visible:outline-gold focus-visible:outline-offset-2 bg-ink/80 backdrop-blur-sm" aria-label="Back to homepage">BACK <span class="text-dim text-xs not-italic">[B]</span></a></main><footer class="text-center text-faint py-12 px-6 font-mono text-xs tracking-widest">Jordan Stewart • © 2026</footer><script>
+				document.addEventListener('keydown', e => {
+				  if (e.key === 'b' || e.key === 'B') document.querySelector('.back').click()
+				})
+			</script><!-- add random google tag shit here --></body></html>

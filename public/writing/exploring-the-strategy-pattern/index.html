@@ -1,0 +1,192 @@
+<html><!doctype html><head><title>Exploring the strategy pattern</title><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400;1,500&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet"><script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script><link rel="icon" type="image/png" sizes="32x32" href="/static/favicon-32x32.png"><link rel="icon" type="image/png" sizes="16x16" href="/static/favicon-16x16.png"><!-- add more random shit there that does in the header site meta things https://github.com/jordanst3wart/stewart.bot/blob/main/data/siteMetadata.ts --><!--TODO move to something like: <link rel="stylesheet" href="app.css"> if you feel like it--><style type="text/tailwindcss">
+		  @import "tailwindcss";
+          @theme {
+            --font-display: 'EB Garamond', Georgia, serif;
+            --font-mono: 'JetBrains Mono', monospace;
+            /* 'border' might clash with a tailwind thingy...
+            TODO change the names of these colours to the cattppuccino names
+            */
+
+            --color-ink: #24273a;
+            --color-paper: #cad3f5;
+            --color-gold: #c6a0f6;
+            --color-gold-light: #b7bdf8;
+            --color-muted: #6e738d;
+            --color-dim: #5b6078;
+            --color-faint: #363a4f;
+            --color-body: #b8c0e0;
+            --color-excerpt: #8087a2;
+            --color-border: #1e2030;
+            --color-border-light: #494d64;
+          }
+
+          p {
+            margin-block-start: 1em;
+            margin-block-end: 1em;
+          }
+
+          code {
+              background: #363a4f;
+              /*border-2 border-solid*/
+          }
+
+          /*h3 {
+              text-4xl
+          }*/
+          /* need to style ul and ol, and probably different headings as well
+          */
+        </style></head><body class="bg-ink text-paper font-display text-lg leading-relaxed antialiased"><main class="max-w-[680px] mx-auto px-6 pt-16 pb-24"><h1 class="text-4xl font-medium tracking-tight leading-tight mb-1">Exploring the strategy pattern</h1><h3 class="font-mono text-sm tracking-wide text-dim mb-8">February 6, 2025</h3><!-- trying the exact formatting of mitchellh.com... i will change it soon added "content" --><div class="content"><p>I wanted to explore the strategy pattern in a modern software concept, and in kotlin in particular.</p>
+<p>If you look at the strategy design pattern from a source like refactoring guru, and convert it to kotlin you get this:</p>
+<pre style="color:#cad3f5;background-color:#24273a;-webkit-text-size-adjust:none;"><code><span style="display:flex;"><span><span style="color:#c6a0f6">package</span> <span style="color:#f5a97f">org.example</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#c6a0f6">interface</span> <span style="color:#eed49f">Strategy</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#c6a0f6">fun</span> <span style="color:#8aadf4">execute</span>(a: Int, b: Int): Int
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#c6a0f6">class</span> <span style="color:#eed49f">ConcreteStrategyAdd</span> : Strategy {
+</span></span><span style="display:flex;"><span>    <span style="color:#c6a0f6">override</span> <span style="color:#c6a0f6">fun</span> <span style="color:#8aadf4">execute</span>(a: Int, b: Int): Int {
+</span></span><span style="display:flex;"><span>        <span style="color:#c6a0f6">return</span> a + b
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#c6a0f6">class</span> <span style="color:#eed49f">ConcreteStrategySubtract</span> : Strategy {
+</span></span><span style="display:flex;"><span>    <span style="color:#c6a0f6">override</span> <span style="color:#c6a0f6">fun</span> <span style="color:#8aadf4">execute</span>(a: Int, b: Int): Int {
+</span></span><span style="display:flex;"><span>        <span style="color:#c6a0f6">return</span> a - b
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#c6a0f6">class</span> <span style="color:#eed49f">ConcreteStrategyMultiply</span> : Strategy {
+</span></span><span style="display:flex;"><span>    <span style="color:#c6a0f6">override</span> <span style="color:#c6a0f6">fun</span> <span style="color:#8aadf4">execute</span>(a: Int, b: Int): Int {
+</span></span><span style="display:flex;"><span>        <span style="color:#c6a0f6">return</span> a * b
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#c6a0f6">class</span> <span style="color:#eed49f">Context</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#c6a0f6">private</span> <span style="color:#c6a0f6">lateinit</span> <span style="color:#c6a0f6">var</span> <span style="color:#f5a97f">strategy</span>: Strategy
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#c6a0f6">fun</span> <span style="color:#8aadf4">setStrategy</span>(strategy: Strategy) {
+</span></span><span style="display:flex;"><span>        <span style="color:#c6a0f6">this</span>.strategy = strategy
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#c6a0f6">fun</span> <span style="color:#8aadf4">executeStrategy</span>(a: Int, b: Int): Int {
+</span></span><span style="display:flex;"><span>        <span style="color:#c6a0f6">return</span> strategy.execute(a, b)
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#c6a0f6">fun</span> <span style="color:#8aadf4">main</span>() {
+</span></span><span style="display:flex;"><span>    <span style="color:#c6a0f6">val</span> <span style="color:#f5a97f">context</span> = Context()
+</span></span><span style="display:flex;"><span>    <span style="color:#6e738d;font-style:italic">// actually get an input
+</span></span></span><span style="display:flex;"><span>    println(<span style="color:#a6da95">&#34;Enter first number:&#34;</span>)
+</span></span><span style="display:flex;"><span>    <span style="color:#c6a0f6">val</span> <span style="color:#f5a97f">firstNumber</span> = readlnOrNull()<span style="color:#91d7e3;font-weight:bold">?.</span>toIntOrNull() <span style="color:#91d7e3;font-weight:bold">?:</span> <span style="color:#f5a97f">0</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    println(<span style="color:#a6da95">&#34;Enter second number:&#34;</span>)
+</span></span><span style="display:flex;"><span>    <span style="color:#c6a0f6">val</span> <span style="color:#f5a97f">secondNumber</span> = readlnOrNull()<span style="color:#91d7e3;font-weight:bold">?.</span>toIntOrNull() <span style="color:#91d7e3;font-weight:bold">?:</span> <span style="color:#f5a97f">0</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#6e738d;font-style:italic">// if statements...
+</span></span></span><span style="display:flex;"><span>    println(<span style="color:#a6da95">&#34;Enter operation (addition/subtraction/multiplication):&#34;</span>)
+</span></span><span style="display:flex;"><span>    <span style="color:#c6a0f6">when</span> (readlnOrNull()<span style="color:#91d7e3;font-weight:bold">?.</span>lowercase()) {
+</span></span><span style="display:flex;"><span>        <span style="color:#a6da95">&#34;addition&#34;</span> <span style="color:#91d7e3;font-weight:bold">-&gt;</span> context.setStrategy(ConcreteStrategyAdd())
+</span></span><span style="display:flex;"><span>        <span style="color:#a6da95">&#34;subtraction&#34;</span> <span style="color:#91d7e3;font-weight:bold">-&gt;</span> context.setStrategy(ConcreteStrategySubtract())
+</span></span><span style="display:flex;"><span>        <span style="color:#a6da95">&#34;multiplication&#34;</span> <span style="color:#91d7e3;font-weight:bold">-&gt;</span> context.setStrategy(ConcreteStrategyMultiply())
+</span></span><span style="display:flex;"><span>        <span style="color:#c6a0f6">else</span> <span style="color:#91d7e3;font-weight:bold">-&gt;</span> {
+</span></span><span style="display:flex;"><span>            println(<span style="color:#a6da95">&#34;Invalid operation&#34;</span>)
+</span></span><span style="display:flex;"><span>            <span style="color:#c6a0f6">return</span>
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#c6a0f6">val</span> <span style="color:#f5a97f">result</span> = context.executeStrategy(firstNumber, secondNumber)
+</span></span><span style="display:flex;"><span>    println(<span style="color:#a6da95">&#34;Result: </span><span style="color:#a6da95">$result</span><span style="color:#a6da95">&#34;</span>)
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre><p>So it's an interface basically. In this example you need to use a <code>when</code>, or switch statement to set the strategy, which is pretty common. A nicer way of doing this is probably using a map for the constructor of the strategy like:</p>
+<pre style="color:#cad3f5;background-color:#24273a;-webkit-text-size-adjust:none;"><code><span style="display:flex;"><span><span style="color:#c6a0f6">package</span> <span style="color:#f5a97f">org.example</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#c6a0f6">enum</span> <span style="color:#c6a0f6">class</span> <span style="color:#eed49f">Operations</span>(<span style="color:#c6a0f6">val</span> <span style="color:#f5a97f">text</span>: String) : Strategy {
+</span></span><span style="display:flex;"><span>    ADDITION(<span style="color:#a6da95">&#34;addition&#34;</span>) {
+</span></span><span style="display:flex;"><span>        <span style="color:#c6a0f6">override</span> <span style="color:#c6a0f6">fun</span> <span style="color:#8aadf4">execute</span>(a: Int, b: Int): Int {
+</span></span><span style="display:flex;"><span>            <span style="color:#c6a0f6">return</span> a + b
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>    },
+</span></span><span style="display:flex;"><span>    SUBTRACTION(<span style="color:#a6da95">&#34;subtraction&#34;</span>) {
+</span></span><span style="display:flex;"><span>        <span style="color:#c6a0f6">override</span> <span style="color:#c6a0f6">fun</span> <span style="color:#8aadf4">execute</span>(a: Int, b: Int): Int {
+</span></span><span style="display:flex;"><span>            <span style="color:#c6a0f6">return</span> a - b
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>    },
+</span></span><span style="display:flex;"><span>    MULTIPLICATION(<span style="color:#a6da95">&#34;multiplication&#34;</span>) {
+</span></span><span style="display:flex;"><span>        <span style="color:#c6a0f6">override</span> <span style="color:#c6a0f6">fun</span> <span style="color:#8aadf4">execute</span>(a: Int, b: Int): Int {
+</span></span><span style="display:flex;"><span>            <span style="color:#c6a0f6">return</span> a * b
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>    };
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#c6a0f6">companion</span> <span style="color:#c6a0f6">object</span> {
+</span></span><span style="display:flex;"><span>        <span style="color:#c6a0f6">fun</span> <span style="color:#8aadf4">fromString</span>(<span style="color:#c6a0f6">value</span>: String?): Strategy {
+</span></span><span style="display:flex;"><span>            <span style="color:#c6a0f6">value</span> <span style="color:#91d7e3;font-weight:bold">?:</span> <span style="color:#c6a0f6">throw</span> IllegalArgumentException(<span style="color:#a6da95">&#34;Input is null&#34;</span>)
+</span></span><span style="display:flex;"><span>            <span style="color:#c6a0f6">val</span> <span style="color:#f5a97f">operation</span> = entries.find { <span style="color:#c6a0f6">it</span>.text.equals(<span style="color:#c6a0f6">value</span>, ignoreCase = <span style="color:#c6a0f6">true</span>) }
+</span></span><span style="display:flex;"><span>            operation <span style="color:#91d7e3;font-weight:bold">?:</span> <span style="color:#c6a0f6">throw</span> IllegalArgumentException(<span style="color:#a6da95">&#34;Invalid operation&#34;</span>)
+</span></span><span style="display:flex;"><span>            <span style="color:#c6a0f6">return</span> operation
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#c6a0f6">fun</span> <span style="color:#8aadf4">main</span>() {
+</span></span><span style="display:flex;"><span>    println(<span style="color:#a6da95">&#34;Enter first number:&#34;</span>)
+</span></span><span style="display:flex;"><span>    <span style="color:#c6a0f6">val</span> <span style="color:#f5a97f">firstNumber</span> = readlnOrNull()<span style="color:#91d7e3;font-weight:bold">?.</span>toIntOrNull() <span style="color:#91d7e3;font-weight:bold">?:</span> <span style="color:#f5a97f">0</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    println(<span style="color:#a6da95">&#34;Enter second number:&#34;</span>)
+</span></span><span style="display:flex;"><span>    <span style="color:#c6a0f6">val</span> <span style="color:#f5a97f">secondNumber</span> = readlnOrNull()<span style="color:#91d7e3;font-weight:bold">?.</span>toIntOrNull() <span style="color:#91d7e3;font-weight:bold">?:</span> <span style="color:#f5a97f">0</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    println(<span style="color:#a6da95">&#34;Enter operation (addition/subtraction/multiplication):&#34;</span>)
+</span></span><span style="display:flex;"><span>    <span style="color:#c6a0f6">val</span> <span style="color:#f5a97f">strategy</span> = <span style="color:#eed49f">Operations</span>.fromString(readlnOrNull()<span style="color:#91d7e3;font-weight:bold">?.</span>lowercase())
+</span></span><span style="display:flex;"><span>    <span style="color:#c6a0f6">val</span> <span style="color:#f5a97f">result</span> = strategy.execute(firstNumber, secondNumber)
+</span></span><span style="display:flex;"><span>    println(<span style="color:#a6da95">&#34;Result: </span><span style="color:#a6da95">$result</span><span style="color:#a6da95">&#34;</span>)
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre><p>This avoids the <code>when</code>, and saves 10 lines of code. I think it is a bit nicer, but uses more advanced language features, like enums, and companion objects.</p>
+<p>This is what the code looks like inlined:</p>
+<pre><code>package org.example
+
+fun main() {
+    println(&quot;Enter first number:&quot;)
+    val firstNumber = readlnOrNull()?.toIntOrNull() ?: 0
+
+    println(&quot;Enter second number:&quot;)
+    val secondNumber = readlnOrNull()?.toIntOrNull() ?: 0
+
+    // if statements...
+    println(&quot;Enter operation (addition/subtraction/multiplication):&quot;)
+    val result = when (readlnOrNull()?.lowercase()) {
+        &quot;addition&quot; -&gt; firstNumber + secondNumber
+        &quot;subtraction&quot; -&gt; firstNumber - secondNumber
+        &quot;multiplication&quot; -&gt; firstNumber * secondNumber
+        else -&gt; {
+            throw Exception(&quot;Invalid operation&quot;)
+        }
+    }
+    println(&quot;Result: $result&quot;)
+}
+</code></pre>
+<p>It saves a further 20 lines of code, doesn't use advanced language features, has less redirection, and is easier to read. This example is potentially not that straight forward as generally a strategy would have significant more code, and more complexity than addition, and substraction. It's worth pointing out though that you shouldn't just default to a design pattern.</p>
+<p>I've been thinking about Elon Musk's 5 step process in design and engineering, and step one and two are:</p>
+<ol>
+<li>Make requirements less dumb: Question and verify each requirement to make it less error-prone.</li>
+<li>Delete the part or process: Remove unnecessary parts or process steps.</li>
+</ol>
+<p>I think in the example above you can use a negative number for substraction, like instead of inputting '1', '2', and 'subtraction', you can just input '1', and '-2'. I think you could also argue that multiple might not be needed, or why is division not there? I think generally in software you have several things you need like addition, subtraction, multiplication, division, exponentiation (like 2^3), root operations (cube root of 8), modulo (7 mod 3 = 1), logarithms (like log₂(8) = 3), sine and cosine operations for a partial calculator app. Or you just need one, like addition. So in this case I would say you just need addition, and subtraction.</p>
+<p>So for just addition, and subtraction, the code looks like this:</p>
+<pre style="color:#cad3f5;background-color:#24273a;-webkit-text-size-adjust:none;"><code><span style="display:flex;"><span><span style="color:#c6a0f6">package</span> <span style="color:#f5a97f">org.example</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#c6a0f6">fun</span> <span style="color:#8aadf4">main</span>() {
+</span></span><span style="display:flex;"><span>    println(<span style="color:#a6da95">&#34;Enter first number:&#34;</span>)
+</span></span><span style="display:flex;"><span>    <span style="color:#c6a0f6">val</span> <span style="color:#f5a97f">firstNumber</span> = readlnOrNull()<span style="color:#91d7e3;font-weight:bold">?.</span>toIntOrNull() <span style="color:#91d7e3;font-weight:bold">?:</span> <span style="color:#f5a97f">0</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    println(<span style="color:#a6da95">&#34;Enter second number:&#34;</span>)
+</span></span><span style="display:flex;"><span>    <span style="color:#c6a0f6">val</span> <span style="color:#f5a97f">secondNumber</span> = readlnOrNull()<span style="color:#91d7e3;font-weight:bold">?.</span>toIntOrNull() <span style="color:#91d7e3;font-weight:bold">?:</span> <span style="color:#f5a97f">0</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#6e738d;font-style:italic">// assuming multiplication isn&#39;t needed, and can just enter a negative number for subtraction
+</span></span></span><span style="display:flex;"><span>    <span style="color:#c6a0f6">val</span> <span style="color:#f5a97f">result</span> = firstNumber + secondNumber
+</span></span><span style="display:flex;"><span>    println(<span style="color:#a6da95">&#34;Result: </span><span style="color:#a6da95">$result</span><span style="color:#a6da95">&#34;</span>)
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre><p>That's 13 lines of code. That's quiet simple, but a lot of things are.</p>
+</div><!-- this back button has a lot of styles to it... --><a href="../../" class="back fixed bottom-8 left-1/2 -translate-x-1/2 py-3 px-5 font-mono text-sm tracking-wide text-gold border border-border-light rounded-sm hover:border-gold transition-colors focus-visible:outline-2 focus-visible:outline-gold focus-visible:outline-offset-2 bg-ink/80 backdrop-blur-sm" aria-label="Back to homepage">BACK <span class="text-dim text-xs not-italic">[B]</span></a></main><footer class="text-center text-faint py-12 px-6 font-mono text-xs tracking-widest">Jordan Stewart • © 2026</footer><script>
+				document.addEventListener('keydown', e => {
+				  if (e.key === 'b' || e.key === 'B') document.querySelector('.back').click()
+				})
+			</script><!-- add random google tag shit here --></body></html>

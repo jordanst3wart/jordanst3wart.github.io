@@ -1,0 +1,74 @@
+<html><!doctype html><head><title>Git personal and company profile</title><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400;1,500&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet"><script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script><link rel="icon" type="image/png" sizes="32x32" href="/static/favicon-32x32.png"><link rel="icon" type="image/png" sizes="16x16" href="/static/favicon-16x16.png"><!-- add more random shit there that does in the header site meta things https://github.com/jordanst3wart/stewart.bot/blob/main/data/siteMetadata.ts --><!--TODO move to something like: <link rel="stylesheet" href="app.css"> if you feel like it--><style type="text/tailwindcss">
+		  @import "tailwindcss";
+          @theme {
+            --font-display: 'EB Garamond', Georgia, serif;
+            --font-mono: 'JetBrains Mono', monospace;
+            /* 'border' might clash with a tailwind thingy...
+            TODO change the names of these colours to the cattppuccino names
+            */
+
+            --color-ink: #24273a;
+            --color-paper: #cad3f5;
+            --color-gold: #c6a0f6;
+            --color-gold-light: #b7bdf8;
+            --color-muted: #6e738d;
+            --color-dim: #5b6078;
+            --color-faint: #363a4f;
+            --color-body: #b8c0e0;
+            --color-excerpt: #8087a2;
+            --color-border: #1e2030;
+            --color-border-light: #494d64;
+          }
+
+          p {
+            margin-block-start: 1em;
+            margin-block-end: 1em;
+          }
+
+          code {
+              background: #363a4f;
+              /*border-2 border-solid*/
+          }
+
+          /*h3 {
+              text-4xl
+          }*/
+          /* need to style ul and ol, and probably different headings as well
+          */
+        </style></head><body class="bg-ink text-paper font-display text-lg leading-relaxed antialiased"><main class="max-w-[680px] mx-auto px-6 pt-16 pb-24"><h1 class="text-4xl font-medium tracking-tight leading-tight mb-1">Git personal and company profile</h1><h3 class="font-mono text-sm tracking-wide text-dim mb-8">July 10, 2024</h3><!-- trying the exact formatting of mitchellh.com... i will change it soon added "content" --><div class="content"><p>I just wanted to show how I got a company and personal git profile on the same computer.</p>
+<p>This is my ~/.gitconfig file (take note of the <code>gitdir</code>):</p>
+<pre style="color:#cad3f5;background-color:#24273a;-webkit-text-size-adjust:none;"><code><span style="display:flex;"><span>[core]
+</span></span><span style="display:flex;"><span>  excludesFile = <span style="color:#ed8796">~/</span>.gitignore_global
+</span></span><span style="display:flex;"><span>[alias]
+</span></span><span style="display:flex;"><span>  squash = <span style="color:#a6da95">&#34;!f(){ git reset --soft $(git merge-base main $(git branch --show-current)) &amp;&amp; git commit -m \&#34;${1}\&#34;;};f&#34;</span>
+</span></span><span style="display:flex;"><span>  squashm = <span style="color:#a6da95">&#34;!f(){ git reset --soft $(git merge-base master $(git branch --show-current)) &amp;&amp; git commit -m \&#34;${1}\&#34;;};f&#34;</span>
+</span></span><span style="display:flex;"><span>  update = <span style="color:#a6da95">&#34;!f(){ git checkout master &amp;&amp; git pull &amp;&amp; git checkout $(git branch --show-current) &amp;&amp; git rebase;};f&#34;</span>
+</span></span><span style="display:flex;"><span>[push]
+</span></span><span style="display:flex;"><span>  autoSetupRemote = <span style="color:#f5a97f">true</span>
+</span></span><span style="display:flex;"><span>[pull]
+</span></span><span style="display:flex;"><span>  rebase = <span style="color:#f5a97f">true</span>
+</span></span><span style="display:flex;"><span>[includeIf <span style="color:#a6da95">&#34;gitdir:~/company/&#34;</span>]
+</span></span><span style="display:flex;"><span>  path = .gitconfig_company
+</span></span><span style="display:flex;"><span>[includeIf <span style="color:#a6da95">&#34;gitdir:~/Documents/&#34;</span>]
+</span></span><span style="display:flex;"><span>  path = .gitconfig_personal
+</span></span></code></pre><p>So any work I do in <code>~/company/</code> uses the company git profile, whilst any work I do in <code>~/Documents</code>, uses my personal git profile.</p>
+<p>The file <code>~/.gitconfig_company</code> is just:</p>
+<pre style="color:#cad3f5;background-color:#24273a;-webkit-text-size-adjust:none;"><code><span style="display:flex;"><span>[User]
+</span></span><span style="display:flex;"><span>  email = username<span style="color:#ed8796">@</span>company.com
+</span></span><span style="display:flex;"><span>  name = company-git-username
+</span></span><span style="display:flex;"><span>  signingkey = XXXXXXXXXXXXXXXXXXX
+</span></span><span style="display:flex;"><span>[gpg]
+</span></span><span style="display:flex;"><span>  program = gpg2
+</span></span><span style="display:flex;"><span>[commit]
+</span></span><span style="display:flex;"><span>  gpgsign = <span style="color:#f5a97f">true</span>
+</span></span></code></pre><p>And my personal gitconfig is at <code>.gitconfig_personal</code> and looks like:</p>
+<pre><code>[user]
+   name = jordanst3wart
+   email = nil@gmail.com
+</code></pre>
+<p>And that setup works well.</p>
+</div><!-- this back button has a lot of styles to it... --><a href="../../" class="back fixed bottom-8 left-1/2 -translate-x-1/2 py-3 px-5 font-mono text-sm tracking-wide text-gold border border-border-light rounded-sm hover:border-gold transition-colors focus-visible:outline-2 focus-visible:outline-gold focus-visible:outline-offset-2 bg-ink/80 backdrop-blur-sm" aria-label="Back to homepage">BACK <span class="text-dim text-xs not-italic">[B]</span></a></main><footer class="text-center text-faint py-12 px-6 font-mono text-xs tracking-widest">Jordan Stewart • © 2026</footer><script>
+				document.addEventListener('keydown', e => {
+				  if (e.key === 'b' || e.key === 'B') document.querySelector('.back').click()
+				})
+			</script><!-- add random google tag shit here --></body></html>

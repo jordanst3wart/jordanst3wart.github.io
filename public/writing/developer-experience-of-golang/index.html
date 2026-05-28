@@ -1,0 +1,119 @@
+<html><!doctype html><head><title>Developer Experience of Golang</title><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400;1,500&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet"><script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script><link rel="icon" type="image/png" sizes="32x32" href="/static/favicon-32x32.png"><link rel="icon" type="image/png" sizes="16x16" href="/static/favicon-16x16.png"><!-- add more random shit there that does in the header site meta things https://github.com/jordanst3wart/stewart.bot/blob/main/data/siteMetadata.ts --><!--TODO move to something like: <link rel="stylesheet" href="app.css"> if you feel like it--><style type="text/tailwindcss">
+		  @import "tailwindcss";
+          @theme {
+            --font-display: 'EB Garamond', Georgia, serif;
+            --font-mono: 'JetBrains Mono', monospace;
+            /* 'border' might clash with a tailwind thingy...
+            TODO change the names of these colours to the cattppuccino names
+            */
+
+            --color-ink: #24273a;
+            --color-paper: #cad3f5;
+            --color-gold: #c6a0f6;
+            --color-gold-light: #b7bdf8;
+            --color-muted: #6e738d;
+            --color-dim: #5b6078;
+            --color-faint: #363a4f;
+            --color-body: #b8c0e0;
+            --color-excerpt: #8087a2;
+            --color-border: #1e2030;
+            --color-border-light: #494d64;
+          }
+
+          p {
+            margin-block-start: 1em;
+            margin-block-end: 1em;
+          }
+
+          code {
+              background: #363a4f;
+              /*border-2 border-solid*/
+          }
+
+          /*h3 {
+              text-4xl
+          }*/
+          /* need to style ul and ol, and probably different headings as well
+          */
+        </style></head><body class="bg-ink text-paper font-display text-lg leading-relaxed antialiased"><main class="max-w-[680px] mx-auto px-6 pt-16 pb-24"><h1 class="text-4xl font-medium tracking-tight leading-tight mb-1">Developer Experience of Golang</h1><h3 class="font-mono text-sm tracking-wide text-dim mb-8">February 21, 2024</h3><!-- trying the exact formatting of mitchellh.com... i will change it soon added "content" --><div class="content"><p>I find the development process with TypeScript painful in every step of development due to divergent tooling. Conversely, I find using go borrowing as it's very simple in comparison.</p>
+<p>You can experience this enjoy by simply quickly setting up a basic webserver, as you go through a lot of the steps in the development process. So here we go...</p>
+<p>How fast can you deploy a server in TypeScript from scratch?</p>
+<p>3... 2... 1... go!</p>
+<h3>1. Initial setup:</h3>
+<pre><code>mkdir go-deployment-minimal
+cd go-deployment-minimal
+go mod init github.com/jordanst3wart/go-deployment-minimal
+</code></pre>
+<p>This creates the go.mod file, which stores the version of go, the package name, and dependencies.</p>
+<p>(Now we go straight to coding with Typescript this is step 5!!!)</p>
+<h3>2. write a web server</h3>
+<p>Create a main file.</p>
+<pre style="color:#cad3f5;background-color:#24273a;-webkit-text-size-adjust:none;"><code><span style="display:flex;"><span>touch main.go
+</span></span></code></pre><p>And let's hit chatgpt to quickly get some code:</p>
+<pre style="color:#cad3f5;background-color:#24273a;-webkit-text-size-adjust:none;"><code><span style="display:flex;"><span><span style="color:#8bd5ca">package</span> main
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#8bd5ca">import</span> (
+</span></span><span style="display:flex;"><span>	<span style="color:#a6da95">&#34;fmt&#34;</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6da95">&#34;log&#34;</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6da95">&#34;net/http&#34;</span>
+</span></span><span style="display:flex;"><span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ed8796">func</span> <span style="color:#8aadf4">helloHandler</span>(w http.ResponseWriter, r <span style="color:#91d7e3;font-weight:bold">*</span>http.Request) {
+</span></span><span style="display:flex;"><span>	log.<span style="color:#8aadf4">Printf</span>(<span style="color:#a6da95">&#34;Received request: %s %s&#34;</span>, r.Method, r.URL.Path)
+</span></span><span style="display:flex;"><span>	<span style="color:#6e738d;font-style:italic">// Respond to the request</span>
+</span></span><span style="display:flex;"><span>	_, err <span style="color:#91d7e3;font-weight:bold">:=</span> fmt.<span style="color:#8aadf4">Fprintf</span>(w, <span style="color:#a6da95">&#34;Hello, world!&#34;</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#c6a0f6">if</span> err <span style="color:#91d7e3;font-weight:bold">!=</span> <span style="color:#f5a97f">nil</span> {
+</span></span><span style="display:flex;"><span>		<span style="color:#c6a0f6">return</span>
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ed8796">func</span> <span style="color:#8aadf4">main</span>() {
+</span></span><span style="display:flex;"><span>	serverAddress <span style="color:#91d7e3;font-weight:bold">:=</span> <span style="color:#a6da95">&#34;:8080&#34;</span>
+</span></span><span style="display:flex;"><span>	http.<span style="color:#8aadf4">HandleFunc</span>(<span style="color:#a6da95">&#34;/&#34;</span>, helloHandler)
+</span></span><span style="display:flex;"><span>	log.<span style="color:#8aadf4">Printf</span>(<span style="color:#a6da95">&#34;Starting server on %s&#34;</span>, serverAddress)
+</span></span><span style="display:flex;"><span>	<span style="color:#c6a0f6">if</span> err <span style="color:#91d7e3;font-weight:bold">:=</span> http.<span style="color:#8aadf4">ListenAndServe</span>(serverAddress, <span style="color:#f5a97f">nil</span>); err <span style="color:#91d7e3;font-weight:bold">!=</span> <span style="color:#f5a97f">nil</span> {
+</span></span><span style="display:flex;"><span>		<span style="color:#91d7e3">panic</span>(err)
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span></code></pre><p>We are using the default go logger, and webserver, which are very popular.</p>
+<p>We are also more aware of what errors could occur with writing to the http response.</p>
+<p>We could create a <code>src/</code> directory, but at the moment that feels a bit unnecessary.</p>
+<h3>compile and run</h3>
+<p>compile and run the code with:</p>
+<pre style="color:#cad3f5;background-color:#24273a;-webkit-text-size-adjust:none;"><code><span style="display:flex;"><span>go run main.go
+</span></span></code></pre><p>You can compile an arm binary with:</p>
+<pre style="color:#cad3f5;background-color:#24273a;-webkit-text-size-adjust:none;"><code><span style="display:flex;"><span><span style="color:#f4dbd6">GOOS</span><span style="color:#91d7e3;font-weight:bold">=</span>linux <span style="color:#f4dbd6">GOARCH</span><span style="color:#91d7e3;font-weight:bold">=</span>arm64 go build -o main
+</span></span></code></pre><p>The flags of <code>GOOS</code> and <code>GOARCH</code> look a tiny bit intimidating, and you should compile a binary in a pipeline not locally on a laptop. But this is fine.</p>
+<h3>deploy it - it's not done until it is running in production</h3>
+<p>Let's make the binary executable:</p>
+<pre style="color:#cad3f5;background-color:#24273a;-webkit-text-size-adjust:none;"><code><span style="display:flex;"><span>chmod +x main
+</span></span></code></pre><p>Let's create a tiny EC2 instance on amazon web services (AWS), like t4g.nano spot instance. We will use ssh, and scp to setup the server.</p>
+<p>Let's make an app directory (I can't to bothered to ssh):</p>
+<pre style="color:#cad3f5;background-color:#24273a;-webkit-text-size-adjust:none;"><code><span style="display:flex;"><span>ssh -i ~/.ssh/ec2-key.pem ec2-user@52.64.95.107 <span style="color:#a6da95">&#39;mkdir app&#39;</span>
+</span></span></code></pre><p>Let's copy the binary to the server:</p>
+<pre style="color:#cad3f5;background-color:#24273a;-webkit-text-size-adjust:none;"><code><span style="display:flex;"><span>scp -i ~/.ssh/ec2-key.pem main ec2-user@52.64.95.107:/home/ec2-user/app
+</span></span></code></pre><p>Let's run the binary on the server (once again, I can't be bothered to ssh):</p>
+<pre style="color:#cad3f5;background-color:#24273a;-webkit-text-size-adjust:none;"><code><span style="display:flex;"><span>ssh -i ~/.ssh/ec2-key.pem ec2-user@52.64.95.107 <span style="color:#a6da95">&#39;nohup ./app/main &gt; ./app/application.log &amp;&#39;</span>
+</span></span></code></pre><p>That shell commands isn't perfect as it doesn't exit... but the go binary keeps running.</p>
+<h3>thoughts on developer experience</h3>
+<p>And that's it, we have a server listening on port 8080, serving content. As a bonus you get <code>go fmt</code> to format your code.</p>
+<p>I can deploy a web server extremely quickly, I didn't even use an IDE, and I feel no confusion or frustration.</p>
+<p>Let's compare this to the minimistic typescript server I made before:</p>
+<ul>
+<li>instead of a <code>package.json</code>, <code>package-lock.json</code>, <code>tsconfig.json</code> (and maybe .prettier, and .eslintrc) we have a <code>go.mod</code> file that was auto generated as is</li>
+<li>the <code>go.mod</code> is 3 lines long compared to the 100 lines we started with in the tsconfig.json file, and the 21 lines of the package.json</li>
+<li>we have really well-defined error conditions with go, rather than the catch-all of the TypeScript server</li>
+<li>the binary has to be compiled for ARM, but that is easy with two flags</li>
+<li>I don't need to install anything on the server, instead of having to install a node version manager, node, and the production packages required for Typescript</li>
+<li>I can copy a single binary to the server instead of two files, and a directory (<code>dist</code> directory, <code>package.json</code>, and <code>package-lock.json</code>)</li>
+<li>I can write a test as <code>main_test.go</code> and run that test with <code>go test</code> as well. I don't need a tool, and a config file like with <code>jest</code>, or <code>vitest</code></li>
+<li>instead of interacting with <code>npm</code>, <code>node</code>, <code>tsc</code>, and potentially <code>vitest</code>, I call <code>go mod ...</code>, <code>go run ...</code>, <code>go build ...</code> and <code>go get ...</code></li>
+</ul>
+<p>It's a very stream lined experience, and it's so simple that it's quiet boring.</p>
+<p>It's removed several steps in the process, and simplified a lot of the others.</p>
+</div><!-- this back button has a lot of styles to it... --><a href="../../" class="back fixed bottom-8 left-1/2 -translate-x-1/2 py-3 px-5 font-mono text-sm tracking-wide text-gold border border-border-light rounded-sm hover:border-gold transition-colors focus-visible:outline-2 focus-visible:outline-gold focus-visible:outline-offset-2 bg-ink/80 backdrop-blur-sm" aria-label="Back to homepage">BACK <span class="text-dim text-xs not-italic">[B]</span></a></main><footer class="text-center text-faint py-12 px-6 font-mono text-xs tracking-widest">Jordan Stewart • © 2026</footer><script>
+				document.addEventListener('keydown', e => {
+				  if (e.key === 'b' || e.key === 'B') document.querySelector('.back').click()
+				})
+			</script><!-- add random google tag shit here --></body></html>

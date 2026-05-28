@@ -1,0 +1,189 @@
+<html><!doctype html><head><title>Odd Things with terraform</title><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400;1,500&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet"><script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script><link rel="icon" type="image/png" sizes="32x32" href="/static/favicon-32x32.png"><link rel="icon" type="image/png" sizes="16x16" href="/static/favicon-16x16.png"><!-- add more random shit there that does in the header site meta things https://github.com/jordanst3wart/stewart.bot/blob/main/data/siteMetadata.ts --><!--TODO move to something like: <link rel="stylesheet" href="app.css"> if you feel like it--><style type="text/tailwindcss">
+		  @import "tailwindcss";
+          @theme {
+            --font-display: 'EB Garamond', Georgia, serif;
+            --font-mono: 'JetBrains Mono', monospace;
+            /* 'border' might clash with a tailwind thingy...
+            TODO change the names of these colours to the cattppuccino names
+            */
+
+            --color-ink: #24273a;
+            --color-paper: #cad3f5;
+            --color-gold: #c6a0f6;
+            --color-gold-light: #b7bdf8;
+            --color-muted: #6e738d;
+            --color-dim: #5b6078;
+            --color-faint: #363a4f;
+            --color-body: #b8c0e0;
+            --color-excerpt: #8087a2;
+            --color-border: #1e2030;
+            --color-border-light: #494d64;
+          }
+
+          p {
+            margin-block-start: 1em;
+            margin-block-end: 1em;
+          }
+
+          code {
+              background: #363a4f;
+              /*border-2 border-solid*/
+          }
+
+          /*h3 {
+              text-4xl
+          }*/
+          /* need to style ul and ol, and probably different headings as well
+          */
+        </style></head><body class="bg-ink text-paper font-display text-lg leading-relaxed antialiased"><main class="max-w-[680px] mx-auto px-6 pt-16 pb-24"><h1 class="text-4xl font-medium tracking-tight leading-tight mb-1">Odd Things with terraform</h1><h3 class="font-mono text-sm tracking-wide text-dim mb-8">October 22, 2024</h3><!-- trying the exact formatting of mitchellh.com... i will change it soon added "content" --><div class="content"><p>I've been using terraform for a bit, and in general it's good... but there is some things that I find very rough around the edges.</p>
+<p>These are:</p>
+<ul>
+<li>control structure <code>for_each</code> and <code>count</code>, missing (missing <code>if</code>)</li>
+<li>providers not allowed to use <code>for_each</code></li>
+<li>backend state not being parameterised</li>
+<li>looping over lists has to be a set</li>
+<li>lack of tfvar (HCL) support in other languages</li>
+<li>templating is weird</li>
+</ul>
+<h3>Control structure <code>for_each</code> and <code>count</code>, missing (missing <code>if</code>)</h3>
+<p>Sometimes it's just nice having code like:</p>
+<pre style="color:#cad3f5;background-color:#24273a;-webkit-text-size-adjust:none;"><code><span style="display:flex;"><span><span style="color:#c6a0f6">if</span> flag {
+</span></span><span style="display:flex;"><span>  <span style="color:#ed8796">#</span> do stuff
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre><p>It's really nice, and in terraform you have to do:</p>
+<pre style="color:#cad3f5;background-color:#24273a;-webkit-text-size-adjust:none;"><code><span style="display:flex;"><span><span style="color:#c6a0f6">module</span> <span style="color:#a6da95">&#34;servers&#34;</span> {
+</span></span><span style="display:flex;"><span>  count  <span style="color:#91d7e3;font-weight:bold">=</span> <span style="color:#c6a0f6">var</span>.<span style="color:#c6a0f6">flag</span> <span style="color:#ed8796">?</span> <span style="color:#f5a97f">1</span> <span style="color:#ed8796">:</span> <span style="color:#f5a97f">0</span>
+</span></span><span style="display:flex;"><span>  source <span style="color:#91d7e3;font-weight:bold">=</span> <span style="color:#a6da95">&#34;./server&#34;</span>
+</span></span><span style="display:flex;"><span>  servers <span style="color:#91d7e3;font-weight:bold">=</span> <span style="color:#f5a97f">5</span>
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre><p>This just isn't as nice.</p>
+<p>Count is also nasty. Let's say I have this:</p>
+<pre style="color:#cad3f5;background-color:#24273a;-webkit-text-size-adjust:none;"><code><span style="display:flex;"><span><span style="color:#c6a0f6">module</span> <span style="color:#a6da95">&#34;database&#34;</span> {
+</span></span><span style="display:flex;"><span>  count  <span style="color:#91d7e3;font-weight:bold">=</span> <span style="color:#f5a97f">5</span>
+</span></span><span style="display:flex;"><span>  source <span style="color:#91d7e3;font-weight:bold">=</span> <span style="color:#a6da95">&#34;./database&#34;</span>
+</span></span><span style="display:flex;"><span>  size <span style="color:#91d7e3;font-weight:bold">=</span> <span style="color:#a6da95">&#34;large&#34;</span>
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre><p>And I want to remove the 2nd database, but keep the 5th. It's hard to do (you have to use imports). So I try to always use <code>for_each</code>.</p>
+<h3>providers not allowed to use <code>for_each</code></h3>
+<p>This is basically just <a href="https://github.com/hashicorp/terraform/issues/19932">this</a> github issue open since 2019.</p>
+<p>It's basically just isn't allowed:</p>
+<pre><code>provider &quot;aws&quot; {
+  for_each   = var.region
+</code></pre>
+<p>And this would be really handy when you need to declare a provider for each AWS region, like when you are using AWS guardduty in multiple regions.</p>
+<p>So instead of just having a list of providers you have to have something like:</p>
+<pre style="color:#cad3f5;background-color:#24273a;-webkit-text-size-adjust:none;"><code><span style="display:flex;"><span><span style="color:#c6a0f6">provider</span> <span style="color:#a6da95">&#34;aws&#34;</span> {
+</span></span><span style="display:flex;"><span>  region <span style="color:#91d7e3;font-weight:bold">=</span> <span style="color:#a6da95">&#34;us-east-1&#34;</span>
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#c6a0f6">provider</span> <span style="color:#a6da95">&#34;aws&#34;</span> {
+</span></span><span style="display:flex;"><span>  region <span style="color:#91d7e3;font-weight:bold">=</span> <span style="color:#a6da95">&#34;us-east-2&#34;</span>
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#c6a0f6">provider</span> <span style="color:#a6da95">&#34;aws&#34;</span> {
+</span></span><span style="display:flex;"><span>  region <span style="color:#91d7e3;font-weight:bold">=</span> <span style="color:#a6da95">&#34;us-west-1&#34;</span>
+</span></span><span style="display:flex;"><span>}<span style="color:#6e738d;font-style:italic">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e738d;font-style:italic"># and on and on...
+</span></span></span></code></pre><h3>backend state not being parameterised</h3>
+<p>So with terraform you have things like:</p>
+<pre style="color:#cad3f5;background-color:#24273a;-webkit-text-size-adjust:none;"><code><span style="display:flex;"><span><span style="color:#c6a0f6">resource</span> <span style="color:#a6da95">&#34;aws_instance&#34; &#34;web&#34;</span> {
+</span></span><span style="display:flex;"><span>  ami           <span style="color:#91d7e3;font-weight:bold">=</span> <span style="color:#c6a0f6">var</span>.<span style="color:#c6a0f6">ami</span>
+</span></span><span style="display:flex;"><span>  instance_type <span style="color:#91d7e3;font-weight:bold">=</span> <span style="color:#c6a0f6">var</span>.<span style="color:#c6a0f6">instance_size</span>
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre><p>And then you suddenly get to backend state, and it looks like:</p>
+<pre style="color:#cad3f5;background-color:#24273a;-webkit-text-size-adjust:none;"><code><span style="display:flex;"><span><span style="color:#c6a0f6">terraform</span> {
+</span></span><span style="display:flex;"><span>  <span style="color:#c6a0f6">backend</span> <span style="color:#a6da95">&#34;s3&#34;</span> {}
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre><p>... which is confusing.</p>
+<p>You would expect this:</p>
+<pre style="color:#cad3f5;background-color:#24273a;-webkit-text-size-adjust:none;"><code><span style="display:flex;"><span><span style="color:#6e738d;font-style:italic"># This will NOT work
+</span></span></span><span style="display:flex;"><span><span style="color:#c6a0f6">terraform</span> {
+</span></span><span style="display:flex;"><span>  <span style="color:#c6a0f6">backend</span> <span style="color:#a6da95">&#34;s3&#34;</span> {
+</span></span><span style="display:flex;"><span>    bucket <span style="color:#91d7e3;font-weight:bold">=</span> <span style="color:#c6a0f6">var</span>.<span style="color:#c6a0f6">state_bucket</span><span style="color:#6e738d;font-style:italic">  # This is not allowed!
+</span></span></span><span style="display:flex;"><span>    key    <span style="color:#91d7e3;font-weight:bold">=</span> <span style="color:#c6a0f6">var</span>.<span style="color:#c6a0f6">state_key</span><span style="color:#6e738d;font-style:italic">     # This is not allowed!
+</span></span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre><p>But instead you have to do something like this:</p>
+<pre style="color:#cad3f5;background-color:#24273a;-webkit-text-size-adjust:none;"><code><span style="display:flex;"><span>terraform init <span style="color:#8aadf4">\
+</span></span></span><span style="display:flex;"><span>  -backend-config<span style="color:#91d7e3;font-weight:bold">=</span>backend-config/sandbox.tfvars.json
+</span></span></code></pre><p>And pass in the variables. It's just a completely different way of doing things compared to the rest of the DSL.</p>
+<h3>looping over lists has to be a set</h3>
+<p>This one is odd. With the terraform for_each is works on either a set of strings (not a list), or a map.</p>
+<p>So this is invalid:</p>
+<pre style="color:#cad3f5;background-color:#24273a;-webkit-text-size-adjust:none;"><code><span style="display:flex;"><span><span style="color:#c6a0f6">variable</span> <span style="color:#a6da95">&#34;sandboxes&#34;</span> {
+</span></span><span style="display:flex;"><span>  type    <span style="color:#91d7e3;font-weight:bold">=</span> <span style="color:#c6a0f6">set</span>(<span style="color:#c6a0f6">number</span>)<span style="color:#6e738d;font-style:italic"> # not strings
+</span></span></span><span style="display:flex;"><span>  default <span style="color:#91d7e3;font-weight:bold">=</span> [<span style="color:#f5a97f">1</span>, <span style="color:#f5a97f">2</span>, <span style="color:#f5a97f">3</span>]
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#c6a0f6">resource</span> <span style="color:#a6da95">&#34;aws_instance&#34; &#34;web&#34;</span> {
+</span></span><span style="display:flex;"><span>  for_each      <span style="color:#91d7e3;font-weight:bold">=</span> <span style="color:#c6a0f6">var</span>.<span style="color:#c6a0f6">sandboxes</span><span style="color:#6e738d;font-style:italic"> # fails as not strings
+</span></span></span><span style="display:flex;"><span>  ami           <span style="color:#91d7e3;font-weight:bold">=</span> <span style="color:#c6a0f6">var</span>.<span style="color:#c6a0f6">ami</span>
+</span></span><span style="display:flex;"><span>  instance_type <span style="color:#91d7e3;font-weight:bold">=</span> <span style="color:#c6a0f6">var</span>.<span style="color:#c6a0f6">instance_size</span>
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre><p>So is this:</p>
+<pre style="color:#cad3f5;background-color:#24273a;-webkit-text-size-adjust:none;"><code><span style="display:flex;"><span><span style="color:#c6a0f6">variable</span> <span style="color:#a6da95">&#34;sandboxes&#34;</span> {
+</span></span><span style="display:flex;"><span>  type    <span style="color:#91d7e3;font-weight:bold">=</span> <span style="color:#c6a0f6">list</span>(<span style="color:#c6a0f6">string</span>)<span style="color:#6e738d;font-style:italic"> # it&#39;s a list!
+</span></span></span><span style="display:flex;"><span>  default <span style="color:#91d7e3;font-weight:bold">=</span> [<span style="color:#f5a97f">1</span>, <span style="color:#f5a97f">2</span>, <span style="color:#f5a97f">3</span>]
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#c6a0f6">resource</span> <span style="color:#a6da95">&#34;aws_instance&#34; &#34;web&#34;</span> {
+</span></span><span style="display:flex;"><span>  for_each      <span style="color:#91d7e3;font-weight:bold">=</span> <span style="color:#c6a0f6">var</span>.<span style="color:#c6a0f6">sandboxes</span><span style="color:#6e738d;font-style:italic"> # fails as a set
+</span></span></span><span style="display:flex;"><span>  ami           <span style="color:#91d7e3;font-weight:bold">=</span> <span style="color:#c6a0f6">var</span>.<span style="color:#c6a0f6">ami</span>
+</span></span><span style="display:flex;"><span>  instance_type <span style="color:#91d7e3;font-weight:bold">=</span> <span style="color:#c6a0f6">var</span>.<span style="color:#c6a0f6">instance_size</span>
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre><p>But there is also no way to do:</p>
+<pre style="color:#cad3f5;background-color:#24273a;-webkit-text-size-adjust:none;"><code><span style="display:flex;"><span><span style="color:#c6a0f6">variable</span> <span style="color:#a6da95">&#34;sandboxes&#34;</span> {
+</span></span><span style="display:flex;"><span>  type    <span style="color:#91d7e3;font-weight:bold">=</span> <span style="color:#c6a0f6">set</span>(<span style="color:#c6a0f6">string</span>)
+</span></span><span style="display:flex;"><span>  default <span style="color:#91d7e3;font-weight:bold">=</span> [<span style="color:#a6da95">&#34;1&#34;, &#34;2&#34;, &#34;3&#34;</span>]
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#c6a0f6">resource</span> <span style="color:#a6da95">&#34;aws_instance&#34; &#34;web&#34;</span> {
+</span></span><span style="display:flex;"><span>  for_each      <span style="color:#91d7e3;font-weight:bold">=</span> [for sandbox in var.sandboxes : sandbox if sandbox !<span style="color:#91d7e3;font-weight:bold">=</span> <span style="color:#a6da95">&#34;3&#34;</span>]<span style="color:#6e738d;font-style:italic"> # cannot do if statements here
+</span></span></span><span style="display:flex;"><span>  ami           <span style="color:#91d7e3;font-weight:bold">=</span> <span style="color:#c6a0f6">var</span>.<span style="color:#c6a0f6">ami</span>
+</span></span><span style="display:flex;"><span>  instance_type <span style="color:#91d7e3;font-weight:bold">=</span> <span style="color:#c6a0f6">var</span>.<span style="color:#c6a0f6">instance_size</span>
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre><p>But this is fine:</p>
+<pre style="color:#cad3f5;background-color:#24273a;-webkit-text-size-adjust:none;"><code><span style="display:flex;"><span><span style="color:#6e738d;font-style:italic"># using a map
+</span></span></span><span style="display:flex;"><span><span style="color:#c6a0f6">variable</span> <span style="color:#a6da95">&#34;sandboxes&#34;</span> {
+</span></span><span style="display:flex;"><span>  type <span style="color:#91d7e3;font-weight:bold">=</span> <span style="color:#c6a0f6">map</span>(<span style="color:#c6a0f6">object</span>({
+</span></span><span style="display:flex;"><span>    index <span style="color:#91d7e3;font-weight:bold">=</span> <span style="color:#c6a0f6">number</span>
+</span></span><span style="display:flex;"><span>  }))
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#c6a0f6">resource</span> <span style="color:#a6da95">&#34;aws_instance&#34; &#34;web&#34;</span> {
+</span></span><span style="display:flex;"><span>  for_each <span style="color:#91d7e3;font-weight:bold">=</span> {
+</span></span><span style="display:flex;"><span>    for name, sandbox in var.sandboxes : name <span style="color:#91d7e3;font-weight:bold">=</span><span style="color:#ed8796">&gt;</span> <span style="color:#c6a0f6">sandbox</span>
+</span></span><span style="display:flex;"><span>    if sandbox.index !<span style="color:#91d7e3;font-weight:bold">=</span> <span style="color:#f5a97f">3</span>
+</span></span><span style="display:flex;"><span>  }<span style="color:#6e738d;font-style:italic"> # can do if statements with maps... but not lists... :?
+</span></span></span><span style="display:flex;"><span>  ami           <span style="color:#91d7e3;font-weight:bold">=</span> <span style="color:#c6a0f6">var</span>.<span style="color:#c6a0f6">ami</span>
+</span></span><span style="display:flex;"><span>  instance_type <span style="color:#91d7e3;font-weight:bold">=</span> <span style="color:#c6a0f6">var</span>.<span style="color:#c6a0f6">instance_size</span>
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre><p>These above examples, kind of make the DSL look really half-baked.</p>
+<p>The map syntax is a bit confusing too, like what <code>name</code> is in the above example is a bit confusing.</p>
+<h3>lack of tfvar (HCL) support in other languages</h3>
+<p>Enough said... tfvars are</p>
+<p>Like there is this 250 star python library on github for python:
+https://github.com/amplify-education/python-hcl2</p>
+<p>And this struggling java library:
+https://github.com/bertramdev/hcl4j</p>
+<p>If you compare that to the serialization of json, and yaml, it is incredibly lack luster.</p>
+<h3>templating is weird</h3>
+<p>So with Ansible they use the common, and vanilla jinja library, which is really easy to use both in ansible templates, and from python.</p>
+<p>Go (or Golang) also has a really easy to use templating library (https://pkg.go.dev/text/template), which is used a lot. But terraform templates decided to have a half/half approach, and be mostly go text templates, but add</p>
+<p>So it looks like this:</p>
+<pre><code class="language-tftpl">{
+  &quot;port&quot;: &quot;${addr}:${port}&quot;,
+}
+</code></pre>
+<p>When it could of been generic go templates as this:</p>
+<pre><code>{
+  &quot;backends&quot;: &quot;{{.addr}}:{{.port}}&quot;,
+}
+</code></pre>
+<p>This has the file extension of <code>.tftpl</code>, which is a bit odd as well. It's a next of not invented here.</p>
+<p>As you can see terraform has some odd characteristics in a few ways.</p>
+</div><!-- this back button has a lot of styles to it... --><a href="../../" class="back fixed bottom-8 left-1/2 -translate-x-1/2 py-3 px-5 font-mono text-sm tracking-wide text-gold border border-border-light rounded-sm hover:border-gold transition-colors focus-visible:outline-2 focus-visible:outline-gold focus-visible:outline-offset-2 bg-ink/80 backdrop-blur-sm" aria-label="Back to homepage">BACK <span class="text-dim text-xs not-italic">[B]</span></a></main><footer class="text-center text-faint py-12 px-6 font-mono text-xs tracking-widest">Jordan Stewart • © 2026</footer><script>
+				document.addEventListener('keydown', e => {
+				  if (e.key === 'b' || e.key === 'B') document.querySelector('.back').click()
+				})
+			</script><!-- add random google tag shit here --></body></html>

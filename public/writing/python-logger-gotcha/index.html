@@ -1,0 +1,72 @@
+<html><!doctype html><head><title>Python Logger Gotcha</title><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400;1,500&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet"><script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script><link rel="icon" type="image/png" sizes="32x32" href="/static/favicon-32x32.png"><link rel="icon" type="image/png" sizes="16x16" href="/static/favicon-16x16.png"><!-- add more random shit there that does in the header site meta things https://github.com/jordanst3wart/stewart.bot/blob/main/data/siteMetadata.ts --><!--TODO move to something like: <link rel="stylesheet" href="app.css"> if you feel like it--><style type="text/tailwindcss">
+		  @import "tailwindcss";
+          @theme {
+            --font-display: 'EB Garamond', Georgia, serif;
+            --font-mono: 'JetBrains Mono', monospace;
+            /* 'border' might clash with a tailwind thingy...
+            TODO change the names of these colours to the cattppuccino names
+            */
+
+            --color-ink: #24273a;
+            --color-paper: #cad3f5;
+            --color-gold: #c6a0f6;
+            --color-gold-light: #b7bdf8;
+            --color-muted: #6e738d;
+            --color-dim: #5b6078;
+            --color-faint: #363a4f;
+            --color-body: #b8c0e0;
+            --color-excerpt: #8087a2;
+            --color-border: #1e2030;
+            --color-border-light: #494d64;
+          }
+
+          p {
+            margin-block-start: 1em;
+            margin-block-end: 1em;
+          }
+
+          code {
+              background: #363a4f;
+              /*border-2 border-solid*/
+          }
+
+          /*h3 {
+              text-4xl
+          }*/
+          /* need to style ul and ol, and probably different headings as well
+          */
+        </style></head><body class="bg-ink text-paper font-display text-lg leading-relaxed antialiased"><main class="max-w-[680px] mx-auto px-6 pt-16 pb-24"><h1 class="text-4xl font-medium tracking-tight leading-tight mb-1">Python Logger Gotcha</h1><h3 class="font-mono text-sm tracking-wide text-dim mb-8">February 18, 2024</h3><!-- trying the exact formatting of mitchellh.com... i will change it soon added "content" --><div class="content"><p>I was having some issues with the logging module in python, so I decided to write a small note about it.</p>
+<p>The python logging module uses oddly uses prototyping to create loggers at the module level. It can make it confusing to understand how to the root logger applied to all loggers, and how a prototyped logger does not have this affect.</p>
+<p>But normally with prototyping once instantiated the prototype should not be impacted by the changes to the original object. But with the logging module, it's the opposite. The prototype is impacted by the changes to the original object.</p>
+<p>So you should see this:</p>
+<pre style="color:#cad3f5;background-color:#24273a;-webkit-text-size-adjust:none;"><code><span style="display:flex;"><span>logging<span style="color:#91d7e3;font-weight:bold">.</span>getLogger(<span style="color:#f4dbd6">__name__</span>)
+</span></span></code></pre><p>This prototypes a logger from the root logger for the python module, creating one if none exist.</p>
+<p>It gets confusing when you want to change the logger, and</p>
+<pre style="color:#cad3f5;background-color:#24273a;-webkit-text-size-adjust:none;"><code><span style="display:flex;"><span><span style="color:#6e738d;font-style:italic"># let&#39;s set the logging level to info</span>
+</span></span><span style="display:flex;"><span>logging<span style="color:#91d7e3;font-weight:bold">.</span>basicConfig(level<span style="color:#91d7e3;font-weight:bold">=</span>logging<span style="color:#91d7e3;font-weight:bold">.</span>INFO)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#6e738d;font-style:italic"># let&#39;s get a logger for the module</span>
+</span></span><span style="display:flex;"><span>loggerMain <span style="color:#91d7e3;font-weight:bold">=</span> logging<span style="color:#91d7e3;font-weight:bold">.</span>getLogger(<span style="color:#f4dbd6">__name__</span>)
+</span></span><span style="display:flex;"><span>loggerMain<span style="color:#91d7e3;font-weight:bold">.</span>debug(<span style="color:#a6da95">&#34;This shouldn&#39;t log as it&#39;s debug level, and the level is set to info&#34;</span>)  <span style="color:#6e738d;font-style:italic"># it doesn&#39;t log</span>
+</span></span><span style="display:flex;"><span><span style="color:#6e738d;font-style:italic"># `logging.getLogger()` is confusing as, it gets the root logger</span>
+</span></span><span style="display:flex;"><span><span style="color:#6e738d;font-style:italic"># it&#39;s the same as `logging.root`</span>
+</span></span><span style="display:flex;"><span>loggerRoot <span style="color:#91d7e3;font-weight:bold">=</span> logging<span style="color:#91d7e3;font-weight:bold">.</span>getLogger()
+</span></span><span style="display:flex;"><span><span style="color:#6e738d;font-style:italic"># if we set the level of the root logger to debug, then the debug message will log</span>
+</span></span><span style="display:flex;"><span><span style="color:#6e738d;font-style:italic"># is it is using the prototype of the root logger</span>
+</span></span><span style="display:flex;"><span>loggerRoot<span style="color:#91d7e3;font-weight:bold">.</span>setLevel(logging<span style="color:#91d7e3;font-weight:bold">.</span>DEBUG)
+</span></span><span style="display:flex;"><span><span style="color:#6e738d;font-style:italic"># now let&#39;s log a debug message again</span>
+</span></span><span style="display:flex;"><span>loggerMain<span style="color:#91d7e3;font-weight:bold">.</span>debug(<span style="color:#a6da95">&#34;This logs now...&#34;</span>)  <span style="color:#6e738d;font-style:italic"># it logs</span>
+</span></span><span style="display:flex;"><span><span style="color:#6e738d;font-style:italic"># if we set the level of the main logger to info, then the debug message will not log</span>
+</span></span><span style="display:flex;"><span>loggerMain<span style="color:#91d7e3;font-weight:bold">.</span>setLevel(logging<span style="color:#91d7e3;font-weight:bold">.</span>INFO)
+</span></span><span style="display:flex;"><span>loggerMain<span style="color:#91d7e3;font-weight:bold">.</span>debug(<span style="color:#a6da95">&#34;This doesn&#39;t log now...&#34;</span>)  <span style="color:#6e738d;font-style:italic"># it doesn&#39;t log</span>
+</span></span></code></pre><p>So if you want to change root logger and have that applied across logger level, you should do it like this:</p>
+<pre style="color:#cad3f5;background-color:#24273a;-webkit-text-size-adjust:none;"><code><span style="display:flex;"><span>rootLogger <span style="color:#91d7e3;font-weight:bold">=</span> logging<span style="color:#91d7e3;font-weight:bold">.</span>root
+</span></span><span style="display:flex;"><span><span style="color:#6e738d;font-style:italic"># make changes</span>
+</span></span><span style="display:flex;"><span>rootLogger<span style="color:#91d7e3;font-weight:bold">.</span>setLevel(logging<span style="color:#91d7e3;font-weight:bold">.</span>DEBUG)
+</span></span><span style="display:flex;"><span><span style="color:#6e738d;font-style:italic"># have them applied across all loggers in all modules</span>
+</span></span><span style="display:flex;"><span>logger <span style="color:#91d7e3;font-weight:bold">=</span> logging<span style="color:#91d7e3;font-weight:bold">.</span>getLogger(<span style="color:#f4dbd6">__name__</span>)<span style="color:#91d7e3;font-weight:bold">.</span>
+</span></span></code></pre></div><!-- this back button has a lot of styles to it... --><a href="../../" class="back fixed bottom-8 left-1/2 -translate-x-1/2 py-3 px-5 font-mono text-sm tracking-wide text-gold border border-border-light rounded-sm hover:border-gold transition-colors focus-visible:outline-2 focus-visible:outline-gold focus-visible:outline-offset-2 bg-ink/80 backdrop-blur-sm" aria-label="Back to homepage">BACK <span class="text-dim text-xs not-italic">[B]</span></a></main><footer class="text-center text-faint py-12 px-6 font-mono text-xs tracking-widest">Jordan Stewart • © 2026</footer><script>
+				document.addEventListener('keydown', e => {
+				  if (e.key === 'b' || e.key === 'B') document.querySelector('.back').click()
+				})
+			</script><!-- add random google tag shit here --></body></html>

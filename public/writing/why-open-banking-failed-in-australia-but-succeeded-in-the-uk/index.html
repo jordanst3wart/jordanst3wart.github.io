@@ -1,0 +1,85 @@
+<html><!doctype html><head><title>Why open banking failed in Australia, but succeeded in the UK</title><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400;1,500&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet"><script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script><link rel="icon" type="image/png" sizes="32x32" href="/static/favicon-32x32.png"><link rel="icon" type="image/png" sizes="16x16" href="/static/favicon-16x16.png"><!-- add more random shit there that does in the header site meta things https://github.com/jordanst3wart/stewart.bot/blob/main/data/siteMetadata.ts --><!--TODO move to something like: <link rel="stylesheet" href="app.css"> if you feel like it--><style type="text/tailwindcss">
+		  @import "tailwindcss";
+          @theme {
+            --font-display: 'EB Garamond', Georgia, serif;
+            --font-mono: 'JetBrains Mono', monospace;
+            /* 'border' might clash with a tailwind thingy...
+            TODO change the names of these colours to the cattppuccino names
+            */
+
+            --color-ink: #24273a;
+            --color-paper: #cad3f5;
+            --color-gold: #c6a0f6;
+            --color-gold-light: #b7bdf8;
+            --color-muted: #6e738d;
+            --color-dim: #5b6078;
+            --color-faint: #363a4f;
+            --color-body: #b8c0e0;
+            --color-excerpt: #8087a2;
+            --color-border: #1e2030;
+            --color-border-light: #494d64;
+          }
+
+          p {
+            margin-block-start: 1em;
+            margin-block-end: 1em;
+          }
+
+          code {
+              background: #363a4f;
+              /*border-2 border-solid*/
+          }
+
+          /*h3 {
+              text-4xl
+          }*/
+          /* need to style ul and ol, and probably different headings as well
+          */
+        </style></head><body class="bg-ink text-paper font-display text-lg leading-relaxed antialiased"><main class="max-w-[680px] mx-auto px-6 pt-16 pb-24"><h1 class="text-4xl font-medium tracking-tight leading-tight mb-1">Why open banking failed in Australia, but succeeded in the UK</h1><h3 class="font-mono text-sm tracking-wide text-dim mb-8">August 16, 2025</h3><!-- trying the exact formatting of mitchellh.com... i will change it soon added "content" --><div class="content"><p>tldr: the regulatory's pushed for a bespoke OAuth stand and didn't use FAPI v1, making it harder for start ups to use the standard.</p>
+<p>I rarely think big complex things, have simple solutions, but this is a rare case I think that does have a simple solution. I think open banking in Australia would have been a success if the open banking standard had just used the FAPI standard, or the financial API standard for OAuth, instead of making up a different standard.</p>
+<p>Here is the signs of open banking has failed in Australia:</p>
+<ul>
+<li>with open banking apps the login process commonly fails, and you have to re-consent every 12 months</li>
+<li>the number of third party providers using the data is abysmal</li>
+</ul>
+<p>With the login process: I was using the Frollo budgeting app. It was the first app to get open banking working.</p>
+<p>With the following it:</p>
+<ul>
+<li>commbank -&gt; works</li>
+<li>westpac -&gt; fails</li>
+<li>citi credit card -&gt; fails</li>
+<li>up bank -&gt; works</li>
+</ul>
+<p>It works for about 50% of the data holders I tried, which is a bit embarrassing.</p>
+<p>With the number of third party providers in Australia's opening is:</p>
+<ul>
+<li>12 surrendered or given up</li>
+<li>29 active</li>
+<li>9 accredited</li>
+</ul>
+<p>Whereas the UK has 229 fintech, or third party providers, 10 times the amount.</p>
+<p>Reference:
+Australian Third party providers:
+https://www.cdr.gov.au/find-a-provider?page=1&amp;providerType=Data%2520Recipient&amp;status=SURRENDERED
+UK Third party providers:
+https://www.openbanking.org.uk/regulated-providers/?filter-provider-type=third-party-providers</p>
+<p>So open banking in Australia failed, but openbanking in the UK succeeded.</p>
+<p>In the UK, the open banking standard used FAPI v1, or stayed very close to common standards. It highly valued not &quot;re-inventing the wheel&quot;.
+reference:
+https://openbankinguk.github.io/read-write-api-site3/v4.0/profiles/read-write-data-api-profile.html#standards</p>
+<p>This allowed for easy adoption from fintechs. The FAPI standard is well known and easy to understand. It's a well known extension of OAuth.</p>
+<p>Whereas Australian open banking re-invented the wheel. It made a &quot;consent model&quot;, or consent standards. It adds an entirely new entity to the OAuth spec <code>cdr_arrangement_id</code>, and the concept of consent. Normally in OAuth, if you have an active access token you can access data. With Australia's open banking, that logic becomes more complicated. It becomes if you have an active access token, and a valid consent, then you can access data. It's slightly more complicated than that with scopes, and claims, but that's not needed here.</p>
+<p>So normally with OAuth you have an access token you can check is signed, and has not expired. You have a refresh token, which can re-generated an access token. With openid connect you have an id_token, which has additional user information. The OAuth server doesn't need to persist much information as it can dynamically check access tokens and refresh tokens are signed based on the keys it has (or json web keys JWKs). With consent added via an arrangement id, it makes every interaction just slightly more complicated.</p>
+<p>Instead of the OAuth server (or Authorization Server) not needing to store data, now with every transaction the consent id needs to be checked as valid. This means the consent object needs to be stored and accessed by the Authorization server on every request. This adds another level of complexity on top of OAuth, which is not apparent anywhere else.</p>
+<p>The FAPI (or financial API spec) does add in mutual TLS, but that is very common in security conscious applications.</p>
+<p>The added layer of complexity prevented a lot of fintechs from joining the already regulatory heavy eco-system in Australia, and has resulted in only a few fintechs taking part in the eco-system. A lot of the startups looking to use open banking ever did not manage to implement the Australian open banking spec, or had more success using legacy web scraping technology.</p>
+<p>Adding in the consent field would have looked like a bright idea to the regulatory, but in reality adding additional requirements is rarely a good idea.</p>
+<p>I believe consults where hired to help the startups succeed in open banking, but when you have a team of one or two engineers, getting an email from a consultant asking for a status update is a waste of time.</p>
+<p>Reference:
+https://consumerdatastandardsaustralia.github.io/standards/#consumer-experience_consent-standards</p>
+<p>The open banking specification in Australia was more technically complicated than what it needed to be, and didn't stick to open or familiars standards. That is way it failed in Australia, but succeeded in the UK.</p>
+</div><!-- this back button has a lot of styles to it... --><a href="../../" class="back fixed bottom-8 left-1/2 -translate-x-1/2 py-3 px-5 font-mono text-sm tracking-wide text-gold border border-border-light rounded-sm hover:border-gold transition-colors focus-visible:outline-2 focus-visible:outline-gold focus-visible:outline-offset-2 bg-ink/80 backdrop-blur-sm" aria-label="Back to homepage">BACK <span class="text-dim text-xs not-italic">[B]</span></a></main><footer class="text-center text-faint py-12 px-6 font-mono text-xs tracking-widest">Jordan Stewart • © 2026</footer><script>
+				document.addEventListener('keydown', e => {
+				  if (e.key === 'b' || e.key === 'B') document.querySelector('.back').click()
+				})
+			</script><!-- add random google tag shit here --></body></html>

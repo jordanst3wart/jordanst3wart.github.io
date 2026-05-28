@@ -1,0 +1,119 @@
+<html><!doctype html><head><title>Terraform Map</title><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400;1,500&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet"><script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script><link rel="icon" type="image/png" sizes="32x32" href="/static/favicon-32x32.png"><link rel="icon" type="image/png" sizes="16x16" href="/static/favicon-16x16.png"><!-- add more random shit there that does in the header site meta things https://github.com/jordanst3wart/stewart.bot/blob/main/data/siteMetadata.ts --><!--TODO move to something like: <link rel="stylesheet" href="app.css"> if you feel like it--><style type="text/tailwindcss">
+		  @import "tailwindcss";
+          @theme {
+            --font-display: 'EB Garamond', Georgia, serif;
+            --font-mono: 'JetBrains Mono', monospace;
+            /* 'border' might clash with a tailwind thingy...
+            TODO change the names of these colours to the cattppuccino names
+            */
+
+            --color-ink: #24273a;
+            --color-paper: #cad3f5;
+            --color-gold: #c6a0f6;
+            --color-gold-light: #b7bdf8;
+            --color-muted: #6e738d;
+            --color-dim: #5b6078;
+            --color-faint: #363a4f;
+            --color-body: #b8c0e0;
+            --color-excerpt: #8087a2;
+            --color-border: #1e2030;
+            --color-border-light: #494d64;
+          }
+
+          p {
+            margin-block-start: 1em;
+            margin-block-end: 1em;
+          }
+
+          code {
+              background: #363a4f;
+              /*border-2 border-solid*/
+          }
+
+          /*h3 {
+              text-4xl
+          }*/
+          /* need to style ul and ol, and probably different headings as well
+          */
+        </style></head><body class="bg-ink text-paper font-display text-lg leading-relaxed antialiased"><main class="max-w-[680px] mx-auto px-6 pt-16 pb-24"><h1 class="text-4xl font-medium tracking-tight leading-tight mb-1">Terraform Map</h1><h3 class="font-mono text-sm tracking-wide text-dim mb-8">February 25, 2025</h3><!-- trying the exact formatting of mitchellh.com... i will change it soon added "content" --><div class="content"><p>Terraform has two ways to create multiple resources. There is the <code>for_each</code> option, and a <code>count</code> option. Count creates an array of resources that are number, whereas <code>for_each</code> uses the key of the key to store the state of the option against. That is <code>file[0], file[1]</code> for count, and <code>file[hello], file[world]</code> with <code>for_each</code>. It's generally a lot nicer having resources named explicitly. It's often more convenient to name things as well, even if it is just <code>ec2-instance-1</code>, and <code>ec2-instance-2</code>. Due to this I heavily prefer <code>for_each</code> loops over <code>counts</code>.</p>
+<p><code>for_each</code> loops have limited inputs. They allow either a set of strings, that is <code>toset([&quot;hello&quot;, &quot;world&quot;])</code>, or a map object. Often a set of strings isn't ideal to create a resource, unless it's one resource you want to name.</p>
+<p>This can look like (naming a single resource with a set):</p>
+<pre style="color:#cad3f5;background-color:#24273a;-webkit-text-size-adjust:none;"><code><span style="display:flex;"><span><span style="color:#c6a0f6">resource</span> <span style="color:#a6da95">&#34;some_resource&#34; &#34;foo&#34;</span> {
+</span></span><span style="display:flex;"><span>  for_each <span style="color:#91d7e3;font-weight:bold">=</span> <span style="color:#c6a0f6">toset</span>([<span style="color:#a6da95">&#34;some_name&#34;</span>])
+</span></span><span style="display:flex;"><span>  key <span style="color:#91d7e3;font-weight:bold">=</span> <span style="color:#c6a0f6">value</span>
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre><p>That would create a resource with the name <code>some_resource.foo[&quot;some_name&quot;]</code>, or something close to that.</p>
+<p>With a <code>count</code> statement, this looks like:</p>
+<pre style="color:#cad3f5;background-color:#24273a;-webkit-text-size-adjust:none;"><code><span style="display:flex;"><span><span style="color:#c6a0f6">resource</span> <span style="color:#a6da95">&#34;some_resource&#34; &#34;foo&#34;</span> {
+</span></span><span style="display:flex;"><span>  count <span style="color:#91d7e3;font-weight:bold">=</span> <span style="color:#f5a97f">1</span>
+</span></span><span style="display:flex;"><span>  key <span style="color:#91d7e3;font-weight:bold">=</span> <span style="color:#c6a0f6">value</span>
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre><p>And the resource should be called <code>some_resource.foo[0]</code>.</p>
+<p>I see a bit of an anti-pattern in terraform when someone has a list, and converts that list to a map to iterate over those resources. It looks like:</p>
+<pre style="color:#cad3f5;background-color:#24273a;-webkit-text-size-adjust:none;"><code><span style="display:flex;"><span><span style="color:#c6a0f6">locals</span> {
+</span></span><span style="display:flex;"><span>  some_list_of_objects <span style="color:#91d7e3;font-weight:bold">=</span> [{
+</span></span><span style="display:flex;"><span>    name <span style="color:#91d7e3;font-weight:bold">=</span> <span style="color:#a6da95">&#34;hi&#34;</span>,
+</span></span><span style="display:flex;"><span>    size <span style="color:#91d7e3;font-weight:bold">=</span> <span style="color:#a6da95">&#34;large&#34;</span>
+</span></span><span style="display:flex;"><span>  },
+</span></span><span style="display:flex;"><span>  {
+</span></span><span style="display:flex;"><span>    name <span style="color:#91d7e3;font-weight:bold">=</span> <span style="color:#a6da95">&#34;bye&#34;</span>,
+</span></span><span style="display:flex;"><span>    size <span style="color:#91d7e3;font-weight:bold">=</span> <span style="color:#a6da95">&#34;medium&#34;</span>
+</span></span><span style="display:flex;"><span>  }]
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#c6a0f6">resource</span> <span style="color:#a6da95">&#34;some_resource&#34; &#34;foo&#34;</span> {<span style="color:#6e738d;font-style:italic">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e738d;font-style:italic">  # have to convert list to map here
+</span></span></span><span style="display:flex;"><span>  for_each <span style="color:#91d7e3;font-weight:bold">=</span> { for index, value in local.some_list_of_objects: value.name <span style="color:#91d7e3;font-weight:bold">=</span><span style="color:#ed8796">&gt;</span> <span style="color:#c6a0f6">value</span> }
+</span></span><span style="display:flex;"><span>  size <span style="color:#91d7e3;font-weight:bold">=</span> <span style="color:#c6a0f6">each</span>.<span style="color:#c6a0f6">value</span>.<span style="color:#c6a0f6">size</span>
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre><p>Whereas I think it is a lot simpler to just use maps instead of lists at the start, like:</p>
+<pre style="color:#cad3f5;background-color:#24273a;-webkit-text-size-adjust:none;"><code><span style="display:flex;"><span><span style="color:#c6a0f6">locals</span> {
+</span></span><span style="display:flex;"><span>  some_map <span style="color:#91d7e3;font-weight:bold">=</span> {
+</span></span><span style="display:flex;"><span>    hi <span style="color:#91d7e3;font-weight:bold">=</span> {
+</span></span><span style="display:flex;"><span>      size <span style="color:#91d7e3;font-weight:bold">=</span> <span style="color:#a6da95">&#34;large&#34;</span>
+</span></span><span style="display:flex;"><span>    },
+</span></span><span style="display:flex;"><span>    bye <span style="color:#91d7e3;font-weight:bold">=</span> {
+</span></span><span style="display:flex;"><span>      size <span style="color:#91d7e3;font-weight:bold">=</span> <span style="color:#a6da95">&#34;medium&#34;</span>
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#c6a0f6">resource</span> <span style="color:#a6da95">&#34;some_resource&#34; &#34;foo&#34;</span> {<span style="color:#6e738d;font-style:italic">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e738d;font-style:italic">  # just use the map
+</span></span></span><span style="display:flex;"><span>  for_each <span style="color:#91d7e3;font-weight:bold">=</span> <span style="color:#c6a0f6">local</span>.<span style="color:#c6a0f6">some_map</span>
+</span></span><span style="display:flex;"><span>  size <span style="color:#91d7e3;font-weight:bold">=</span> <span style="color:#c6a0f6">each</span>.<span style="color:#c6a0f6">value</span>.<span style="color:#c6a0f6">size</span>
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre><p>I think the second example is a lot simpler.</p>
+<p>For completeness, here is an example with an if statement:</p>
+<pre style="color:#cad3f5;background-color:#24273a;-webkit-text-size-adjust:none;"><code><span style="display:flex;"><span><span style="color:#6e738d;font-style:italic"># Define environments with their configurations
+</span></span></span><span style="display:flex;"><span><span style="color:#c6a0f6">variable</span> <span style="color:#a6da95">&#34;environments&#34;</span> {
+</span></span><span style="display:flex;"><span>  type <span style="color:#91d7e3;font-weight:bold">=</span> <span style="color:#c6a0f6">map</span>(<span style="color:#c6a0f6">object</span>({
+</span></span><span style="display:flex;"><span>    cidr      <span style="color:#91d7e3;font-weight:bold">=</span> <span style="color:#c6a0f6">string</span>
+</span></span><span style="display:flex;"><span>    is_public <span style="color:#91d7e3;font-weight:bold">=</span> <span style="color:#c6a0f6">bool</span>
+</span></span><span style="display:flex;"><span>  }))
+</span></span><span style="display:flex;"><span>  default <span style="color:#91d7e3;font-weight:bold">=</span> {
+</span></span><span style="display:flex;"><span>    development <span style="color:#91d7e3;font-weight:bold">=</span> { cidr <span style="color:#91d7e3;font-weight:bold">=</span> &#34;10.0.0.0/16&#34;, is_public <span style="color:#91d7e3;font-weight:bold">=</span> <span style="color:#ed8796">true</span> },
+</span></span><span style="display:flex;"><span>    staging     <span style="color:#91d7e3;font-weight:bold">=</span> { cidr <span style="color:#91d7e3;font-weight:bold">=</span> &#34;10.1.0.0/16&#34;, is_public <span style="color:#91d7e3;font-weight:bold">=</span> <span style="color:#ed8796">true</span> },
+</span></span><span style="display:flex;"><span>    production  <span style="color:#91d7e3;font-weight:bold">=</span> { cidr <span style="color:#91d7e3;font-weight:bold">=</span> &#34;10.2.0.0/16&#34;, is_public <span style="color:#91d7e3;font-weight:bold">=</span> <span style="color:#ed8796">false</span> }
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>}<span style="color:#6e738d;font-style:italic">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e738d;font-style:italic">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e738d;font-style:italic"># Create public IP addresses only for environments where is_public is true
+</span></span></span><span style="display:flex;"><span><span style="color:#c6a0f6">resource</span> <span style="color:#a6da95">&#34;some_resource&#34; &#34;foo&#34;</span> {
+</span></span><span style="display:flex;"><span>  for_each <span style="color:#91d7e3;font-weight:bold">=</span> {
+</span></span><span style="display:flex;"><span>    for env_name, env_config in var.environments : env_name <span style="color:#91d7e3;font-weight:bold">=</span><span style="color:#ed8796">&gt;</span> <span style="color:#c6a0f6">env_config</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#c6a0f6">if</span> <span style="color:#c6a0f6">env_config</span>.<span style="color:#c6a0f6">is_public</span>
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  vpc <span style="color:#91d7e3;font-weight:bold">=</span> <span style="color:#ed8796">true</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  tags <span style="color:#91d7e3;font-weight:bold">=</span> {
+</span></span><span style="display:flex;"><span>    Name <span style="color:#91d7e3;font-weight:bold">=</span> <span style="color:#a6da95">&#34;eip-${each.key}&#34;</span>
+</span></span><span style="display:flex;"><span>    Environment <span style="color:#91d7e3;font-weight:bold">=</span> <span style="color:#c6a0f6">each</span>.<span style="color:#c6a0f6">key</span>
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><!-- this back button has a lot of styles to it... --><a href="../../" class="back fixed bottom-8 left-1/2 -translate-x-1/2 py-3 px-5 font-mono text-sm tracking-wide text-gold border border-border-light rounded-sm hover:border-gold transition-colors focus-visible:outline-2 focus-visible:outline-gold focus-visible:outline-offset-2 bg-ink/80 backdrop-blur-sm" aria-label="Back to homepage">BACK <span class="text-dim text-xs not-italic">[B]</span></a></main><footer class="text-center text-faint py-12 px-6 font-mono text-xs tracking-widest">Jordan Stewart • © 2026</footer><script>
+				document.addEventListener('keydown', e => {
+				  if (e.key === 'b' || e.key === 'B') document.querySelector('.back').click()
+				})
+			</script><!-- add random google tag shit here --></body></html>

@@ -1,0 +1,64 @@
+<html><!doctype html><head><title>Rewriting the website</title><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400;1,500&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet"><script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script><link rel="icon" type="image/png" sizes="32x32" href="/static/favicon-32x32.png"><link rel="icon" type="image/png" sizes="16x16" href="/static/favicon-16x16.png"><!-- add more random shit there that does in the header site meta things https://github.com/jordanst3wart/stewart.bot/blob/main/data/siteMetadata.ts --><!--TODO move to something like: <link rel="stylesheet" href="app.css"> if you feel like it--><style type="text/tailwindcss">
+		  @import "tailwindcss";
+          @theme {
+            --font-display: 'EB Garamond', Georgia, serif;
+            --font-mono: 'JetBrains Mono', monospace;
+            /* 'border' might clash with a tailwind thingy...
+            TODO change the names of these colours to the cattppuccino names
+            */
+
+            --color-ink: #24273a;
+            --color-paper: #cad3f5;
+            --color-gold: #c6a0f6;
+            --color-gold-light: #b7bdf8;
+            --color-muted: #6e738d;
+            --color-dim: #5b6078;
+            --color-faint: #363a4f;
+            --color-body: #b8c0e0;
+            --color-excerpt: #8087a2;
+            --color-border: #1e2030;
+            --color-border-light: #494d64;
+          }
+
+          p {
+            margin-block-start: 1em;
+            margin-block-end: 1em;
+          }
+
+          code {
+              background: #363a4f;
+              /*border-2 border-solid*/
+          }
+
+          /*h3 {
+              text-4xl
+          }*/
+          /* need to style ul and ol, and probably different headings as well
+          */
+        </style></head><body class="bg-ink text-paper font-display text-lg leading-relaxed antialiased"><main class="max-w-[680px] mx-auto px-6 pt-16 pb-24"><h1 class="text-4xl font-medium tracking-tight leading-tight mb-1">Rewriting the website</h1><h3 class="font-mono text-sm tracking-wide text-dim mb-8">May 17, 2026</h3><!-- trying the exact formatting of mitchellh.com... i will change it soon added "content" --><div class="content"><p>I recently wrote a blog, before publishing the new blog the build broke. I haven't updated my website in a while. But admitterently it is just my personal blog site, so it isn't a critical piece of software infrastructure. I'm a bit confused why the vercel build just suddenly broke. I think it might have automatically bumped my dependencies or something, which would be weird because the dependencies that I have are pinned. Maybe it was some security concern.</p>
+<p>So I tried to just bump the npm dependencies, but apparently going to next 15 to 16 is a big upgrade. I thought I just did a big upgrade previously with react server components, or something... When picking this website I wanted to be as simple, and as standard as possible, using the industry standard react, and next. I felt like that would make it easy to handle, so I could focus on just writing. It seems I was wrong.</p>
+<p>From first using this blog template I was mortified to find that where was a lot of tiny dependencies the author wrote, and put into separate dependencies, before upgrading the dependencies in a hard to upgrade way. Such as <code>pliny</code> (https://www.npmjs.com/package/pliny?activeTab=readme), and <code>contentlayer</code> (https://www.npmjs.com/package/next-contentlayer2). I have probably spent a few hours trying to remove this dependencies, and failed. The code is mostly a lot of tiny utility type features, which are easy to write, but tracing the types, and the code across dependencies is a pain. Particularly when there is a lot of small functions.</p>
+<p>There is also the issue of having 48 security vulnerabilities. I have 26 dependencies, I tried to remove more, and tried. These security vulnerabilities are mostly high. Apparently, I closed 41 security vulnerabilities. This is tiny blog website. How could it possibly have 48 security vulnerabilities!</p>
+<p>This is wild. I also get confused by the build process, and the postcss processors, and other silly things. I have maybe 10 config files?! <code>.eslintrc.js</code>, <code>contentlayer.config.ts</code>, <code>jsconfig.json</code>, <code>next-env.d.ts</code>, <code>next.config.js</code>, <code>package.json</code>, <code>postcss.config.js</code>, <code>prettier.config.js</code>, <code>tailwind.config.js</code>, and <code>tsconfig.json</code>. Not including the ignore files...</p>
+<p>So I'm moving the entire site, and maybe doing a rewrite. Let's see. Instead of following the most common technology I might try:
+As few dependencies as possible - so maybe not js
+As simple as possible - static site...
+Using fundamental web technologies if possible... html, js, css, so maybe not something like elm...
+I also don't want to learn too many new things... so not rust.</p>
+<p>I could potentially look at using bun, with something like solid.js... I could look at using go with templ, or go template rendering... I could use htmx or something too... I could use svelte, but I feel like it borders on too much learning. I might look at some sample projects, and see how complicated they look...</p>
+<p>Here is a sample go templ project:
+https://github.com/a-h/templ/tree/main/examples/blog
+It's very simple, but it worries me on how to handle js, and css. I guess I can build it automatically, and just test it... It has a risk of not having the best DX (but neither does anything in node.js really).</p>
+<p>I was having a look at a building a static site with svelte, and it seems like a lot. I think people urrrr towards complicating a blog. I kind of want to keep it simple like: Mitchell Hashimoto's blog (https://mitchellh.com/). I also like the style of terminal.shop (via ssh), how it uses keys to navigate... I might just use go.</p>
+<p>I think I could really optimise the webpage - doing things like loading the page in the background - but I don't think that is worth it for my use case.</p>
+<p>I guess there is two steps:</p>
+<ol>
+<li>build the webpages (I don't need to build at runtime)</li>
+<li>serve the webpages from the file system (which could be done with nginx, or anything...)
+I probably want to serve the pages from a go process...</li>
+</ol>
+</div><!-- this back button has a lot of styles to it... --><a href="../../" class="back fixed bottom-8 left-1/2 -translate-x-1/2 py-3 px-5 font-mono text-sm tracking-wide text-gold border border-border-light rounded-sm hover:border-gold transition-colors focus-visible:outline-2 focus-visible:outline-gold focus-visible:outline-offset-2 bg-ink/80 backdrop-blur-sm" aria-label="Back to homepage">BACK <span class="text-dim text-xs not-italic">[B]</span></a></main><footer class="text-center text-faint py-12 px-6 font-mono text-xs tracking-widest">Jordan Stewart • © 2026</footer><script>
+				document.addEventListener('keydown', e => {
+				  if (e.key === 'b' || e.key === 'B') document.querySelector('.back').click()
+				})
+			</script><!-- add random google tag shit here --></body></html>

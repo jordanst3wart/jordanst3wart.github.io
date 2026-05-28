@@ -1,0 +1,97 @@
+<html><!doctype html><head><title>Nushell setup</title><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400;1,500&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet"><script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script><link rel="icon" type="image/png" sizes="32x32" href="/static/favicon-32x32.png"><link rel="icon" type="image/png" sizes="16x16" href="/static/favicon-16x16.png"><!-- add more random shit there that does in the header site meta things https://github.com/jordanst3wart/stewart.bot/blob/main/data/siteMetadata.ts --><!--TODO move to something like: <link rel="stylesheet" href="app.css"> if you feel like it--><style type="text/tailwindcss">
+		  @import "tailwindcss";
+          @theme {
+            --font-display: 'EB Garamond', Georgia, serif;
+            --font-mono: 'JetBrains Mono', monospace;
+            /* 'border' might clash with a tailwind thingy...
+            TODO change the names of these colours to the cattppuccino names
+            */
+
+            --color-ink: #24273a;
+            --color-paper: #cad3f5;
+            --color-gold: #c6a0f6;
+            --color-gold-light: #b7bdf8;
+            --color-muted: #6e738d;
+            --color-dim: #5b6078;
+            --color-faint: #363a4f;
+            --color-body: #b8c0e0;
+            --color-excerpt: #8087a2;
+            --color-border: #1e2030;
+            --color-border-light: #494d64;
+          }
+
+          p {
+            margin-block-start: 1em;
+            margin-block-end: 1em;
+          }
+
+          code {
+              background: #363a4f;
+              /*border-2 border-solid*/
+          }
+
+          /*h3 {
+              text-4xl
+          }*/
+          /* need to style ul and ol, and probably different headings as well
+          */
+        </style></head><body class="bg-ink text-paper font-display text-lg leading-relaxed antialiased"><main class="max-w-[680px] mx-auto px-6 pt-16 pb-24"><h1 class="text-4xl font-medium tracking-tight leading-tight mb-1">Nushell setup</h1><h3 class="font-mono text-sm tracking-wide text-dim mb-8">March 3, 2024</h3><!-- trying the exact formatting of mitchellh.com... i will change it soon added "content" --><div class="content"><p>I decided to try out <a href="https://www.nushell.sh/">nushell</a>. The reason for this is I dislike bash/zsh if statements, and other similarities.</p>
+<p>For reference here is a bash if statement:</p>
+<pre style="color:#cad3f5;background-color:#24273a;-webkit-text-size-adjust:none;"><code><span style="display:flex;"><span><span style="color:#f4dbd6">file</span><span style="color:#91d7e3;font-weight:bold">=</span><span style="color:#a6da95">&#34;file.txt&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#6e738d;font-style:italic">#Checking if a file exists</span>
+</span></span><span style="display:flex;"><span><span style="color:#c6a0f6">if</span> <span style="color:#91d7e3;font-weight:bold">[[</span> -e <span style="color:#a6da95">&#34;</span><span style="color:#f4dbd6">$file</span><span style="color:#a6da95">&#34;</span> <span style="color:#91d7e3;font-weight:bold">]]</span>; <span style="color:#c6a0f6">then</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#91d7e3">echo</span> <span style="color:#a6da95">&#34;</span><span style="color:#f4dbd6">$file</span><span style="color:#a6da95"> file exists.&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#c6a0f6">fi</span>
+</span></span></code></pre><p>Whenever I am writing a bash script, I have to pause and look up this syntax. It's just like the <code>tar</code> command.</p>
+<p>Here is the same thing in nushell:</p>
+<pre style="color:#cad3f5;background-color:#24273a;-webkit-text-size-adjust:none;"><code><span style="display:flex;"><span><span style="color:#c6a0f6">let</span> <span style="color:#f4dbd6">file</span> <span style="color:#91d7e3;font-weight:bold">=</span> <span style="color:#a6da95">&#34;file.txt&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#c6a0f6">if</span> <span style="color:#f4dbd6">$file</span> | <span style="color:#c6a0f6">path</span> exists <span style="color:#91d7e3;font-weight:bold">{</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#a6da95">$&#34;</span><span style="color:#a6da95">(</span><span style="color:#f4dbd6">$file</span><span style="color:#a6da95">)</span><span style="color:#a6da95"> file exists&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#91d7e3;font-weight:bold">}</span>
+</span></span></code></pre><p>I think I can learn to write that whilst not breaking my flow.</p>
+<p>For reference, I tried out Elvish shell as well, and I found the missing <code>history</code> command to be a deal breaker for me. You can use Ctrl-R in Elvish for history (I think), but I have to look that up every time as well.</p>
+<p>I found installing nushell easy, with <code>nix</code> package manager on MacOs, but I had two problems:</p>
+<ol>
+<li>adding custom commands in a modular way</li>
+<li>setting up PATH
+You can see how I solved these problems below.</li>
+</ol>
+<p>You can find the config directory of nushell with this command:</p>
+<pre style="color:#cad3f5;background-color:#24273a;-webkit-text-size-adjust:none;"><code><span style="display:flex;"><span><span style="color:#f4dbd6">$nu</span>.default-config-dir
+</span></span></code></pre><p>The <code>config.nu</code> file is quiet long:</p>
+<pre style="color:#cad3f5;background-color:#24273a;-webkit-text-size-adjust:none;"><code><span style="display:flex;"><span>❯ wc -l <span style="color:#c6a0f6">config</span>.nu
+</span></span><span style="display:flex;"><span>     <span style="color:#f5a97f">743</span> <span style="color:#c6a0f6">config</span>.nu
+</span></span></code></pre><p>So I didn't want to edit that file, and I wanted to keep my custom commands separate. I created a <code>custom.nu</code> file in that directory, and added the following command in <code>env.nu</code> to load the custom file on startup:</p>
+<pre style="color:#cad3f5;background-color:#24273a;-webkit-text-size-adjust:none;"><code><span style="display:flex;"><span><span style="color:#c6a0f6">source</span> <span style="color:#91d7e3;font-weight:bold">(</span><span style="color:#f4dbd6">$nu</span>.default-config-dir | <span style="color:#c6a0f6">path</span> <span style="color:#c6a0f6">join</span> <span style="color:#a6da95">&#39;custom.nu&#39;</span><span style="color:#91d7e3;font-weight:bold">)</span>
+</span></span></code></pre><p>I think a nice way to add to PATH is:</p>
+<pre style="color:#cad3f5;background-color:#24273a;-webkit-text-size-adjust:none;"><code><span style="display:flex;"><span><span style="color:#c6a0f6">use</span> std <span style="color:#a6da95">&#34;path add&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#f4dbd6">$env</span>.PATH <span style="color:#91d7e3;font-weight:bold">=</span> <span style="color:#91d7e3;font-weight:bold">(</span><span style="color:#f4dbd6">$env</span>.PATH | <span style="color:#c6a0f6">split</span> row <span style="color:#91d7e3;font-weight:bold">(</span><span style="color:#c6a0f6">char</span> esep<span style="color:#91d7e3;font-weight:bold">))</span>
+</span></span><span style="display:flex;"><span><span style="color:#c6a0f6">path</span> add /nix/var/nix/profiles/default/bin
+</span></span><span style="display:flex;"><span><span style="color:#c6a0f6">path</span> add <span style="color:#91d7e3;font-weight:bold">(</span><span style="color:#f4dbd6">$env</span>.HOME | <span style="color:#c6a0f6">path</span> <span style="color:#c6a0f6">join</span> <span style="color:#a6da95">&#34;Library&#34;</span> <span style="color:#a6da95">&#34;pnpm&#34;</span><span style="color:#91d7e3;font-weight:bold">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#c6a0f6">path</span> add <span style="color:#91d7e3;font-weight:bold">(</span><span style="color:#f4dbd6">$env</span>.HOME | <span style="color:#c6a0f6">path</span> <span style="color:#c6a0f6">join</span> <span style="color:#a6da95">&#34;.nix-profile&#34;</span> <span style="color:#a6da95">&#34;bin&#34;</span><span style="color:#91d7e3;font-weight:bold">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#c6a0f6">path</span> add <span style="color:#91d7e3;font-weight:bold">(</span><span style="color:#f4dbd6">$env</span>.HOME | <span style="color:#c6a0f6">path</span> <span style="color:#c6a0f6">join</span> <span style="color:#a6da95">&#34;.bun&#34;</span> <span style="color:#a6da95">&#34;bin&#34;</span><span style="color:#91d7e3;font-weight:bold">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#c6a0f6">path</span> add <span style="color:#91d7e3;font-weight:bold">(</span><span style="color:#f4dbd6">$env</span>.HOME | <span style="color:#c6a0f6">path</span> <span style="color:#c6a0f6">join</span> <span style="color:#a6da95">&#34;.npm-global&#34;</span> <span style="color:#a6da95">&#34;bin&#34;</span><span style="color:#91d7e3;font-weight:bold">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#c6a0f6">path</span> add <span style="color:#91d7e3;font-weight:bold">(</span><span style="color:#f4dbd6">$env</span>.CARGO_HOME | <span style="color:#c6a0f6">path</span> <span style="color:#c6a0f6">join</span> <span style="color:#a6da95">&#34;bin&#34;</span><span style="color:#91d7e3;font-weight:bold">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#c6a0f6">path</span> add /usr/local/go/bin
+</span></span><span style="display:flex;"><span><span style="color:#c6a0f6">path</span> add <span style="color:#91d7e3;font-weight:bold">(</span><span style="color:#f4dbd6">$env</span>.HOME | <span style="color:#c6a0f6">path</span> <span style="color:#c6a0f6">join</span> <span style="color:#a6da95">&#34;.local&#34;</span> <span style="color:#a6da95">&#34;bin&#34;</span><span style="color:#91d7e3;font-weight:bold">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#f4dbd6">$env</span>.PATH <span style="color:#91d7e3;font-weight:bold">=</span> <span style="color:#91d7e3;font-weight:bold">(</span><span style="color:#f4dbd6">$env</span>.PATH | <span style="color:#c6a0f6">uniq</span><span style="color:#91d7e3;font-weight:bold">)</span>
+</span></span></code></pre><p>I think this is another nice way to adding to path:</p>
+<pre style="color:#cad3f5;background-color:#24273a;-webkit-text-size-adjust:none;"><code><span style="display:flex;"><span><span style="color:#f4dbd6">$env</span>.PATH <span style="color:#91d7e3;font-weight:bold">=</span> <span style="color:#91d7e3;font-weight:bold">(</span><span style="color:#f4dbd6">$env</span>.PATH |
+</span></span><span style="display:flex;"><span>    <span style="color:#c6a0f6">split</span> row <span style="color:#91d7e3;font-weight:bold">(</span><span style="color:#c6a0f6">char</span> esep<span style="color:#91d7e3;font-weight:bold">)</span> |
+</span></span><span style="display:flex;"><span>    <span style="color:#c6a0f6">append</span> /usr/local/bin |
+</span></span><span style="display:flex;"><span>    <span style="color:#c6a0f6">append</span> <span style="color:#91d7e3;font-weight:bold">(</span><span style="color:#f4dbd6">$env</span>.CARGO_HOME | <span style="color:#c6a0f6">path</span> <span style="color:#c6a0f6">join</span> <span style="color:#a6da95">&#34;bin&#34;</span><span style="color:#91d7e3;font-weight:bold">)</span> |
+</span></span><span style="display:flex;"><span>    <span style="color:#c6a0f6">append</span> <span style="color:#91d7e3;font-weight:bold">(</span><span style="color:#f4dbd6">$env</span>.HOME | <span style="color:#c6a0f6">path</span> <span style="color:#c6a0f6">join</span> <span style="color:#a6da95">&#34;.local&#34;</span> <span style="color:#a6da95">&#34;bin&#34;</span><span style="color:#91d7e3;font-weight:bold">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#91d7e3;font-weight:bold">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#6e738d;font-style:italic"># filter so the paths are unique
+</span></span></span><span style="display:flex;"><span><span style="color:#f4dbd6">$env</span>.PATH <span style="color:#91d7e3;font-weight:bold">=</span> <span style="color:#91d7e3;font-weight:bold">(</span><span style="color:#f4dbd6">$env</span>.PATH | <span style="color:#c6a0f6">uniq</span><span style="color:#91d7e3;font-weight:bold">)</span>
+</span></span></code></pre><p>I also added some custom commands to <code>custom.nu</code>, like:</p>
+<pre style="color:#cad3f5;background-color:#24273a;-webkit-text-size-adjust:none;"><code><span style="display:flex;"><span><span style="color:#c6a0f6">def</span> search <span style="color:#91d7e3;font-weight:bold">[</span>query: string<span style="color:#91d7e3;font-weight:bold">]</span> <span style="color:#91d7e3;font-weight:bold">{</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#c6a0f6">let</span> <span style="color:#f4dbd6">search</span> <span style="color:#91d7e3;font-weight:bold">=</span> <span style="color:#a6da95">&#34;https://google.com.au/search?q=&#34;</span> + <span style="color:#f4dbd6">$query</span>
+</span></span><span style="display:flex;"><span>  ^open -a <span style="color:#a6da95">&#39;/Applications/Firefox Developer Edition.app&#39;</span> <span style="color:#f4dbd6">$search</span>
+</span></span><span style="display:flex;"><span><span style="color:#91d7e3;font-weight:bold">}</span>
+</span></span></code></pre><p>And that's my current <code>nushell</code> setup. It is also nice to have these configuration files versioned in git. I like <code>stow</code> to symlink and version this.</p>
+</div><!-- this back button has a lot of styles to it... --><a href="../../" class="back fixed bottom-8 left-1/2 -translate-x-1/2 py-3 px-5 font-mono text-sm tracking-wide text-gold border border-border-light rounded-sm hover:border-gold transition-colors focus-visible:outline-2 focus-visible:outline-gold focus-visible:outline-offset-2 bg-ink/80 backdrop-blur-sm" aria-label="Back to homepage">BACK <span class="text-dim text-xs not-italic">[B]</span></a></main><footer class="text-center text-faint py-12 px-6 font-mono text-xs tracking-widest">Jordan Stewart • © 2026</footer><script>
+				document.addEventListener('keydown', e => {
+				  if (e.key === 'b' || e.key === 'B') document.querySelector('.back').click()
+				})
+			</script><!-- add random google tag shit here --></body></html>

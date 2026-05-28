@@ -1,0 +1,58 @@
+<html><!doctype html><head><title>Wordpress dilemma</title><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400;1,500&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet"><script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script><link rel="icon" type="image/png" sizes="32x32" href="/static/favicon-32x32.png"><link rel="icon" type="image/png" sizes="16x16" href="/static/favicon-16x16.png"><!-- add more random shit there that does in the header site meta things https://github.com/jordanst3wart/stewart.bot/blob/main/data/siteMetadata.ts --><!--TODO move to something like: <link rel="stylesheet" href="app.css"> if you feel like it--><style type="text/tailwindcss">
+		  @import "tailwindcss";
+          @theme {
+            --font-display: 'EB Garamond', Georgia, serif;
+            --font-mono: 'JetBrains Mono', monospace;
+            /* 'border' might clash with a tailwind thingy...
+            TODO change the names of these colours to the cattppuccino names
+            */
+
+            --color-ink: #24273a;
+            --color-paper: #cad3f5;
+            --color-gold: #c6a0f6;
+            --color-gold-light: #b7bdf8;
+            --color-muted: #6e738d;
+            --color-dim: #5b6078;
+            --color-faint: #363a4f;
+            --color-body: #b8c0e0;
+            --color-excerpt: #8087a2;
+            --color-border: #1e2030;
+            --color-border-light: #494d64;
+          }
+
+          p {
+            margin-block-start: 1em;
+            margin-block-end: 1em;
+          }
+
+          code {
+              background: #363a4f;
+              /*border-2 border-solid*/
+          }
+
+          /*h3 {
+              text-4xl
+          }*/
+          /* need to style ul and ol, and probably different headings as well
+          */
+        </style></head><body class="bg-ink text-paper font-display text-lg leading-relaxed antialiased"><main class="max-w-[680px] mx-auto px-6 pt-16 pb-24"><h1 class="text-4xl font-medium tracking-tight leading-tight mb-1">Wordpress dilemma</h1><h3 class="font-mono text-sm tracking-wide text-dim mb-8">February 15, 2025</h3><!-- trying the exact formatting of mitchellh.com... i will change it soon added "content" --><div class="content"><p>I have this dilemma. It starts with a friend who has no technology skills ask me how they can setup a website. I think if I was doing it I would write HTML, CSS, and JavaScript, as these technologies are what a webpage is, but for them I think oh, I guess you can use a third party software platform like Wix, or Wordpress. However, i know if, or when, they want to do something fancy it would be a lot harder for me to help them out, and they are creating a dependency on a huge ecosystem that would be hard to move off.</p>
+<p>Their journey generally looks like:</p>
+<ol>
+<li>buy a domain (difficulty: easy)</li>
+<li>create a template website (difficulty: easy)</li>
+<li>try to change website to do the thing they want (difficulty: medium to hard)</li>
+</ol>
+<p>It's generally in the changing the website to be exactly how they want were it gets really hard. They obviously don't know how to style a website, or even the important web concepts like a &quot;call to action&quot;. It's this oddness of creating a website is extremely easy, but changing it is extremely hard.</p>
+<p>There is also this huge dependency burden they take on. Wordpress may need to be upgraded every year. The plugins that they use may become unsupported or have security vulnerabilities. If something goes wrong, how do you debug a Wordpress site for someone non-technical? I think these are issues you quickly run into if you are trying to do something that isn't perfectly cookie cutter.</p>
+<p>On the other hand, do I recommend then to use react, and go into using npm packages. They may need to update there version of react, and other npm libraries every year. It would take them a lot longer to get started, and they would have to learn a lot for something is potentially not that strategy for their business.</p>
+<p>I could recommend they just use html, css, and javascript, to avoid all unnecessary dependencies, but a that stage it might take them even longer to get a basic webpage setup.</p>
+<p>I see this happening in the worst way at companies. So you have a company that is heavy motivated to save money, and deliver a project fast. So instead of hiring software who knows HTML, CSS, and JavaScript, or even hiring someone a software engineer that knows React. They look at wordpress, and they quickly generate a wordpress sight. This allows them to capture a space in the short term, but in the long term it really slows them down. They them struggle to update the website as instead of having a frontend engineer, who has a little react knowledge, they struggle to update the php plugins driving their website. It's a lot more difficult for a frontend engineer to engage with a wordpress website, than it is for a frontend engineer to engage with a react website.</p>
+<p>There is this secondary problem of the frontend engineer now. If they update the website in an odd way, it might make the website less &quot;vanilla&quot;, and more customised. If wordpress offered a custom incuberating feature to make websites load two times fast with static page generation, and your boss wants to dive user engage, you are motivated to use this incuberating feature knowing if will more than likely get changed. Whereas if you have svelte, it's already optimised for fast page reloads. If you use this new incuberating feature, when the next engineer comes along, and trys to update wordpress, they could easily get an error with something like &quot;wordpress static site generation has changed&quot;. So it motivates subsequent engineers to try to keep wordpress as vanilla as possible.</p>
+<p>It seems to end up in a contradiction where you need a really skilled engineer to not just do the simple code change, but they do complicated code changes in some opensource codebase, or opensource tool, that might not completely fit your use case.</p>
+<p>The company I work has setup Librechat as a large language model chat bot. Librechat is basically an openai chat clone that just calls the model from Azure, or from Claude. The codebase is in TypeScript, and there is python code for the RAG server (Retrieve augmented something). When I think of a company adopting this tool, I kind of immediately think &quot;why not just pay for the SAAS platform?&quot;. It saves the maintenance, and setup costs. I them think given the codebase is TypeScript updating the dependencies might be a pain. There is actually 2703 versioned dependencies in the package-lock.json file for the codebase (https://github.com/danny-avila/LibreChat/blob/main/package-lock.json), which is a bit wild. If any one of those dependencies has a severe vulnerability the engineers maintaining it are probably on the hook for that, and because it is an open source codebase there is only two engineers looking into it.</p>
+<p>Whilst there is two engineers responsible for editing the codebase, there is potentially five managers, and directors who want to get credit for the project, which is at odds. As managers, and directors, also want to have a lot of people under them. If you are a manager, and you manage one person, you must not be that important. Managers, and directors need to look important, i think makes them want to hire out sourced workers from India, from Tara Consulting Services (TCS). I think as a manager I would look a lot more important if I had a team of 20 &quot;engineers&quot;, rather than just having two engineers, who would potentially be more productive. At this moment, there is no doubt in my head, that three well skilled, and suited engineers can outperform 20 less skilled engineers.</p>
+</div><!-- this back button has a lot of styles to it... --><a href="../../" class="back fixed bottom-8 left-1/2 -translate-x-1/2 py-3 px-5 font-mono text-sm tracking-wide text-gold border border-border-light rounded-sm hover:border-gold transition-colors focus-visible:outline-2 focus-visible:outline-gold focus-visible:outline-offset-2 bg-ink/80 backdrop-blur-sm" aria-label="Back to homepage">BACK <span class="text-dim text-xs not-italic">[B]</span></a></main><footer class="text-center text-faint py-12 px-6 font-mono text-xs tracking-widest">Jordan Stewart • © 2026</footer><script>
+				document.addEventListener('keydown', e => {
+				  if (e.key === 'b' || e.key === 'B') document.querySelector('.back').click()
+				})
+			</script><!-- add random google tag shit here --></body></html>

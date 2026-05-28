@@ -1,0 +1,176 @@
+<html><!doctype html><head><title>TypeScript has a terrible developer experience</title><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400;1,500&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet"><script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script><link rel="icon" type="image/png" sizes="32x32" href="/static/favicon-32x32.png"><link rel="icon" type="image/png" sizes="16x16" href="/static/favicon-16x16.png"><!-- add more random shit there that does in the header site meta things https://github.com/jordanst3wart/stewart.bot/blob/main/data/siteMetadata.ts --><!--TODO move to something like: <link rel="stylesheet" href="app.css"> if you feel like it--><style type="text/tailwindcss">
+		  @import "tailwindcss";
+          @theme {
+            --font-display: 'EB Garamond', Georgia, serif;
+            --font-mono: 'JetBrains Mono', monospace;
+            /* 'border' might clash with a tailwind thingy...
+            TODO change the names of these colours to the cattppuccino names
+            */
+
+            --color-ink: #24273a;
+            --color-paper: #cad3f5;
+            --color-gold: #c6a0f6;
+            --color-gold-light: #b7bdf8;
+            --color-muted: #6e738d;
+            --color-dim: #5b6078;
+            --color-faint: #363a4f;
+            --color-body: #b8c0e0;
+            --color-excerpt: #8087a2;
+            --color-border: #1e2030;
+            --color-border-light: #494d64;
+          }
+
+          p {
+            margin-block-start: 1em;
+            margin-block-end: 1em;
+          }
+
+          code {
+              background: #363a4f;
+              /*border-2 border-solid*/
+          }
+
+          /*h3 {
+              text-4xl
+          }*/
+          /* need to style ul and ol, and probably different headings as well
+          */
+        </style></head><body class="bg-ink text-paper font-display text-lg leading-relaxed antialiased"><main class="max-w-[680px] mx-auto px-6 pt-16 pb-24"><h1 class="text-4xl font-medium tracking-tight leading-tight mb-1">TypeScript has a terrible developer experience</h1><h3 class="font-mono text-sm tracking-wide text-dim mb-8">February 21, 2024</h3><!-- trying the exact formatting of mitchellh.com... i will change it soon added "content" --><div class="content"><p>I find the development process with TypeScript painful in every step of development due to divergent tooling. I find the TypeScript language good, but I find everything around the language bad. In comparsion, I find the Go language from easy in basically every aspect (Check my other most...).</p>
+<p>You can experience this headache setting up a basic webserver, as you go through a lot of the steps in the development process. So here we go...</p>
+<p>How fast can you deploy a server in TypeScript from scratch?</p>
+<p>3... 2... 1... go!</p>
+<h3>1. Make a folder:</h3>
+<pre><code>mkdir typescript-deployment-minimal
+</code></pre>
+<h3>2. initiate npm</h3>
+<pre style="color:#cad3f5;background-color:#24273a;-webkit-text-size-adjust:none;"><code><span style="display:flex;"><span>npm init -y
+</span></span></code></pre><p>This creates a lot of values I don't care for like version, description, main, author and license.</p>
+<h3>3. initiate typescript</h3>
+<pre style="color:#cad3f5;background-color:#24273a;-webkit-text-size-adjust:none;"><code><span style="display:flex;"><span>npm install typescript @types/node --save-dev
+</span></span><span style="display:flex;"><span>tsc --init <span style="color:#6e738d;font-style:italic"># create tsconfig.json</span>
+</span></span></code></pre><p>This creates the tsconfig.json, required for Typescript.</p>
+<h3>4. get stuck looking at tsconfig.json</h3>
+<p>The <code>tsconfig.json</code> file generated from <code>tsc --init</code> is 109 lines long, and has a doesn't have sane defaults...</p>
+<p>This is a sane default to have though (I had to look this up on youtube, the documentation isn't great):</p>
+<pre style="color:#cad3f5;background-color:#24273a;-webkit-text-size-adjust:none;"><code><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>  <span style="color:#c6a0f6">&#34;compilerOptions&#34;</span>: {
+</span></span><span style="display:flex;"><span>    <span style="color:#c6a0f6">&#34;target&#34;</span>: <span style="color:#a6da95">&#34;esNext&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#c6a0f6">&#34;module&#34;</span>: <span style="color:#a6da95">&#34;NodeNext&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#c6a0f6">&#34;rootDir&#34;</span>: <span style="color:#a6da95">&#34;./src&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#c6a0f6">&#34;allowJs&#34;</span>: <span style="color:#f5a97f">false</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#c6a0f6">&#34;sourceMap&#34;</span>: <span style="color:#f5a97f">true</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#c6a0f6">&#34;outDir&#34;</span>: <span style="color:#a6da95">&#34;./dist&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#c6a0f6">&#34;esModuleInterop&#34;</span>: <span style="color:#f5a97f">true</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#c6a0f6">&#34;forceConsistentCasingInFileNames&#34;</span>: <span style="color:#f5a97f">true</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#c6a0f6">&#34;strict&#34;</span>: <span style="color:#f5a97f">true</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#c6a0f6">&#34;skipLibCheck&#34;</span>: <span style="color:#f5a97f">true</span>
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre><p>It's got a <code>src</code> for code and <code>dist</code> folder for compiled code (or javascript). You probably don't need <code>&quot;sourceMap&quot;: true,</code></p>
+<h3>5. write a web server in src</h3>
+<p>Let's use fastify as the web server as people would laugh at you if you just use the http module, and express.js is legacy now (no http/2).</p>
+<pre style="color:#cad3f5;background-color:#24273a;-webkit-text-size-adjust:none;"><code><span style="display:flex;"><span>npm install fastify
+</span></span></code></pre><p>And let's hit chatgpt to quickly get some code:</p>
+<pre style="color:#cad3f5;background-color:#24273a;-webkit-text-size-adjust:none;"><code><span style="display:flex;"><span><span style="color:#c6a0f6">import</span> fastify <span style="color:#c6a0f6">from</span> <span style="color:#a6da95">&#39;fastify&#39;</span>;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#c6a0f6">const</span> server <span style="color:#91d7e3;font-weight:bold">=</span> fastify({
+</span></span><span style="display:flex;"><span>    logger: <span style="color:#ed8796">true</span>
+</span></span><span style="display:flex;"><span>});
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>server.<span style="color:#c6a0f6">get</span>(<span style="color:#a6da95">&#39;/&#39;</span>, <span style="color:#c6a0f6">async</span> (request, reply) <span style="color:#91d7e3;font-weight:bold">=&gt;</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#c6a0f6">return</span> { hello<span style="color:#91d7e3;font-weight:bold">:</span> <span style="color:#a6da95">&#39;world&#39;</span> };
+</span></span><span style="display:flex;"><span>});
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#c6a0f6">const</span> start <span style="color:#91d7e3;font-weight:bold">=</span> <span style="color:#c6a0f6">async</span> () <span style="color:#91d7e3;font-weight:bold">=&gt;</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#c6a0f6">try</span> {
+</span></span><span style="display:flex;"><span>        <span style="color:#c6a0f6">await</span> server.listen({ port: <span style="color:#ed8796">3000</span> });
+</span></span><span style="display:flex;"><span>    } <span style="color:#c6a0f6">catch</span> (err) {
+</span></span><span style="display:flex;"><span>        server.log.error(err);
+</span></span><span style="display:flex;"><span>        process.exit(<span style="color:#f5a97f">1</span>);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>};
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>start();
+</span></span><span style="display:flex;"><span>
+</span></span></code></pre><p>This is great. It's short and we have a logger too. Otherwise we would have had to have installed and configured a logger like <code>winston</code>.</p>
+<p>I wanted to protect you from this, but here is the type of the fastify server:</p>
+<pre style="color:#cad3f5;background-color:#24273a;-webkit-text-size-adjust:none;"><code><span style="display:flex;"><span><span style="color:#c6a0f6">declare</span> <span style="color:#ed8796">function</span> fastify<span style="color:#91d7e3;font-weight:bold">&lt;</span>
+</span></span><span style="display:flex;"><span>  Server <span style="color:#c6a0f6">extends</span> http.Server,
+</span></span><span style="display:flex;"><span>  Request <span style="color:#c6a0f6">extends</span> RawRequestDefaultExpression&lt;<span style="color:#c6a0f6">Server</span>&gt; <span style="color:#91d7e3;font-weight:bold">=</span> RawRequestDefaultExpression&lt;<span style="color:#c6a0f6">Server</span>&gt;,
+</span></span><span style="display:flex;"><span>  Reply <span style="color:#c6a0f6">extends</span> RawReplyDefaultExpression&lt;<span style="color:#c6a0f6">Server</span>&gt; <span style="color:#91d7e3;font-weight:bold">=</span> RawReplyDefaultExpression&lt;<span style="color:#c6a0f6">Server</span>&gt;,
+</span></span><span style="display:flex;"><span>  Logger <span style="color:#c6a0f6">extends</span> FastifyBaseLogger <span style="color:#91d7e3;font-weight:bold">=</span> FastifyBaseLogger,
+</span></span><span style="display:flex;"><span>  TypeProvider <span style="color:#c6a0f6">extends</span> FastifyTypeProvider <span style="color:#91d7e3;font-weight:bold">=</span> FastifyTypeProviderDefault,
+</span></span><span style="display:flex;"><span><span style="color:#91d7e3;font-weight:bold">&gt;</span>(opts?: <span style="color:#ed8796">fastify.FastifyHttpOptions</span>&lt;<span style="color:#c6a0f6">Server</span>, <span style="color:#8aadf4">Logger</span>&gt;)<span style="color:#91d7e3;font-weight:bold">:</span> FastifyInstance&lt;<span style="color:#c6a0f6">Server</span>, <span style="color:#8aadf4">Request</span>, <span style="color:#8aadf4">Reply</span>, <span style="color:#8aadf4">Logger</span>, <span style="color:#8aadf4">TypeProvider</span>&gt; <span style="color:#91d7e3;font-weight:bold">&amp;</span> PromiseLike&lt;<span style="color:#c6a0f6">FastifyInstance</span>&lt;<span style="color:#c6a0f6">Server</span>, <span style="color:#8aadf4">Request</span>, <span style="color:#8aadf4">Reply</span>, <span style="color:#8aadf4">Logger</span>, <span style="color:#8aadf4">TypeProvider</span>&gt;&gt;
+</span></span></code></pre><p>To get the port of the server it's:</p>
+<pre style="color:#cad3f5;background-color:#24273a;-webkit-text-size-adjust:none;"><code><span style="display:flex;"><span>        <span style="color:#c6a0f6">const</span> address <span style="color:#91d7e3;font-weight:bold">=</span> server.server.address() <span style="color:#c6a0f6">as</span> AddressInfo
+</span></span><span style="display:flex;"><span>        address.port
+</span></span></code></pre><p>I have a lost a lot of time to complicated types like these.</p>
+<h3>compile and run</h3>
+<p>compile the code with:</p>
+<pre style="color:#cad3f5;background-color:#24273a;-webkit-text-size-adjust:none;"><code><span style="display:flex;"><span>tsc
+</span></span></code></pre><p>With bigger projects you probably want to move to swc, or the <code>speedy web compile</code> for builds as compiling is a lot faster. There is esbuild aswell.</p>
+<p>run the code with:</p>
+<pre style="color:#cad3f5;background-color:#24273a;-webkit-text-size-adjust:none;"><code><span style="display:flex;"><span>node dist/index.js
+</span></span></code></pre><p>Sweet...</p>
+<p>With more advanced projects you probably want to compile with <code>swc</code> the speedy web compiler, or esbuild. I think they are a lot faster they <code>tsc</code> or typescript compile.</p>
+<p>As an aside to run Typescript code with bun, it is just:</p>
+<pre style="color:#cad3f5;background-color:#24273a;-webkit-text-size-adjust:none;"><code><span style="display:flex;"><span>bun run index.ts
+</span></span></code></pre><p>You are generally stepping through two tools to run and compile.</p>
+<h3>deploy it - it's not done until it is running in production</h3>
+<h4>setup the server</h4>
+<p>Let's create a tiny EC2 instance on amazon web services (AWS), like t4g.nano spot instance. We will just use ssh, and scp to setup the server.</p>
+<p>Let's connect to the server</p>
+<pre style="color:#cad3f5;background-color:#24273a;-webkit-text-size-adjust:none;"><code><span style="display:flex;"><span>ssh -i ~/.ssh/ec2-key.pem ec2-user@52.64.95.107
+</span></span></code></pre><p>Once on the server we need to install node. You would think it is just:</p>
+<pre style="color:#cad3f5;background-color:#24273a;-webkit-text-size-adjust:none;"><code><span style="display:flex;"><span>sudo yum install node
+</span></span></code></pre><p>But that doesn't work.</p>
+<p>It's actually:</p>
+<pre style="color:#cad3f5;background-color:#24273a;-webkit-text-size-adjust:none;"><code><span style="display:flex;"><span>curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash <span style="color:#6e738d;font-style:italic"># install node version manager</span>
+</span></span><span style="display:flex;"><span><span style="color:#91d7e3">source</span> ~/.bashrc <span style="color:#6e738d;font-style:italic"># load nvm</span>
+</span></span><span style="display:flex;"><span>nvm install --lts <span style="color:#6e738d;font-style:italic"># install long term support version</span>
+</span></span></code></pre><p>Let's make a directory for the code as well on the server:</p>
+<pre style="color:#cad3f5;background-color:#24273a;-webkit-text-size-adjust:none;"><code><span style="display:flex;"><span>mkdir node
+</span></span></code></pre><h4>move the code to the server, and run the code</h4>
+<p>Now the server is setup let's move the code there.</p>
+<pre style="color:#cad3f5;background-color:#24273a;-webkit-text-size-adjust:none;"><code><span style="display:flex;"><span><span style="color:#6e738d;font-style:italic"># copy the package.json file for dependencies</span>
+</span></span><span style="display:flex;"><span>scp -i ~/.ssh/ec2-key.pem package.json ec2-user@52.64.95.107:/home/ec2-user/node
+</span></span><span style="display:flex;"><span><span style="color:#6e738d;font-style:italic"># copy the package-lock.json for dependency versions</span>
+</span></span><span style="display:flex;"><span>scp -i ~/.ssh/ec2-key.pem package-lock.json ec2-user@52.64.95.107:/home/ec2-user/node
+</span></span><span style="display:flex;"><span><span style="color:#6e738d;font-style:italic"># copy the dist directory for the compiled code</span>
+</span></span><span style="display:flex;"><span>scp -i ~/.ssh/ec2-key.pem -r dist/ ec2-user@52.64.95.107:/home/ec2-user/node
+</span></span></code></pre><p>Back on the server we need to re-install the packages, and run the code:</p>
+<pre style="color:#cad3f5;background-color:#24273a;-webkit-text-size-adjust:none;"><code><span style="display:flex;"><span><span style="color:#91d7e3">cd</span> node
+</span></span><span style="display:flex;"><span>npm install --production <span style="color:#6e738d;font-style:italic"># you could copy the node_modules, but i think installing is more safer</span>
+</span></span><span style="display:flex;"><span><span style="color:#6e738d;font-style:italic"># the production flag seem you don&#39;t install devDependencies</span>
+</span></span><span style="display:flex;"><span><span style="color:#6e738d;font-style:italic"># now let&#39;s run the server:</span>
+</span></span><span style="display:flex;"><span>nohup node dist/index.js &gt; application.log &amp;
+</span></span></code></pre><p><code>nohup</code> mean no hang up, it prevents the linux server from shutting now the process. <code>&amp;</code> runs the process in the background.</p>
+<h3>thoughts on developer experience</h3>
+<p>And that's it, we have a server listening on port 3000, serving content.</p>
+<p>I can deploy a web server somewhat quickly, but I felt pain on basically every step:</p>
+<ul>
+<li>The package.json file has a lot of garbage in it, which annoys me</li>
+<li>I get overwhelmed by the tsconfig.json file being 100 lines of options from <code>tsc --init</code></li>
+<li>The types of some objects are crazy.</li>
+<li>Compiling can run into issues with misconfigured tsconfig.json, and with bigger projects you would want to move to the speedy web compiler <code>swc</code> for a lot more speed</li>
+<li>on the server I needed to install node, a node version manager and the libraries again, and scp a directory</li>
+<li>writing a test you need another tool (see below)</li>
+</ul>
+<p>We also missed out on setting up prettier, and eslint, and sharing code between projects, and workspaces, which can be very confusing.</p>
+<p>I did enjoy the good library support though.</p>
+<p>Check my other post on how this compares to Go language.</p>
+<h3>bonus... setting up testing</h3>
+<p>Here is a bonus of setting up tests with node. You can use jest, or vitest. I'm using vitest as it's more modern.</p>
+<pre style="color:#cad3f5;background-color:#24273a;-webkit-text-size-adjust:none;"><code><span style="display:flex;"><span>npm install -D vitest
+</span></span></code></pre><p>You generally need <code>vitest.config.ts</code> file, and to add the test script to package.json.</p>
+<p>From there you write tests in the file like <code>.test.ts</code>.</p>
+<h3>References:</h3>
+<ol>
+<li>How to install node on amazon linux:
+https://docs.aws.amazon.com/sdk-for-javascript/v2/developer-guide/setting-up-node-on-ec2-instance.html</li>
+</ol>
+</div><!-- this back button has a lot of styles to it... --><a href="../../" class="back fixed bottom-8 left-1/2 -translate-x-1/2 py-3 px-5 font-mono text-sm tracking-wide text-gold border border-border-light rounded-sm hover:border-gold transition-colors focus-visible:outline-2 focus-visible:outline-gold focus-visible:outline-offset-2 bg-ink/80 backdrop-blur-sm" aria-label="Back to homepage">BACK <span class="text-dim text-xs not-italic">[B]</span></a></main><footer class="text-center text-faint py-12 px-6 font-mono text-xs tracking-widest">Jordan Stewart • © 2026</footer><script>
+				document.addEventListener('keydown', e => {
+				  if (e.key === 'b' || e.key === 'B') document.querySelector('.back').click()
+				})
+			</script><!-- add random google tag shit here --></body></html>

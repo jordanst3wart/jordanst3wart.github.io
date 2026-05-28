@@ -1,0 +1,83 @@
+<html><!doctype html><head><title>Writing a terraform variables parser and writer</title><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400;1,500&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet"><script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script><link rel="icon" type="image/png" sizes="32x32" href="/static/favicon-32x32.png"><link rel="icon" type="image/png" sizes="16x16" href="/static/favicon-16x16.png"><!-- add more random shit there that does in the header site meta things https://github.com/jordanst3wart/stewart.bot/blob/main/data/siteMetadata.ts --><!--TODO move to something like: <link rel="stylesheet" href="app.css"> if you feel like it--><style type="text/tailwindcss">
+		  @import "tailwindcss";
+          @theme {
+            --font-display: 'EB Garamond', Georgia, serif;
+            --font-mono: 'JetBrains Mono', monospace;
+            /* 'border' might clash with a tailwind thingy...
+            TODO change the names of these colours to the cattppuccino names
+            */
+
+            --color-ink: #24273a;
+            --color-paper: #cad3f5;
+            --color-gold: #c6a0f6;
+            --color-gold-light: #b7bdf8;
+            --color-muted: #6e738d;
+            --color-dim: #5b6078;
+            --color-faint: #363a4f;
+            --color-body: #b8c0e0;
+            --color-excerpt: #8087a2;
+            --color-border: #1e2030;
+            --color-border-light: #494d64;
+          }
+
+          p {
+            margin-block-start: 1em;
+            margin-block-end: 1em;
+          }
+
+          code {
+              background: #363a4f;
+              /*border-2 border-solid*/
+          }
+
+          /*h3 {
+              text-4xl
+          }*/
+          /* need to style ul and ol, and probably different headings as well
+          */
+        </style></head><body class="bg-ink text-paper font-display text-lg leading-relaxed antialiased"><main class="max-w-[680px] mx-auto px-6 pt-16 pb-24"><h1 class="text-4xl font-medium tracking-tight leading-tight mb-1">Writing a terraform variables parser and writer</h1><h3 class="font-mono text-sm tracking-wide text-dim mb-8">February 25, 2025</h3><!-- trying the exact formatting of mitchellh.com... i will change it soon added "content" --><div class="content"><p>I recently wrote a small library to parse tfvar files, or hcl files, for jdk languages. I wrote the library in kotlin, and it's just two files, with a lot of tests. I wrote it so, because I wanted to be a library author of a really small but useful library. Currently, there is only hcl4j that can parse hcl files, but not write HCL files. I really wanted it to be simple, and low/no dependencies.</p>
+<p>I found the hardest part of about writing a library was actually publishing the package to maven. Writing the parser was challenging too, but I think sorting out PGP keys was more challenging. I wanted the library to be maintained in a test driven way, which I think makes sense with this library. It's easy to have a lot of tests that parse HCL, and match an expected result.</p>
+<p>I want to compare it to hcl4j...
+Number of tests:
+hcl4j: 52 tests
+hcl: 31 tests</p>
+<p>Number of lines of code:
+hcl: 439
+hcl4j: 3578 (also generates 1678 lines with jflex)</p>
+<p>Number of source code files:
+hcl: 2
+hcl4j: 36 (plus one generated)</p>
+<p>I wonder how they got heredoc parsing to work.</p>
+<p>Indented heredoc I still don't have support for, but this is normal heredoc:</p>
+<pre style="color:#cad3f5;background-color:#24273a;-webkit-text-size-adjust:none;"><code><span style="display:flex;"><span>user_data2 <span style="color:#91d7e3;font-weight:bold">=</span> <span style="color:#ed8796">&lt;&lt;</span><span style="color:#c6a0f6">FOO</span><span style="color:#6e738d;font-style:italic">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e738d;font-style:italic">#!/bin/bash
+</span></span></span><span style="display:flex;"><span><span style="color:#c6a0f6">echo</span> <span style="color:#a6da95">&#34;Hello, World!&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#c6a0f6">yum</span> <span style="color:#c6a0f6">update</span> <span style="color:#ed8796">-</span><span style="color:#c6a0f6">y</span>
+</span></span><span style="display:flex;"><span><span style="color:#c6a0f6">yum</span> <span style="color:#c6a0f6">install</span> <span style="color:#ed8796">-</span><span style="color:#c6a0f6">y</span> <span style="color:#c6a0f6">httpd</span>
+</span></span><span style="display:flex;"><span><span style="color:#c6a0f6">systemctl</span> <span style="color:#c6a0f6">start</span> <span style="color:#c6a0f6">httpd</span>
+</span></span><span style="display:flex;"><span><span style="color:#c6a0f6">systemctl</span> <span style="color:#c6a0f6">enable</span> <span style="color:#c6a0f6">httpd</span>
+</span></span><span style="display:flex;"><span><span style="color:#c6a0f6">FOO</span>
+</span></span></code></pre><p>It has a delimiter, which can be any word repeated, in this case 'FOO', and starts with <code>&lt;&lt;</code>. It starts with <code>&lt;&lt;-</code> for indented heredoc.</p>
+<p>Hcl4j parses heredoc fine, but doesn't get the indent right with indented heredoc.</p>
+<p>ie.</p>
+<pre style="color:#cad3f5;background-color:#24273a;-webkit-text-size-adjust:none;"><code><span style="display:flex;"><span>user_data2 <span style="color:#91d7e3;font-weight:bold">=</span> <span style="color:#ed8796">&lt;&lt;-</span><span style="color:#c6a0f6">FOO</span><span style="color:#6e738d;font-style:italic">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e738d;font-style:italic">  #!/bin/bash
+</span></span></span><span style="display:flex;"><span>  <span style="color:#c6a0f6">echo</span> <span style="color:#a6da95">&#34;Hello, World!&#34;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#c6a0f6">yum</span> <span style="color:#c6a0f6">update</span> <span style="color:#ed8796">-</span><span style="color:#c6a0f6">y</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#c6a0f6">yum</span> <span style="color:#c6a0f6">install</span> <span style="color:#ed8796">-</span><span style="color:#c6a0f6">y</span> <span style="color:#c6a0f6">httpd</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#c6a0f6">systemctl</span> <span style="color:#c6a0f6">start</span> <span style="color:#c6a0f6">httpd</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#c6a0f6">systemctl</span> <span style="color:#c6a0f6">enable</span> <span style="color:#c6a0f6">httpd</span>
+</span></span><span style="display:flex;"><span><span style="color:#c6a0f6">FOO</span>
+</span></span></code></pre><p>Should be processed to:</p>
+<pre style="color:#cad3f5;background-color:#24273a;-webkit-text-size-adjust:none;"><code><span style="display:flex;"><span><span style="color:#6e738d;font-style:italic">#!/bin/bash
+</span></span></span><span style="display:flex;"><span><span style="color:#91d7e3">echo</span> <span style="color:#a6da95">&#34;Hello, World!&#34;</span>
+</span></span><span style="display:flex;"><span>yum update -y
+</span></span><span style="display:flex;"><span>yum install -y httpd
+</span></span><span style="display:flex;"><span>systemctl start httpd
+</span></span><span style="display:flex;"><span>systemctl <span style="color:#91d7e3">enable</span> httpd
+</span></span></code></pre><p>The two spaces should be removed.</p>
+</div><!-- this back button has a lot of styles to it... --><a href="../../" class="back fixed bottom-8 left-1/2 -translate-x-1/2 py-3 px-5 font-mono text-sm tracking-wide text-gold border border-border-light rounded-sm hover:border-gold transition-colors focus-visible:outline-2 focus-visible:outline-gold focus-visible:outline-offset-2 bg-ink/80 backdrop-blur-sm" aria-label="Back to homepage">BACK <span class="text-dim text-xs not-italic">[B]</span></a></main><footer class="text-center text-faint py-12 px-6 font-mono text-xs tracking-widest">Jordan Stewart • © 2026</footer><script>
+				document.addEventListener('keydown', e => {
+				  if (e.key === 'b' || e.key === 'B') document.querySelector('.back').click()
+				})
+			</script><!-- add random google tag shit here --></body></html>

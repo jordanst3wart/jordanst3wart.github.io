@@ -1,0 +1,110 @@
+<html><!doctype html><head><title>Redux is not needed anymore</title><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400;1,500&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet"><script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script><link rel="icon" type="image/png" sizes="32x32" href="/static/favicon-32x32.png"><link rel="icon" type="image/png" sizes="16x16" href="/static/favicon-16x16.png"><!-- add more random shit there that does in the header site meta things https://github.com/jordanst3wart/stewart.bot/blob/main/data/siteMetadata.ts --><!--TODO move to something like: <link rel="stylesheet" href="app.css"> if you feel like it--><style type="text/tailwindcss">
+		  @import "tailwindcss";
+          @theme {
+            --font-display: 'EB Garamond', Georgia, serif;
+            --font-mono: 'JetBrains Mono', monospace;
+            /* 'border' might clash with a tailwind thingy...
+            TODO change the names of these colours to the cattppuccino names
+            */
+
+            --color-ink: #24273a;
+            --color-paper: #cad3f5;
+            --color-gold: #c6a0f6;
+            --color-gold-light: #b7bdf8;
+            --color-muted: #6e738d;
+            --color-dim: #5b6078;
+            --color-faint: #363a4f;
+            --color-body: #b8c0e0;
+            --color-excerpt: #8087a2;
+            --color-border: #1e2030;
+            --color-border-light: #494d64;
+          }
+
+          p {
+            margin-block-start: 1em;
+            margin-block-end: 1em;
+          }
+
+          code {
+              background: #363a4f;
+              /*border-2 border-solid*/
+          }
+
+          /*h3 {
+              text-4xl
+          }*/
+          /* need to style ul and ol, and probably different headings as well
+          */
+        </style></head><body class="bg-ink text-paper font-display text-lg leading-relaxed antialiased"><main class="max-w-[680px] mx-auto px-6 pt-16 pb-24"><h1 class="text-4xl font-medium tracking-tight leading-tight mb-1">Redux is not needed anymore</h1><h3 class="font-mono text-sm tracking-wide text-dim mb-8">February 28, 2024</h3><!-- trying the exact formatting of mitchellh.com... i will change it soon added "content" --><div class="content"><p>I don't think Redux is needed anymore. And I think this is because of three different reasons:</p>
+<ol>
+<li>A lot of frontends should not have a lot of state in them</li>
+<li>Some frontends use redux to check if elements are loaded which is just a bad practice, and react query is better for this</li>
+<li>And finally if you do have complicated state in the frontend there are better, and simplier alternatives, such as Zustand, and Jotai, react.js useState, preact useSignal</li>
+</ol>
+<h3>1. A lot of frontends should not have a lot of state in them</h3>
+<p>I want you to have a look at a stream on twitch.tv, and see how much state is in the frontend. Twitch.tv has an extremely interactive frontend, and should be using something to manage state in the frontend. It has &quot;local machine state&quot;, or &quot;browser state&quot; such as a live audio feed, and live video feed. It also has a lot of user information that needs to be passed down to the frontend such as a live message feed. It has local browser state, like is the microphone streaming to the browser, and complex application information like a live chat. This makes it very strategic to carefully manage state in the frontend.</p>
+<p>If your application has to carefully manage frontend state like twitch.tv then it is a great idea to have state in the frontend. Otherwise, you should central state more from the server. It is extremely rare to have require such complicated state in the frontend. There is only a few categories that should require if like online games, application that need to be offline, video streaming, and live feed websites. Other websites if probably better just to store state in the server.</p>
+<p>Separately, a lot of frontends are moving from the traditions single page app (or SPA) model to be rendered on the server (or use server side rendering). This is so the application can render faster, and have a better user experience. This is becoming more popular with Next.js, and react.</p>
+<h3>2. Some frontends use redux to check if elements are loaded which is just a bad practice</h3>
+<p>In some React, or redux codebases you have:</p>
+<pre style="color:#cad3f5;background-color:#24273a;-webkit-text-size-adjust:none;"><code><span style="display:flex;"><span><span style="color:#c6a0f6">const</span> dispatch <span style="color:#91d7e3;font-weight:bold">=</span> useDispatch()
+</span></span><span style="display:flex;"><span><span style="color:#c6a0f6">const</span> { data, isLoading, error } <span style="color:#91d7e3;font-weight:bold">=</span> useSelector((state) =&gt; state.data)
+</span></span><span style="display:flex;"><span><span style="color:#6e738d;font-style:italic">// potentially some use useEffect
+</span></span></span><span style="display:flex;"><span><span style="color:#c6a0f6">if</span> (isLoading) <span style="color:#c6a0f6">return</span> <span style="color:#91d7e3;font-weight:bold">&lt;</span>div<span style="color:#91d7e3;font-weight:bold">&gt;</span>Loading...<span style="color:#91d7e3;font-weight:bold">&lt;</span><span style="color:#ed8796">/div&gt;</span>
+</span></span></code></pre><p>The <code>useDispatch</code> and <code>useSelector</code> are from the <code>react-redux</code> library. The <code>useDispatch</code> is used to dispatch an action to the redux store, and the <code>useSelector</code> is used to get the state from the redux store. The <code>useEffect</code> is used to check if the data is loading, and if it is loading then it will return a loading message.</p>
+<p>This requires a store to be created, and a reducer to be created. The reducer is created like:</p>
+<pre style="color:#cad3f5;background-color:#24273a;-webkit-text-size-adjust:none;"><code><span style="display:flex;"><span><span style="color:#ed8796">function</span> dataReducer(state <span style="color:#91d7e3;font-weight:bold">=</span> initialState, action) {
+</span></span><span style="display:flex;"><span>  <span style="color:#c6a0f6">switch</span> (action.type) {
+</span></span><span style="display:flex;"><span>    <span style="color:#c6a0f6">case</span> <span style="color:#a6da95">&#39;FETCH_DATA_BEGIN&#39;</span><span style="color:#91d7e3;font-weight:bold">:</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#c6a0f6">return</span> {
+</span></span><span style="display:flex;"><span>        ...state,
+</span></span><span style="display:flex;"><span>        isLoading<span style="color:#91d7e3;font-weight:bold">:</span> <span style="color:#f5a97f">true</span>,
+</span></span><span style="display:flex;"><span>        error<span style="color:#91d7e3;font-weight:bold">:</span> <span style="color:#f5a97f">null</span>,
+</span></span><span style="display:flex;"><span>      }
+</span></span><span style="display:flex;"><span>    <span style="color:#c6a0f6">case</span> <span style="color:#a6da95">&#39;FETCH_DATA_SUCCESS&#39;</span><span style="color:#91d7e3;font-weight:bold">:</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#c6a0f6">return</span> {
+</span></span><span style="display:flex;"><span>        ...state,
+</span></span><span style="display:flex;"><span>        isLoading<span style="color:#91d7e3;font-weight:bold">:</span> <span style="color:#f5a97f">false</span>,
+</span></span><span style="display:flex;"><span>        data<span style="color:#91d7e3;font-weight:bold">:</span> action.payload.data,
+</span></span><span style="display:flex;"><span>      }
+</span></span><span style="display:flex;"><span>    <span style="color:#c6a0f6">default</span><span style="color:#91d7e3;font-weight:bold">:</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#c6a0f6">return</span> state
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#c6a0f6">const</span> rootReducer <span style="color:#91d7e3;font-weight:bold">=</span> combineReducers({
+</span></span><span style="display:flex;"><span>  data<span style="color:#91d7e3;font-weight:bold">:</span> dataReducer,
+</span></span><span style="display:flex;"><span>})
+</span></span><span style="display:flex;"><span><span style="color:#c6a0f6">export</span> <span style="color:#c6a0f6">const</span> store <span style="color:#91d7e3;font-weight:bold">=</span> createStore(rootReducer)
+</span></span></code></pre><p>This is extremely heavily for the purpose of checking if the data is loading. You are creating a state machine to handle web requests. If the website is rendered on the server as well, this logic is not required. But if it is rendered on the client it's simpler to use <code>useState</code>, and better to use <code>react-query</code> to check if the data is loading.</p>
+<p>You can use <code>useState</code>, like:</p>
+<pre style="color:#cad3f5;background-color:#24273a;-webkit-text-size-adjust:none;"><code><span style="display:flex;"><span><span style="color:#c6a0f6">const</span> [data, setData] <span style="color:#91d7e3;font-weight:bold">=</span> useState([])
+</span></span><span style="display:flex;"><span><span style="color:#c6a0f6">const</span> [isLoading, setIsLoading] <span style="color:#91d7e3;font-weight:bold">=</span> useState(<span style="color:#f5a97f">false</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>useEffect(<span style="color:#c6a0f6">async</span> () =&gt; {
+</span></span><span style="display:flex;"><span>  setIsLoading(<span style="color:#f5a97f">true</span>)
+</span></span><span style="display:flex;"><span>  <span style="color:#c6a0f6">const</span> data <span style="color:#91d7e3;font-weight:bold">=</span> <span style="color:#c6a0f6">await</span> fetch(<span style="color:#a6da95">&#39;/some-api-endpoint&#39;</span>)
+</span></span><span style="display:flex;"><span>  setData(data)
+</span></span><span style="display:flex;"><span>  setIsLoading(<span style="color:#f5a97f">false</span>)
+</span></span><span style="display:flex;"><span>}, [])
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#c6a0f6">if</span> (isLoading) <span style="color:#c6a0f6">return</span> <span style="color:#91d7e3;font-weight:bold">&lt;</span>div<span style="color:#91d7e3;font-weight:bold">&gt;</span>Loading...<span style="color:#91d7e3;font-weight:bold">&lt;</span><span style="color:#ed8796">/div&gt;</span>
+</span></span></code></pre><p>This is a lot simpler than introducing a state container, and handling the state in the component and the reducer.</p>
+<p>This works, but doesn't look the best. This is where <code>react-query</code> comes in. <code>react-query</code> is a library that is used to handle web requests, and check if the data is loading. It is a lot simpler than using <code>useState</code>, and <code>useEffect</code> to check if the data is loading. You can use <code>react-query</code> like:</p>
+<pre style="color:#cad3f5;background-color:#24273a;-webkit-text-size-adjust:none;"><code><span style="display:flex;"><span><span style="color:#c6a0f6">const</span> { data, isLoading, error } <span style="color:#91d7e3;font-weight:bold">=</span> useQuery(<span style="color:#a6da95">&#39;data&#39;</span>, () =&gt; fetch(<span style="color:#a6da95">&#39;/some-api-endpoint&#39;</span>))
+</span></span><span style="display:flex;"><span><span style="color:#c6a0f6">if</span> (isLoading) <span style="color:#c6a0f6">return</span> <span style="color:#91d7e3;font-weight:bold">&lt;</span>div<span style="color:#91d7e3;font-weight:bold">&gt;</span>Loading...<span style="color:#91d7e3;font-weight:bold">&lt;</span><span style="color:#ed8796">/div&gt;</span>
+</span></span></code></pre><p>This looks a lot nicer than useEffect. You do have to learn the react-query library though. It also might not be the best managing state that says on the frontend, like writing cookies, saving to local storage, is the camera on, or off and is the microphone on, or off. It's worth mentioning a lot of libraries are changing to <code>useSignal</code> like Solid.js, preact, and qwik. You can use preact signals in react apps by using <code>@preact/signals-react</code> library.</p>
+<p>The <code>useSignal</code> is using the observer pattern, rather than the state machine pattern used by redux.</p>
+<p>As an aside, apparently useContext might not be the best, even though it's available from the react library.</p>
+<h3>3. And finally if you do have complicated state in the frontend there are better, and simplier alternatives, such as Zustand, and Jotai</h3>
+<p>I have not deeply looked into these libraries, but Jotai uses atoms similar to how signals work in preact, and Solid.js, and Zustand is a slimmer version of redux, with more simple syntax.</p>
+<p>They offer lighter syntax, and offer more of a library approach rather than a framework.</p>
+<h3>Post Script</h3>
+<p>Lastly, this is a great resource:
+Theo - t3․gg - You still use Redux? https://www.youtube.com/watch?v=5-1LM2NySR0</p>
+<p>A lot of the state manage on the frontend has changed dynamically in the last few years, but I think it is converging around signals.</p>
+</div><!-- this back button has a lot of styles to it... --><a href="../../" class="back fixed bottom-8 left-1/2 -translate-x-1/2 py-3 px-5 font-mono text-sm tracking-wide text-gold border border-border-light rounded-sm hover:border-gold transition-colors focus-visible:outline-2 focus-visible:outline-gold focus-visible:outline-offset-2 bg-ink/80 backdrop-blur-sm" aria-label="Back to homepage">BACK <span class="text-dim text-xs not-italic">[B]</span></a></main><footer class="text-center text-faint py-12 px-6 font-mono text-xs tracking-widest">Jordan Stewart • © 2026</footer><script>
+				document.addEventListener('keydown', e => {
+				  if (e.key === 'b' || e.key === 'B') document.querySelector('.back').click()
+				})
+			</script><!-- add random google tag shit here --></body></html>

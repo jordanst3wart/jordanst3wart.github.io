@@ -51,7 +51,6 @@ templ headerComponent(title string) {
             --color-mantle: oklch(0.25 0.03 278);
             --color-crust: oklch(0.22 0.03 281);
 
-            --color-ink: #24273a;
             --color-dim: #5b6078;
             --color-faint: #363a4f;
             --color-body: #b8c0e0;
@@ -70,7 +69,7 @@ templ headerComponent(title string) {
 
 templ contentComponent(title string, date string, body templ.Component) {
 	<h1 class="text-4xl font-medium tracking-tight leading-tight mb-1">{ title }</h1>
-	<h3 class="font-mono text-sm tracking-wide text-dim mb-8">{ date }</h3>
+	<h3 class="font-mono text-sm tracking-wide text-overlay0 mb-8">{ date }</h3>
 	<!-- could move this styling-->
 	<div class="content [&_ul]:list-disc [&_ul]:list-inside [&_ol]:list-decimal [&_ol]:list-inside [&_a]:text-blue-600 [&_a:hover]:underline">
 		@body
@@ -89,18 +88,18 @@ templ links() {
 }
 
 templ about() {
-	<section id="about" class="py-20 first:pt-28">
-		<h1 class="text-4xl font-medium tracking-tight leading-tight mb-1">Jordan Stewart <span class="text-dim">[A]</span></h1>
+	<section id="about" class="py-10 px-4 first:pt-16 bg-mantle rounded-lg">
+		<h1 class="text-4xl font-medium tracking-tight leading-tight mb-1">Jordan Stewart <span class="text-surface2">[A]</span></h1>
 		<p class="text-overlay1 font-mono text-base tracking-wide mb-8">Engineer</p>
 		<p class="mb-5 text-body">I write about ideas, opportunities and situations I see, so I can learn, and communicate better. I'm trying to take a grounded approach to problem solving, and look at things threw equations, or first principles, with reason assumptions. Any content written is not from an large language model, and the ideas are my own.</p>
-		<p class="text-overlay1 italic text-sm">Currently, working on removing dependencies.</p>
+		<p class="text-overlay1 italic text-sm">Currently removing dependencies & vulnerabilities.</p>
 		@links()
 	</section>
 }
 
 templ writing(posts []Post) {
-	<section id="writings" class="py-10">
-		<h2 class="text-3xl font-medium mb-6 flex items-center gap-3 before:inline before:content-['*'] before:text-mauve before:font-mono before:font-normal before:text-[1.75rem]">Writings <span class="text-dim">[W]</span></h2>
+	<section id="writings" class="py-10 px-4 bg-mantle rounded-lg">
+		<h2 class="text-3xl font-medium mb-6 flex items-center gap-3 before:inline before:content-['*'] before:text-mauve before:font-mono before:font-normal before:text-[1.75rem]">Writings <span class="text-surface2">[W]</span></h2>
 		for index, post := range posts {
 			@writingArticle(post, index)
 		}
@@ -108,7 +107,7 @@ templ writing(posts []Post) {
 }
 
 templ birb() {
-	<section id="birb" class="justify-items-center">
+	<section id="birb" class="py-4 justify-items-center">
 		<svg version="1.0" xmlns="http://www.w3.org/2000/svg" width="60" height="60" viewBox="0 0 80.000000 82.000000" preserveAspectRatio="xMidYMid meet"><g transform="translate(0.000000,82.000000) scale(0.100000,-0.100000)" fill="#f4dbd6" stroke="none"><path d="M495 718 c-3 -8 -4 -55 -3 -106 l3 -91 105 99 105 99 -65 1 c-36 0 -82 3 -102 6 -28 5 -39 3 -43 -8z"></path><path d="M380 610 l-92 -100 96 0 96 0 0 100 c0 55 -2 100 -4 100 -2 0 -45 -45 -96 -100z"></path><path d="M671 660 c-30 -26 -20 -25 21 0 18 11 26 20 18 20 -8 -1 -26 -10 -39 -20z"></path><path d="M160 585 l0 -75 48 0 c37 0 53 5 69 23 l21 22 -48 53 c-29 30 -57 52 -69 52 -19 0 -21 -6 -21 -75z"></path><path d="M115 630 c-18 -19 -17 -20 3 -20 15 0 22 6 22 20 0 11 -2 20 -3 20 -2 0 -12 -9 -22 -20z"></path><path d="M180 483 c1 -5 47 -57 104 -117 l103 -108 38 103 c21 57 40 110 42 117 4 9 -28 12 -141 12 -80 0 -146 -3 -146 -7z"></path><path d="M463 405 c-6 -16 -27 -74 -47 -127 l-35 -97 45 -26 c25 -15 48 -25 50 -22 3 2 3 71 2 153 -3 125 -5 144 -15 119z"></path></g></svg>
 	</section>
 }
@@ -117,20 +116,20 @@ templ writingArticle(post Post, index int) {
 	<!-- border border is weird -->
 	<div class="py-3 border-b border-border last:border-0">
 		<p class="text-xl font-medium mb-1">
-			<a href={ templ.SafeURL(post.Metadata.Link) } class="text-text hover:text-mauve">{ post.Metadata.Title } <span class="text-dim">[{ index + 1 }]</span></a>
+			<a href={ templ.SafeURL(post.Metadata.Link) } class="text-text hover:text-mauve">{ post.Metadata.Title } <span class="text-surface2">[{ index + 1 }]</span></a>
 		</p>
-		<p class="font-mono text-xs tracking-wide text-dim mb-1">{ post.Metadata.Date.Format("January 2, 2006") }</p>
+		<p class="font-mono text-xs tracking-wide text-overlay0 mb-1">{ post.Metadata.Date.Format("January 2, 2006") }</p>
 	</div>
 }
 
 templ contentPage(title string, date string, body templ.Component) {
 	<html>
 		@headerComponent(title)
-		<body class="bg-ink text-text font-display text-lg leading-relaxed antialiased">
-			<main class="max-w-[680px] mx-auto px-6 pt-16 pb-24">
+		<body class="bg-crust text-text font-display text-lg leading-relaxed antialiased">
+			<main class="max-w-[680px] bg-mantle mx-auto px-6 pt-16 pb-24 rounded-lg">
 				@contentComponent(title, date, body)
 				<!-- this back button has a lot of styles to it... -->
-				<a href="../../" class="back fixed bottom-8 left-1/2 -translate-x-1/2 py-3 px-5 font-mono text-sm tracking-wide text-mauve border border-border-light rounded-sm hover:border-mauve transition-colors focus-visible:outline-2 focus-visible:outline-mauve focus-visible:outline-offset-2 bg-ink/80 backdrop-blur-sm" aria-label="Back to homepage">BACK <span class="text-dim text-xs not-italic">[B]</span></a>
+				<a href="../../" class="back fixed bottom-8 left-1/2 -translate-x-1/2 py-3 px-5 font-mono text-sm tracking-wide text-mauve border border-border-light rounded-sm hover:border-mauve transition-colors focus-visible:outline-2 focus-visible:outline-mauve focus-visible:outline-offset-2 bg-base/80 backdrop-blur-sm" aria-label="Back to homepage">BACK <span class="text-surface2 text-xs not-italic">[B]</span></a>
 			</main>
 			@footer()
 			<script>
@@ -146,7 +145,7 @@ templ contentPage(title string, date string, body templ.Component) {
 templ indexPage(posts []Post, links []string) {
 	<html>
 		@headerComponent("Jordan Stewart")
-		<body class="bg-ink text-text font-display text-lg leading-relaxed antialiased">
+		<body class="bg-crust text-text font-display text-lg leading-relaxed antialiased">
 			/* @nav() */
 			<main class="max-w-[680px] mx-auto px-6">
 				@about()

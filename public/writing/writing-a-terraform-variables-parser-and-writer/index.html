@@ -36,7 +36,6 @@
             --color-mantle: oklch(0.25 0.03 278);
             --color-crust: oklch(0.22 0.03 281);
 
-            --color-ink: #24273a;
             --color-dim: #5b6078;
             --color-faint: #363a4f;
             --color-body: #b8c0e0;
@@ -49,7 +48,7 @@
             margin-block-start: 1em;
             margin-block-end: 1em;
           }
-        </style></head><body class="bg-ink text-text font-display text-lg leading-relaxed antialiased"><main class="max-w-[680px] mx-auto px-6 pt-16 pb-24"><h1 class="text-4xl font-medium tracking-tight leading-tight mb-1">Writing a terraform variables parser and writer</h1><h3 class="font-mono text-sm tracking-wide text-dim mb-8">February 25, 2025</h3><!-- could move this styling--><div class="content [&_ul]:list-disc [&_ul]:list-inside [&_ol]:list-decimal [&_ol]:list-inside [&_a]:text-blue-600 [&_a:hover]:underline"><p>I recently wrote a small library to parse tfvar files, or hcl files, for jdk languages. I wrote the library in kotlin, and it's just two files, with a lot of tests. I wrote it so, because I wanted to be a library author of a really small but useful library. Currently, there is only hcl4j that can parse hcl files, but not write HCL files. I really wanted it to be simple, and low/no dependencies.</p>
+        </style></head><body class="bg-crust text-text font-display text-lg leading-relaxed antialiased"><main class="max-w-[680px] bg-mantle mx-auto px-6 pt-16 pb-24 rounded-lg"><h1 class="text-4xl font-medium tracking-tight leading-tight mb-1">Writing a terraform variables parser and writer</h1><h3 class="font-mono text-sm tracking-wide text-overlay0 mb-8">February 25, 2025</h3><!-- could move this styling--><div class="content [&_ul]:list-disc [&_ul]:list-inside [&_ol]:list-decimal [&_ol]:list-inside [&_a]:text-blue-600 [&_a:hover]:underline"><p>I recently wrote a small library to parse tfvar files, or hcl files, for jdk languages. I wrote the library in kotlin, and it's just two files, with a lot of tests. I wrote it so, because I wanted to be a library author of a really small but useful library. Currently, there is only hcl4j that can parse hcl files, but not write HCL files. I really wanted it to be simple, and low/no dependencies.</p>
 <p>I found the hardest part of about writing a library was actually publishing the package to maven. Writing the parser was challenging too, but I think sorting out PGP keys was more challenging. I wanted the library to be maintained in a test driven way, which I think makes sense with this library. It's easy to have a lot of tests that parse HCL, and match an expected result.</p>
 <p>I want to compare it to hcl4j...
 Number of tests:
@@ -90,7 +89,7 @@ hcl4j: 36 (plus one generated)</p>
 </span></span><span style="display:flex;"><span>systemctl start httpd
 </span></span><span style="display:flex;"><span>systemctl <span style="color:#91d7e3">enable</span> httpd
 </span></span></code></pre><p>The two spaces should be removed.</p>
-</div><!-- this back button has a lot of styles to it... --><a href="../../" class="back fixed bottom-8 left-1/2 -translate-x-1/2 py-3 px-5 font-mono text-sm tracking-wide text-mauve border border-border-light rounded-sm hover:border-mauve transition-colors focus-visible:outline-2 focus-visible:outline-mauve focus-visible:outline-offset-2 bg-ink/80 backdrop-blur-sm" aria-label="Back to homepage">BACK <span class="text-dim text-xs not-italic">[B]</span></a></main><footer class="text-center text-faint py-2 px-6 font-mono text-xs tracking-widest">Jordan Stewart • © 2026</footer><script>
+</div><!-- this back button has a lot of styles to it... --><a href="../../" class="back fixed bottom-8 left-1/2 -translate-x-1/2 py-3 px-5 font-mono text-sm tracking-wide text-mauve border border-border-light rounded-sm hover:border-mauve transition-colors focus-visible:outline-2 focus-visible:outline-mauve focus-visible:outline-offset-2 bg-base/80 backdrop-blur-sm" aria-label="Back to homepage">BACK <span class="text-surface2 text-xs not-italic">[B]</span></a></main><footer class="text-center text-faint py-2 px-6 font-mono text-xs tracking-widest">Jordan Stewart • © 2026</footer><script>
 				document.addEventListener('keydown', e => {
 				  if (e.key === 'b' || e.key === 'B') document.querySelector('.back').click()
 				})

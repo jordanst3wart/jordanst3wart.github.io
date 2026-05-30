@@ -42,7 +42,7 @@ func headerComponent(title string) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "</title><meta charset=\"UTF-8\"><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"><link rel=\"preconnect\" href=\"https://fonts.googleapis.com\"><link href=\"https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400;1,500&family=JetBrains+Mono:wght@400&display=swap\" rel=\"stylesheet\"><script src=\"https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4\"></script><link rel=\"icon\" type=\"image/png\" sizes=\"32x32\" href=\"/static/favicon-32x32.png\"><link rel=\"icon\" type=\"image/png\" sizes=\"16x16\" href=\"/static/favicon-16x16.png\"><!-- add more random shit there that does in the header site meta things https://github.com/jordanst3wart/stewart.bot/blob/main/data/siteMetadata.ts --><!--TODO move to something like: <link rel=\"stylesheet\" href=\"app.css\"> if you feel like it--><style type=\"text/tailwindcss\">\n\t\t  @import \"tailwindcss\";\n          @theme {\n            --font-display: 'EB Garamond', Georgia, serif;\n            --font-mono: 'JetBrains Mono', monospace;\n            /* 'border' might clash with a tailwind thingy...\n            TODO change the names of these colours to the cattppuccino names\n            Colours  from:\n            https://catppuccin.com/palette/\n            */\n\n            --color-rosewater: oklch(0.91 0.03 31);\n            --color-flamingo: oklch(0.86 0.05 18);\n            --color-pink: oklch(0.86 0.08 336);\n            --color-mauve: oklch(0.77 0.13 304);\n            --color-red: oklch(0.74 0.13 11);\n            --color-maroon: oklch(0.77 0.1 14);\n            --color-peach: oklch(0.8 0.11 50);\n            --color-yellow: oklch(0.88 0.07 85);\n            --color-green: oklch(0.83 0.11 138);\n            --color-teal: oklch(0.82 0.08 184);\n            --color-sky: oklch(0.84 0.07 209);\n            --color-sapphire: oklch(0.79 0.08 228);\n            --color-blue: oklch(0.75 0.11 264);\n            --color-lavender: oklch(0.81 0.08 280);\n            --color-text: oklch(0.87 0.05 274);\n            --color-subtext1: oklch(0.81 0.05 274);\n            --color-subtext0: oklch(0.75 0.04 274);\n            --color-overlay2: oklch(0.69 0.04 275);\n            --color-overlay1: oklch(0.63 0.04 274);\n            --color-overlay0: oklch(0.56 0.04 276);\n            --color-surface2: oklch(0.49 0.04 276);\n            --color-surface1: oklch(0.43 0.04 277);\n            --color-surface0: oklch(0.35 0.04 276);\n            --color-base: oklch(0.28 0.04 277);\n            --color-mantle: oklch(0.25 0.03 278);\n            --color-crust: oklch(0.22 0.03 281);\n\n            --color-ink: #24273a;\n            --color-dim: #5b6078;\n            --color-faint: #363a4f;\n            --color-body: #b8c0e0;\n            --color-excerpt: #8087a2;\n            --color-border: #1e2030;\n            --color-border-light: #494d64;\n          }\n\n          p {\n            margin-block-start: 1em;\n            margin-block-end: 1em;\n          }\n        </style></head>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "</title><meta charset=\"UTF-8\"><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"><link rel=\"preconnect\" href=\"https://fonts.googleapis.com\"><link href=\"https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400;1,500&family=JetBrains+Mono:wght@400&display=swap\" rel=\"stylesheet\"><script src=\"https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4\"></script><link rel=\"icon\" type=\"image/png\" sizes=\"32x32\" href=\"/static/favicon-32x32.png\"><link rel=\"icon\" type=\"image/png\" sizes=\"16x16\" href=\"/static/favicon-16x16.png\"><!-- add more random shit there that does in the header site meta things https://github.com/jordanst3wart/stewart.bot/blob/main/data/siteMetadata.ts --><!--TODO move to something like: <link rel=\"stylesheet\" href=\"app.css\"> if you feel like it--><style type=\"text/tailwindcss\">\n\t\t  @import \"tailwindcss\";\n          @theme {\n            --font-display: 'EB Garamond', Georgia, serif;\n            --font-mono: 'JetBrains Mono', monospace;\n            /* 'border' might clash with a tailwind thingy...\n            TODO change the names of these colours to the cattppuccino names\n            Colours  from:\n            https://catppuccin.com/palette/\n            */\n\n            --color-rosewater: oklch(0.91 0.03 31);\n            --color-flamingo: oklch(0.86 0.05 18);\n            --color-pink: oklch(0.86 0.08 336);\n            --color-mauve: oklch(0.77 0.13 304);\n            --color-red: oklch(0.74 0.13 11);\n            --color-maroon: oklch(0.77 0.1 14);\n            --color-peach: oklch(0.8 0.11 50);\n            --color-yellow: oklch(0.88 0.07 85);\n            --color-green: oklch(0.83 0.11 138);\n            --color-teal: oklch(0.82 0.08 184);\n            --color-sky: oklch(0.84 0.07 209);\n            --color-sapphire: oklch(0.79 0.08 228);\n            --color-blue: oklch(0.75 0.11 264);\n            --color-lavender: oklch(0.81 0.08 280);\n            --color-text: oklch(0.87 0.05 274);\n            --color-subtext1: oklch(0.81 0.05 274);\n            --color-subtext0: oklch(0.75 0.04 274);\n            --color-overlay2: oklch(0.69 0.04 275);\n            --color-overlay1: oklch(0.63 0.04 274);\n            --color-overlay0: oklch(0.56 0.04 276);\n            --color-surface2: oklch(0.49 0.04 276);\n            --color-surface1: oklch(0.43 0.04 277);\n            --color-surface0: oklch(0.35 0.04 276);\n            --color-base: oklch(0.28 0.04 277);\n            --color-mantle: oklch(0.25 0.03 278);\n            --color-crust: oklch(0.22 0.03 281);\n\n            --color-dim: #5b6078;\n            --color-faint: #363a4f;\n            --color-body: #b8c0e0;\n            --color-excerpt: #8087a2;\n            --color-border: #1e2030;\n            --color-border-light: #494d64;\n          }\n\n          p {\n            margin-block-start: 1em;\n            margin-block-end: 1em;\n          }\n        </style></head>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -78,20 +78,20 @@ func contentComponent(title string, date string, body templ.Component) templ.Com
 		var templ_7745c5c3_Var4 string
 		templ_7745c5c3_Var4, templ_7745c5c3_Err = templ.JoinStringErrs(title)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `blog.templ`, Line: 72, Col: 75}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `blog.templ`, Line: 71, Col: 75}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var4))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 4, "</h1><h3 class=\"font-mono text-sm tracking-wide text-dim mb-8\">")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 4, "</h1><h3 class=\"font-mono text-sm tracking-wide text-overlay0 mb-8\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var5 string
 		templ_7745c5c3_Var5, templ_7745c5c3_Err = templ.JoinStringErrs(date)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `blog.templ`, Line: 73, Col: 65}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `blog.templ`, Line: 72, Col: 70}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var5))
 		if templ_7745c5c3_Err != nil {
@@ -192,7 +192,7 @@ func about() templ.Component {
 			templ_7745c5c3_Var8 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 9, "<section id=\"about\" class=\"py-20 first:pt-28\"><h1 class=\"text-4xl font-medium tracking-tight leading-tight mb-1\">Jordan Stewart <span class=\"text-dim\">[A]</span></h1><p class=\"text-overlay1 font-mono text-base tracking-wide mb-8\">Engineer</p><p class=\"mb-5 text-body\">I write about ideas, opportunities and situations I see, so I can learn, and communicate better. I'm trying to take a grounded approach to problem solving, and look at things threw equations, or first principles, with reason assumptions. Any content written is not from an large language model, and the ideas are my own.</p><p class=\"text-overlay1 italic text-sm\">Currently, working on removing dependencies.</p>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 9, "<section id=\"about\" class=\"py-10 px-4 first:pt-16 bg-mantle rounded-lg\"><h1 class=\"text-4xl font-medium tracking-tight leading-tight mb-1\">Jordan Stewart <span class=\"text-surface2\">[A]</span></h1><p class=\"text-overlay1 font-mono text-base tracking-wide mb-8\">Engineer</p><p class=\"mb-5 text-body\">I write about ideas, opportunities and situations I see, so I can learn, and communicate better. I'm trying to take a grounded approach to problem solving, and look at things threw equations, or first principles, with reason assumptions. Any content written is not from an large language model, and the ideas are my own.</p><p class=\"text-overlay1 italic text-sm\">Currently removing dependencies & vulnerabilities.</p>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -229,7 +229,7 @@ func writing(posts []Post) templ.Component {
 			templ_7745c5c3_Var9 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 11, "<section id=\"writings\" class=\"py-10\"><h2 class=\"text-3xl font-medium mb-6 flex items-center gap-3 before:inline before:content-['*'] before:text-mauve before:font-mono before:font-normal before:text-[1.75rem]\">Writings <span class=\"text-dim\">[W]</span></h2>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 11, "<section id=\"writings\" class=\"py-10 px-4 bg-mantle rounded-lg\"><h2 class=\"text-3xl font-medium mb-6 flex items-center gap-3 before:inline before:content-['*'] before:text-mauve before:font-mono before:font-normal before:text-[1.75rem]\">Writings <span class=\"text-surface2\">[W]</span></h2>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -268,7 +268,7 @@ func birb() templ.Component {
 			templ_7745c5c3_Var10 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 13, "<section id=\"birb\" class=\"justify-items-center\"><svg version=\"1.0\" xmlns=\"http://www.w3.org/2000/svg\" width=\"60\" height=\"60\" viewBox=\"0 0 80.000000 82.000000\" preserveAspectRatio=\"xMidYMid meet\"><g transform=\"translate(0.000000,82.000000) scale(0.100000,-0.100000)\" fill=\"#f4dbd6\" stroke=\"none\"><path d=\"M495 718 c-3 -8 -4 -55 -3 -106 l3 -91 105 99 105 99 -65 1 c-36 0 -82 3 -102 6 -28 5 -39 3 -43 -8z\"></path><path d=\"M380 610 l-92 -100 96 0 96 0 0 100 c0 55 -2 100 -4 100 -2 0 -45 -45 -96 -100z\"></path><path d=\"M671 660 c-30 -26 -20 -25 21 0 18 11 26 20 18 20 -8 -1 -26 -10 -39 -20z\"></path><path d=\"M160 585 l0 -75 48 0 c37 0 53 5 69 23 l21 22 -48 53 c-29 30 -57 52 -69 52 -19 0 -21 -6 -21 -75z\"></path><path d=\"M115 630 c-18 -19 -17 -20 3 -20 15 0 22 6 22 20 0 11 -2 20 -3 20 -2 0 -12 -9 -22 -20z\"></path><path d=\"M180 483 c1 -5 47 -57 104 -117 l103 -108 38 103 c21 57 40 110 42 117 4 9 -28 12 -141 12 -80 0 -146 -3 -146 -7z\"></path><path d=\"M463 405 c-6 -16 -27 -74 -47 -127 l-35 -97 45 -26 c25 -15 48 -25 50 -22 3 2 3 71 2 153 -3 125 -5 144 -15 119z\"></path></g></svg></section>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 13, "<section id=\"birb\" class=\"py-4 justify-items-center\"><svg version=\"1.0\" xmlns=\"http://www.w3.org/2000/svg\" width=\"60\" height=\"60\" viewBox=\"0 0 80.000000 82.000000\" preserveAspectRatio=\"xMidYMid meet\"><g transform=\"translate(0.000000,82.000000) scale(0.100000,-0.100000)\" fill=\"#f4dbd6\" stroke=\"none\"><path d=\"M495 718 c-3 -8 -4 -55 -3 -106 l3 -91 105 99 105 99 -65 1 c-36 0 -82 3 -102 6 -28 5 -39 3 -43 -8z\"></path><path d=\"M380 610 l-92 -100 96 0 96 0 0 100 c0 55 -2 100 -4 100 -2 0 -45 -45 -96 -100z\"></path><path d=\"M671 660 c-30 -26 -20 -25 21 0 18 11 26 20 18 20 -8 -1 -26 -10 -39 -20z\"></path><path d=\"M160 585 l0 -75 48 0 c37 0 53 5 69 23 l21 22 -48 53 c-29 30 -57 52 -69 52 -19 0 -21 -6 -21 -75z\"></path><path d=\"M115 630 c-18 -19 -17 -20 3 -20 15 0 22 6 22 20 0 11 -2 20 -3 20 -2 0 -12 -9 -22 -20z\"></path><path d=\"M180 483 c1 -5 47 -57 104 -117 l103 -108 38 103 c21 57 40 110 42 117 4 9 -28 12 -141 12 -80 0 -146 -3 -146 -7z\"></path><path d=\"M463 405 c-6 -16 -27 -74 -47 -127 l-35 -97 45 -26 c25 -15 48 -25 50 -22 3 2 3 71 2 153 -3 125 -5 144 -15 119z\"></path></g></svg></section>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -304,7 +304,7 @@ func writingArticle(post Post, index int) templ.Component {
 		var templ_7745c5c3_Var12 templ.SafeURL
 		templ_7745c5c3_Var12, templ_7745c5c3_Err = templ.JoinURLErrs(templ.SafeURL(post.Metadata.Link))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `blog.templ`, Line: 120, Col: 46}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `blog.templ`, Line: 119, Col: 46}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var12))
 		if templ_7745c5c3_Err != nil {
@@ -317,33 +317,33 @@ func writingArticle(post Post, index int) templ.Component {
 		var templ_7745c5c3_Var13 string
 		templ_7745c5c3_Var13, templ_7745c5c3_Err = templ.JoinStringErrs(post.Metadata.Title)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `blog.templ`, Line: 120, Col: 105}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `blog.templ`, Line: 119, Col: 105}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var13))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 16, " <span class=\"text-dim\">[")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 16, " <span class=\"text-surface2\">[")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var14 string
 		templ_7745c5c3_Var14, templ_7745c5c3_Err = templ.JoinStringErrs(index + 1)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `blog.templ`, Line: 120, Col: 143}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `blog.templ`, Line: 119, Col: 148}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var14))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 17, "]</span></a></p><p class=\"font-mono text-xs tracking-wide text-dim mb-1\">")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 17, "]</span></a></p><p class=\"font-mono text-xs tracking-wide text-overlay0 mb-1\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var15 string
 		templ_7745c5c3_Var15, templ_7745c5c3_Err = templ.JoinStringErrs(post.Metadata.Date.Format("January 2, 2006"))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `blog.templ`, Line: 122, Col: 105}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `blog.templ`, Line: 121, Col: 110}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var15))
 		if templ_7745c5c3_Err != nil {
@@ -386,7 +386,7 @@ func contentPage(title string, date string, body templ.Component) templ.Componen
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 20, "<body class=\"bg-ink text-text font-display text-lg leading-relaxed antialiased\"><main class=\"max-w-[680px] mx-auto px-6 pt-16 pb-24\">")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 20, "<body class=\"bg-crust text-text font-display text-lg leading-relaxed antialiased\"><main class=\"max-w-[680px] bg-mantle mx-auto px-6 pt-16 pb-24 rounded-lg\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -394,7 +394,7 @@ func contentPage(title string, date string, body templ.Component) templ.Componen
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 21, "<!-- this back button has a lot of styles to it... --><a href=\"../../\" class=\"back fixed bottom-8 left-1/2 -translate-x-1/2 py-3 px-5 font-mono text-sm tracking-wide text-mauve border border-border-light rounded-sm hover:border-mauve transition-colors focus-visible:outline-2 focus-visible:outline-mauve focus-visible:outline-offset-2 bg-ink/80 backdrop-blur-sm\" aria-label=\"Back to homepage\">BACK <span class=\"text-dim text-xs not-italic\">[B]</span></a></main>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 21, "<!-- this back button has a lot of styles to it... --><a href=\"../../\" class=\"back fixed bottom-8 left-1/2 -translate-x-1/2 py-3 px-5 font-mono text-sm tracking-wide text-mauve border border-border-light rounded-sm hover:border-mauve transition-colors focus-visible:outline-2 focus-visible:outline-mauve focus-visible:outline-offset-2 bg-base/80 backdrop-blur-sm\" aria-label=\"Back to homepage\">BACK <span class=\"text-surface2 text-xs not-italic\">[B]</span></a></main>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -439,7 +439,7 @@ func indexPage(posts []Post, links []string) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 24, "<body class=\"bg-ink text-text font-display text-lg leading-relaxed antialiased\"><main class=\"max-w-[680px] mx-auto px-6\">")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 24, "<body class=\"bg-crust text-text font-display text-lg leading-relaxed antialiased\"><main class=\"max-w-[680px] mx-auto px-6\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -461,7 +461,7 @@ func indexPage(posts []Post, links []string) templ.Component {
 		}
 		templ_7745c5c3_Var18, templ_7745c5c3_Err := templruntime.ScriptContentOutsideStringLiteral(links)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `blog.templ`, Line: 157, Col: 32}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `blog.templ`, Line: 156, Col: 32}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var18)
 		if templ_7745c5c3_Err != nil {

@@ -36,7 +36,6 @@
             --color-mantle: oklch(0.25 0.03 278);
             --color-crust: oklch(0.22 0.03 281);
 
-            --color-ink: #24273a;
             --color-dim: #5b6078;
             --color-faint: #363a4f;
             --color-body: #b8c0e0;
@@ -49,7 +48,7 @@
             margin-block-start: 1em;
             margin-block-end: 1em;
           }
-        </style></head><body class="bg-ink text-text font-display text-lg leading-relaxed antialiased"><main class="max-w-[680px] mx-auto px-6 pt-16 pb-24"><h1 class="text-4xl font-medium tracking-tight leading-tight mb-1">Python Logger Gotcha</h1><h3 class="font-mono text-sm tracking-wide text-dim mb-8">February 18, 2024</h3><!-- could move this styling--><div class="content [&_ul]:list-disc [&_ul]:list-inside [&_ol]:list-decimal [&_ol]:list-inside [&_a]:text-blue-600 [&_a:hover]:underline"><p>I was having some issues with the logging module in python, so I decided to write a small note about it.</p>
+        </style></head><body class="bg-crust text-text font-display text-lg leading-relaxed antialiased"><main class="max-w-[680px] bg-mantle mx-auto px-6 pt-16 pb-24 rounded-lg"><h1 class="text-4xl font-medium tracking-tight leading-tight mb-1">Python Logger Gotcha</h1><h3 class="font-mono text-sm tracking-wide text-overlay0 mb-8">February 18, 2024</h3><!-- could move this styling--><div class="content [&_ul]:list-disc [&_ul]:list-inside [&_ol]:list-decimal [&_ol]:list-inside [&_a]:text-blue-600 [&_a:hover]:underline"><p>I was having some issues with the logging module in python, so I decided to write a small note about it.</p>
 <p>The python logging module uses oddly uses prototyping to create loggers at the module level. It can make it confusing to understand how to the root logger applied to all loggers, and how a prototyped logger does not have this affect.</p>
 <p>But normally with prototyping once instantiated the prototype should not be impacted by the changes to the original object. But with the logging module, it's the opposite. The prototype is impacted by the changes to the original object.</p>
 <p>So you should see this:</p>
@@ -79,7 +78,7 @@
 </span></span><span style="display:flex;"><span>rootLogger<span style="color:#91d7e3;font-weight:bold">.</span>setLevel(logging<span style="color:#91d7e3;font-weight:bold">.</span>DEBUG)
 </span></span><span style="display:flex;"><span><span style="color:#6e738d;font-style:italic"># have them applied across all loggers in all modules</span>
 </span></span><span style="display:flex;"><span>logger <span style="color:#91d7e3;font-weight:bold">=</span> logging<span style="color:#91d7e3;font-weight:bold">.</span>getLogger(<span style="color:#f4dbd6">__name__</span>)<span style="color:#91d7e3;font-weight:bold">.</span>
-</span></span></code></pre></div><!-- this back button has a lot of styles to it... --><a href="../../" class="back fixed bottom-8 left-1/2 -translate-x-1/2 py-3 px-5 font-mono text-sm tracking-wide text-mauve border border-border-light rounded-sm hover:border-mauve transition-colors focus-visible:outline-2 focus-visible:outline-mauve focus-visible:outline-offset-2 bg-ink/80 backdrop-blur-sm" aria-label="Back to homepage">BACK <span class="text-dim text-xs not-italic">[B]</span></a></main><footer class="text-center text-faint py-2 px-6 font-mono text-xs tracking-widest">Jordan Stewart • © 2026</footer><script>
+</span></span></code></pre></div><!-- this back button has a lot of styles to it... --><a href="../../" class="back fixed bottom-8 left-1/2 -translate-x-1/2 py-3 px-5 font-mono text-sm tracking-wide text-mauve border border-border-light rounded-sm hover:border-mauve transition-colors focus-visible:outline-2 focus-visible:outline-mauve focus-visible:outline-offset-2 bg-base/80 backdrop-blur-sm" aria-label="Back to homepage">BACK <span class="text-surface2 text-xs not-italic">[B]</span></a></main><footer class="text-center text-faint py-2 px-6 font-mono text-xs tracking-widest">Jordan Stewart • © 2026</footer><script>
 				document.addEventListener('keydown', e => {
 				  if (e.key === 'b' || e.key === 'B') document.querySelector('.back').click()
 				})

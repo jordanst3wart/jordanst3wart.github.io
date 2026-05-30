@@ -1,6 +1,6 @@
 ---
 title: Alternative jdk project layouts
-date: '2025-1-19'
+date: '2025-01-19'
 tags: ['jdk', 'maven', 'bazel', 'clojure', 'leiningen', 'kotlin']
 summary: Alternatives jdk project layouts
 ---
@@ -94,5 +94,5 @@ sourceSets {
             srcDirs("test-resources")
         }
     }
-:
+}
 ```

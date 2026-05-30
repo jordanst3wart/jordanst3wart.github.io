@@ -1,6 +1,6 @@
 ---
 title: Don't use terraform workspaces
-date: '2025-1-19'
+date: '2025-01-19'
 tags: ['terraform', 'developer experience', 'workspace']
 summary: 'Terraform workspaces are dangerous and there are better alternatives'
 ---

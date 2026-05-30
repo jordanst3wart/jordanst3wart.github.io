@@ -1,6 +1,6 @@
 ---
-title: Golang Global
-date: '2024-2-21'
+title: Developer Experience of Golang
+date: '2024-02-21'
 tags: ['go', 'developer experience', 'golang', 'Typescript']
 summary: 'Go has an amazing developer experience when compared to Typescript'
 ---

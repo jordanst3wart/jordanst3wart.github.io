@@ -1,6 +1,6 @@
 ---
 title: 'TypeScript has a terrible developer experience'
-date: '2024-2-21'
+date: '2024-02-21'
 tags: ['Typescript', 'developer experience', 'node']
 summary: 'TypeScript has a terrible developer experience tools when compared to go'
 ---

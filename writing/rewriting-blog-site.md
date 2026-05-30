@@ -1,6 +1,6 @@
 ---
 title: Rewriting the website
-date: '2026-5-17'
+date: '2026-05-17'
 tags: ['next 16', 'react', 'Typescript']
 summary: 'Moving to simpler setup'
 ---

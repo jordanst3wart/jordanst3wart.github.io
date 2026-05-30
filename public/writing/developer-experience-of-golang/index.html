@@ -5,7 +5,36 @@
             --font-mono: 'JetBrains Mono', monospace;
             /* 'border' might clash with a tailwind thingy...
             TODO change the names of these colours to the cattppuccino names
+            Colours  from:
+            https://catppuccin.com/palette/
             */
+
+            --color-rosewater: oklch(0.91 0.03 31);
+            --color-flamingo: oklch(0.86 0.05 18);
+            --color-pink: oklch(0.86 0.08 336);
+            --color-mauve: oklch(0.77 0.13 304);
+            --color-red: oklch(0.74 0.13 11);
+            --color-maroon: oklch(0.77 0.1 14);
+            --color-peach: oklch(0.8 0.11 50);
+            --color-yellow: oklch(0.88 0.07 85);
+            --color-green: oklch(0.83 0.11 138);
+            --color-teal: oklch(0.82 0.08 184);
+            --color-sky: oklch(0.84 0.07 209);
+            --color-sapphire: oklch(0.79 0.08 228);
+            --color-blue: oklch(0.75 0.11 264);
+            --color-lavender: oklch(0.81 0.08 280);
+            --color-text: oklch(0.87 0.05 274);
+            --color-subtext1: oklch(0.81 0.05 274);
+            --color-subtext0: oklch(0.75 0.04 274);
+            --color-overlay2: oklch(0.69 0.04 275);
+            --color-overlay1: oklch(0.63 0.04 274);
+            --color-overlay0: oklch(0.56 0.04 276);
+            --color-surface2: oklch(0.49 0.04 276);
+            --color-surface1: oklch(0.43 0.04 277);
+            --color-surface0: oklch(0.35 0.04 276);
+            --color-base: oklch(0.28 0.04 277);
+            --color-mantle: oklch(0.25 0.03 278);
+            --color-crust: oklch(0.22 0.03 281);
 
             --color-ink: #24273a;
             --color-paper: #cad3f5;
@@ -24,18 +53,7 @@
             margin-block-start: 1em;
             margin-block-end: 1em;
           }
-
-          code {
-              background: #363a4f;
-              /*border-2 border-solid*/
-          }
-
-          /*h3 {
-              text-4xl
-          }*/
-          /* need to style ul and ol, and probably different headings as well
-          */
-        </style></head><body class="bg-ink text-paper font-display text-lg leading-relaxed antialiased"><main class="max-w-[680px] mx-auto px-6 pt-16 pb-24"><h1 class="text-4xl font-medium tracking-tight leading-tight mb-1">Developer Experience of Golang</h1><h3 class="font-mono text-sm tracking-wide text-dim mb-8">February 21, 2024</h3><!-- trying the exact formatting of mitchellh.com... i will change it soon added "content" --><div class="content"><p>I find the development process with TypeScript painful in every step of development due to divergent tooling. Conversely, I find using go borrowing as it's very simple in comparison.</p>
+        </style></head><body class="bg-ink text-paper font-display text-lg leading-relaxed antialiased"><main class="max-w-[680px] mx-auto px-6 pt-16 pb-24"><h1 class="text-4xl font-medium tracking-tight leading-tight mb-1">Developer Experience of Golang</h1><h3 class="font-mono text-sm tracking-wide text-dim mb-8">February 21, 2024</h3><!-- could move this styling--><div class="content [&_ul]:list-disc [&_ul]:list-inside [&_ol]:list-decimal [&_ol]:list-inside [&_a]:text-blue-600 [&_a:hover]:underline"><p>I find the development process with TypeScript painful in every step of development due to divergent tooling. Conversely, I find using go borrowing as it's very simple in comparison.</p>
 <p>You can experience this enjoy by simply quickly setting up a basic webserver, as you go through a lot of the steps in the development process. So here we go...</p>
 <p>How fast can you deploy a server in TypeScript from scratch?</p>
 <p>3... 2... 1... go!</p>
@@ -112,7 +130,7 @@ go mod init github.com/jordanst3wart/go-deployment-minimal
 </ul>
 <p>It's a very stream lined experience, and it's so simple that it's quiet boring.</p>
 <p>It's removed several steps in the process, and simplified a lot of the others.</p>
-</div><!-- this back button has a lot of styles to it... --><a href="../../" class="back fixed bottom-8 left-1/2 -translate-x-1/2 py-3 px-5 font-mono text-sm tracking-wide text-gold border border-border-light rounded-sm hover:border-gold transition-colors focus-visible:outline-2 focus-visible:outline-gold focus-visible:outline-offset-2 bg-ink/80 backdrop-blur-sm" aria-label="Back to homepage">BACK <span class="text-dim text-xs not-italic">[B]</span></a></main><footer class="text-center text-faint py-12 px-6 font-mono text-xs tracking-widest">Jordan Stewart • © 2026</footer><script>
+</div><!-- this back button has a lot of styles to it... --><a href="../../" class="back fixed bottom-8 left-1/2 -translate-x-1/2 py-3 px-5 font-mono text-sm tracking-wide text-mauve border border-border-light rounded-sm hover:border-mauve transition-colors focus-visible:outline-2 focus-visible:outline-mauve focus-visible:outline-offset-2 bg-ink/80 backdrop-blur-sm" aria-label="Back to homepage">BACK <span class="text-dim text-xs not-italic">[B]</span></a></main><footer class="text-center text-faint py-2 px-6 font-mono text-xs tracking-widest">Jordan Stewart • © 2026</footer><script>
 				document.addEventListener('keydown', e => {
 				  if (e.key === 'b' || e.key === 'B') document.querySelector('.back').click()
 				})

@@ -9,6 +9,7 @@ import (
 	"log"
 	"os"
 	"path"
+	"slices"
 	"strings"
 	"time"
 
@@ -47,6 +48,10 @@ func main() {
 	if err != nil {
 		log.Fatalf("failed to create output file: %v", err)
 	}
+
+	slices.SortFunc(posts, func(a, b Post) int {
+		return b.Metadata.Date.Time.Compare(a.Metadata.Date.Time)
+	})
 
 	var links []string
 	for index, post := range posts {

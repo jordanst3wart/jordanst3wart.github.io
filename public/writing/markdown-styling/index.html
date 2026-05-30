@@ -1,0 +1,86 @@
+<html><!doctype html><head><title>Markdown styling</title><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400;1,500&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet"><script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script><link rel="icon" type="image/png" sizes="32x32" href="/static/favicon-32x32.png"><link rel="icon" type="image/png" sizes="16x16" href="/static/favicon-16x16.png"><!-- add more random shit there that does in the header site meta things https://github.com/jordanst3wart/stewart.bot/blob/main/data/siteMetadata.ts --><!--TODO move to something like: <link rel="stylesheet" href="app.css"> if you feel like it--><style type="text/tailwindcss">
+		  @import "tailwindcss";
+          @theme {
+            --font-display: 'EB Garamond', Georgia, serif;
+            --font-mono: 'JetBrains Mono', monospace;
+            /* 'border' might clash with a tailwind thingy...
+            TODO change the names of these colours to the cattppuccino names
+            Colours  from:
+            https://catppuccin.com/palette/
+            */
+
+            --color-rosewater: oklch(0.91 0.03 31);
+            --color-flamingo: oklch(0.86 0.05 18);
+            --color-pink: oklch(0.86 0.08 336);
+            --color-mauve: oklch(0.77 0.13 304);
+            --color-red: oklch(0.74 0.13 11);
+            --color-maroon: oklch(0.77 0.1 14);
+            --color-peach: oklch(0.8 0.11 50);
+            --color-yellow: oklch(0.88 0.07 85);
+            --color-green: oklch(0.83 0.11 138);
+            --color-teal: oklch(0.82 0.08 184);
+            --color-sky: oklch(0.84 0.07 209);
+            --color-sapphire: oklch(0.79 0.08 228);
+            --color-blue: oklch(0.75 0.11 264);
+            --color-lavender: oklch(0.81 0.08 280);
+            --color-text: oklch(0.87 0.05 274);
+            --color-subtext1: oklch(0.81 0.05 274);
+            --color-subtext0: oklch(0.75 0.04 274);
+            --color-overlay2: oklch(0.69 0.04 275);
+            --color-overlay1: oklch(0.63 0.04 274);
+            --color-overlay0: oklch(0.56 0.04 276);
+            --color-surface2: oklch(0.49 0.04 276);
+            --color-surface1: oklch(0.43 0.04 277);
+            --color-surface0: oklch(0.35 0.04 276);
+            --color-base: oklch(0.28 0.04 277);
+            --color-mantle: oklch(0.25 0.03 278);
+            --color-crust: oklch(0.22 0.03 281);
+
+            --color-ink: #24273a;
+            --color-paper: #cad3f5;
+            --color-gold: #c6a0f6;
+            --color-gold-light: #b7bdf8;
+            --color-muted: #6e738d;
+            --color-dim: #5b6078;
+            --color-faint: #363a4f;
+            --color-body: #b8c0e0;
+            --color-excerpt: #8087a2;
+            --color-border: #1e2030;
+            --color-border-light: #494d64;
+          }
+
+          p {
+            margin-block-start: 1em;
+            margin-block-end: 1em;
+          }
+        </style></head><body class="bg-ink text-paper font-display text-lg leading-relaxed antialiased"><main class="max-w-[680px] mx-auto px-6 pt-16 pb-24"><h1 class="text-4xl font-medium tracking-tight leading-tight mb-1">Markdown styling</h1><h3 class="font-mono text-sm tracking-wide text-dim mb-8">May 30, 2026</h3><!-- could move this styling--><div class="content [&_ul]:list-disc [&_ul]:list-inside [&_ol]:list-decimal [&_ol]:list-inside [&_a]:text-blue-600 [&_a:hover]:underline"><p>This is some writing to formalise the styling on writing pages. On this website a writing pages is from a markdown files. As I don't want to apply styling directly in markdown to not break my flow when writing, I want to style the html elements in a single place, and have it automatically format the writing.</p>
+<p>So here is the basic syntax (and a new paragraph).</p>
+<p>So an ordered list looks like:</p>
+<ol>
+<li>first element</li>
+<li>second element</li>
+<li>third element</li>
+</ol>
+<p>An unordered list looks like:</p>
+<ul>
+<li>one element</li>
+<li>two elements</li>
+<li>three elements</li>
+</ul>
+<h3>a h3 heading</h3>
+<p>A link looks like <a href="https://stewart.bot">this</a></p>
+<pre style="color:#cad3f5;background-color:#24273a;-webkit-text-size-adjust:none;"><code><span style="display:flex;"><span><span style="color:#6e738d;font-style:italic"># A shell script</span>
+</span></span><span style="display:flex;"><span>ls
+</span></span></code></pre><p>A piece of <code>code</code>.</p>
+<p>A paragraph of text.</p>
+<p>Here is a horizontal rule:</p>
+<hr>
+<p>Here is text below the horizontal rule.</p>
+<p>Here is some <strong>bold text</strong>. Here is some <em><strong>italics</strong></em>.</p>
+<p>Here is a nice image:
+<a href="https://www.flickr.com/photos/beaurogers/31833779864/in/photolist-Qv3rFw-34mt9F-a9Cmfy-5Ha3Zi-9msKdv-o3hgjr-hWpUte-4WMsJ1-KUQ8N-deshUb-vssBD-6CQci6-8AFCiD-zsJWT-nNfsgB-dPDwZJ-bn9JGn-5HtSXY-6CUhAL-a4UTXB-ugPum-KUPSo-fBLNm-6CUmpy-4WMsc9-8a7D3T-83KJev-6CQ2bK-nNusHJ-a78rQH-nw3NvT-7aq2qf-8wwBso-3nNceh-ugSKP-4mh4kh-bbeeqH-a7biME-q3PtTf-brFpgb-cg38zw-bXMZc-nJPELD-f58Lmo-bXMYG-bz8AAi-bxNtNT-bXMYi-bXMY6-bXMYv"><img src="/assets/images/shiprock.jpg" alt="An old rock in the desert" title="Shiprock, New Mexico by Beau Rogers"></a></p>
+</div><!-- this back button has a lot of styles to it... --><a href="../../" class="back fixed bottom-8 left-1/2 -translate-x-1/2 py-3 px-5 font-mono text-sm tracking-wide text-mauve border border-border-light rounded-sm hover:border-mauve transition-colors focus-visible:outline-2 focus-visible:outline-mauve focus-visible:outline-offset-2 bg-ink/80 backdrop-blur-sm" aria-label="Back to homepage">BACK <span class="text-dim text-xs not-italic">[B]</span></a></main><footer class="text-center text-faint py-2 px-6 font-mono text-xs tracking-widest">Jordan Stewart • © 2026</footer><script>
+				document.addEventListener('keydown', e => {
+				  if (e.key === 'b' || e.key === 'B') document.querySelector('.back').click()
+				})
+			</script><!-- add random google tag shit here --></body></html>

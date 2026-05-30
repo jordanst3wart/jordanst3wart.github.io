@@ -5,7 +5,36 @@
             --font-mono: 'JetBrains Mono', monospace;
             /* 'border' might clash with a tailwind thingy...
             TODO change the names of these colours to the cattppuccino names
+            Colours  from:
+            https://catppuccin.com/palette/
             */
+
+            --color-rosewater: oklch(0.91 0.03 31);
+            --color-flamingo: oklch(0.86 0.05 18);
+            --color-pink: oklch(0.86 0.08 336);
+            --color-mauve: oklch(0.77 0.13 304);
+            --color-red: oklch(0.74 0.13 11);
+            --color-maroon: oklch(0.77 0.1 14);
+            --color-peach: oklch(0.8 0.11 50);
+            --color-yellow: oklch(0.88 0.07 85);
+            --color-green: oklch(0.83 0.11 138);
+            --color-teal: oklch(0.82 0.08 184);
+            --color-sky: oklch(0.84 0.07 209);
+            --color-sapphire: oklch(0.79 0.08 228);
+            --color-blue: oklch(0.75 0.11 264);
+            --color-lavender: oklch(0.81 0.08 280);
+            --color-text: oklch(0.87 0.05 274);
+            --color-subtext1: oklch(0.81 0.05 274);
+            --color-subtext0: oklch(0.75 0.04 274);
+            --color-overlay2: oklch(0.69 0.04 275);
+            --color-overlay1: oklch(0.63 0.04 274);
+            --color-overlay0: oklch(0.56 0.04 276);
+            --color-surface2: oklch(0.49 0.04 276);
+            --color-surface1: oklch(0.43 0.04 277);
+            --color-surface0: oklch(0.35 0.04 276);
+            --color-base: oklch(0.28 0.04 277);
+            --color-mantle: oklch(0.25 0.03 278);
+            --color-crust: oklch(0.22 0.03 281);
 
             --color-ink: #24273a;
             --color-paper: #cad3f5;
@@ -24,18 +53,7 @@
             margin-block-start: 1em;
             margin-block-end: 1em;
           }
-
-          code {
-              background: #363a4f;
-              /*border-2 border-solid*/
-          }
-
-          /*h3 {
-              text-4xl
-          }*/
-          /* need to style ul and ol, and probably different headings as well
-          */
-        </style></head><body class="bg-ink text-paper font-display text-lg leading-relaxed antialiased"><main class="max-w-[680px] mx-auto px-6 pt-16 pb-24"><h1 class="text-4xl font-medium tracking-tight leading-tight mb-1">Python Logger Gotcha</h1><h3 class="font-mono text-sm tracking-wide text-dim mb-8">February 18, 2024</h3><!-- trying the exact formatting of mitchellh.com... i will change it soon added "content" --><div class="content"><p>I was having some issues with the logging module in python, so I decided to write a small note about it.</p>
+        </style></head><body class="bg-ink text-paper font-display text-lg leading-relaxed antialiased"><main class="max-w-[680px] mx-auto px-6 pt-16 pb-24"><h1 class="text-4xl font-medium tracking-tight leading-tight mb-1">Python Logger Gotcha</h1><h3 class="font-mono text-sm tracking-wide text-dim mb-8">February 18, 2024</h3><!-- could move this styling--><div class="content [&_ul]:list-disc [&_ul]:list-inside [&_ol]:list-decimal [&_ol]:list-inside [&_a]:text-blue-600 [&_a:hover]:underline"><p>I was having some issues with the logging module in python, so I decided to write a small note about it.</p>
 <p>The python logging module uses oddly uses prototyping to create loggers at the module level. It can make it confusing to understand how to the root logger applied to all loggers, and how a prototyped logger does not have this affect.</p>
 <p>But normally with prototyping once instantiated the prototype should not be impacted by the changes to the original object. But with the logging module, it's the opposite. The prototype is impacted by the changes to the original object.</p>
 <p>So you should see this:</p>
@@ -65,7 +83,7 @@
 </span></span><span style="display:flex;"><span>rootLogger<span style="color:#91d7e3;font-weight:bold">.</span>setLevel(logging<span style="color:#91d7e3;font-weight:bold">.</span>DEBUG)
 </span></span><span style="display:flex;"><span><span style="color:#6e738d;font-style:italic"># have them applied across all loggers in all modules</span>
 </span></span><span style="display:flex;"><span>logger <span style="color:#91d7e3;font-weight:bold">=</span> logging<span style="color:#91d7e3;font-weight:bold">.</span>getLogger(<span style="color:#f4dbd6">__name__</span>)<span style="color:#91d7e3;font-weight:bold">.</span>
-</span></span></code></pre></div><!-- this back button has a lot of styles to it... --><a href="../../" class="back fixed bottom-8 left-1/2 -translate-x-1/2 py-3 px-5 font-mono text-sm tracking-wide text-gold border border-border-light rounded-sm hover:border-gold transition-colors focus-visible:outline-2 focus-visible:outline-gold focus-visible:outline-offset-2 bg-ink/80 backdrop-blur-sm" aria-label="Back to homepage">BACK <span class="text-dim text-xs not-italic">[B]</span></a></main><footer class="text-center text-faint py-12 px-6 font-mono text-xs tracking-widest">Jordan Stewart • © 2026</footer><script>
+</span></span></code></pre></div><!-- this back button has a lot of styles to it... --><a href="../../" class="back fixed bottom-8 left-1/2 -translate-x-1/2 py-3 px-5 font-mono text-sm tracking-wide text-mauve border border-border-light rounded-sm hover:border-mauve transition-colors focus-visible:outline-2 focus-visible:outline-mauve focus-visible:outline-offset-2 bg-ink/80 backdrop-blur-sm" aria-label="Back to homepage">BACK <span class="text-dim text-xs not-italic">[B]</span></a></main><footer class="text-center text-faint py-2 px-6 font-mono text-xs tracking-widest">Jordan Stewart • © 2026</footer><script>
 				document.addEventListener('keydown', e => {
 				  if (e.key === 'b' || e.key === 'B') document.querySelector('.back').click()
 				})

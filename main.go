@@ -181,3 +181,21 @@ func (d *CustomDate) UnmarshalYAML(value *yaml.Node) error {
 	d.Time = t
 	return nil
 }
+
+/*
+func WriteRobotsTxt(outDir string) {
+	// TODO
+	User-Agent: *
+	Allow: /
+
+	Host: https://stewart.bot
+	Sitemap: https://stewart.bot/sitemap.xml
+}
+
+func WriteSiteMap(posts []Post, outDir string) {
+
+}
+
+I should do a redirect as well
+
+*/

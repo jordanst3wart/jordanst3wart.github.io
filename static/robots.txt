@@ -1,0 +1,5 @@
+User-Agent: *
+Allow: /
+
+Host: https://stewart.bot
+Sitemap: https://stewart.bot/sitemap.xml

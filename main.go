@@ -89,6 +89,8 @@ func main() {
 			log.Fatalf("failed to write output file: %v", err)
 		}
 	}
+	copyStaticToPublic()
+	WriteSiteMap(posts, "public")
 }
 
 func fileExists(path string) bool {
@@ -182,20 +184,14 @@ func (d *CustomDate) UnmarshalYAML(value *yaml.Node) error {
 	return nil
 }
 
-/*
-func WriteRobotsTxt(outDir string) {
-	// TODO
-	User-Agent: *
-	Allow: /
-
-	Host: https://stewart.bot
-	Sitemap: https://stewart.bot/sitemap.xml
+func copyStaticToPublic() {
+	src := path.Join("static")  // "./my-source-folder"
+	dest := path.Join("public") // ./my-destination-folder"
+	srcFS := os.DirFS(src)
+	err := os.CopyFS(dest, srcFS)
+	if err != nil {
+		log.Fatalf("failed to copy static assets, error: %v", err)
+	}
 }
 
-func WriteSiteMap(posts []Post, outDir string) {
-
-}
-
-I should do a redirect as well
-
-*/
+// TODO gtag for google tracking

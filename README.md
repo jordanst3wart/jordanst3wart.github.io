@@ -1,4 +1,3 @@
-TODO: redirect from blog to writing...
 TODO: gtag
 TODO: CNAME and change hosting
 

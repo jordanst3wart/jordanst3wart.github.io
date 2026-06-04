@@ -91,6 +91,7 @@ func main() {
 	}
 	copyStaticToPublic()
 	WriteSiteMap(posts, "public")
+	redirectsForEachPosts(posts)
 }
 
 func fileExists(path string) bool {
@@ -185,8 +186,8 @@ func (d *CustomDate) UnmarshalYAML(value *yaml.Node) error {
 }
 
 func copyStaticToPublic() {
-	src := path.Join("static")  // "./my-source-folder"
-	dest := path.Join("public") // ./my-destination-folder"
+	src := path.Join("static")
+	dest := path.Join("public")
 	srcFS := os.DirFS(src)
 	err := os.CopyFS(dest, srcFS)
 	if err != nil {
@@ -194,4 +195,23 @@ func copyStaticToPublic() {
 	}
 }
 
-// TODO gtag for google tracking
+func redirectsForEachPosts(posts []Post) {
+	for _, post := range posts {
+		redirect := path.Join("writing", slug.Make(post.Metadata.Title))
+		dir := path.Join("public", "blog", slug.Make(post.Metadata.Title))
+		if err := os.MkdirAll(dir, 0o755); err != nil && err != os.ErrExist {
+			log.Fatalf("failed to create dir %q: %v", dir, err)
+		}
+
+		name := path.Join(dir, "index.html")
+		file, err := os.Create(name)
+		if err != nil {
+			log.Fatalf("failed to create output file: %v", err)
+		}
+
+		err = redirectPage(post.Metadata.Title, redirect).Render(context.Background(), file)
+		if err != nil {
+			log.Fatalf("failed to write output file: %v", err)
+		}
+	}
+}

@@ -127,7 +127,8 @@ templ writingArticle(post Post, index int) {
 }
 
 templ contentPage(title string, date string, body templ.Component) {
-	<html>
+	<!DOCTYPE html>
+	<html lang="en">
 		@headerComponent(title)
 		<body class="bg-crust text-text font-display text-lg leading-relaxed antialiased">
 			<main class="max-w-[680px] bg-mantle mx-auto px-6 pt-16 pb-24 rounded-lg">
@@ -147,7 +148,8 @@ templ contentPage(title string, date string, body templ.Component) {
 }
 
 templ indexPage(posts []Post, links []string) {
-	<html>
+	<!DOCTYPE html>
+	<html lang="en">
 		@headerComponent("Jordan Stewart")
 		<body class="bg-crust text-text font-display text-lg leading-relaxed antialiased">
 			/* @nav() */

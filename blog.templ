@@ -64,6 +64,7 @@ templ headerComponent(title string) {
 
 templ contentComponent(title string, date string, body templ.Component) {
 	<h1 class="text-4xl font-medium tracking-tight leading-tight mb-1">{ title }</h1>
+	<hr/>
 	<h3 class="font-mono text-sm tracking-wide text-overlay0 mb-8">{ date }</h3>
 	<!-- could move this styling-->
 	<div class="content [&_ul]:list-disc [&_ul]:list-inside [&_ol]:list-decimal [&_ol]:list-inside [&_a]:text-blue [&_a:hover]:underline [&_h3]:text-xl font-mono">
@@ -85,6 +86,7 @@ templ links() {
 templ about() {
 	<section id="about" class="py-10 px-3 first:pt-16 bg-mantle rounded-lg">
 		<h1 class="text-4xl font-medium tracking-tight leading-tight mb-1 text-rosewater">Jordan Stewart <span class="text-surface2">[A]</span></h1>
+		<hr/>
 		<p class="text-pink font-mono italic text-base tracking-wide mb-8">Engineer</p>
 		<p class="mb-5 text-body font-mono">Welcome to my tiny abode. Here in this virtual space I write about observations, ideas, and opportunities, so I can sharpen my communicating skills, or maybe even build a brand for myself. I'm trying to take a grounded approach to exploring, and solving, and look at situations with sound logic. Any content written is not from an large language model, and the ideas are my own.</p>
 		<p class="italic text-green">Currently trying to delete coworkers vibed code.</p>
@@ -94,7 +96,8 @@ templ about() {
 
 templ writing(posts []Post) {
 	<section id="writings" class="py-10 px-3 bg-mantle rounded-lg">
-		<h2 class="text-3xl font-medium mb-6 flex items-center gap-3 before:inline before:content-['*'] before:text-mauve before:font-mono before:font-normal before:text-[1.75rem] text-rosewater">Writings <span class="text-surface2">[W]</span></h2>
+		<h2 class="text-3xl font-medium mb-1 flex items-center gap-3 before:inline before:content-['*'] before:text-mauve before:font-mono before:font-normal before:text-[1.75rem] text-rosewater">Writings <span class="text-surface2">[W]</span></h2>
+		<hr/>
 		for index, post := range posts {
 			@writingArticle(post, index)
 		}
@@ -108,13 +111,23 @@ templ birb() {
 }
 
 templ writingArticle(post Post, index int) {
-	<!-- border border is weird -->
-	<div class="py-3 border-b border-border last:border-0">
-		<p class="text-2xl font-medium mb-1">
-			<a href={ templ.SafeURL(post.Metadata.Link) } class="text-text hover:text-mauve">{ post.Metadata.Title } <span class="text-surface2">[{ index + 1 }]</span></a>
-		</p>
-		<p class="font-mono text-sm tracking-wide text-overlay0 mb-1">{ post.Metadata.Date.Format("January 2, 2006") }</p>
-	</div>
+	if index % 2 == 0 {
+		<!-- border border is weird -->
+		<div class="py-3 border-b border-border last:border-0 bg-mantle rounded-md">
+			<p class="px-2 text-2xl font-medium mb-1">
+				<a href={ templ.SafeURL(post.Metadata.Link) } class="text-text hover:text-mauve">{ post.Metadata.Title } <span class="text-surface2">[{ index + 1 }]</span></a>
+			</p>
+			<p class="px-2 font-mono text-sm tracking-wide text-overlay0 mb-1">{ post.Metadata.Date.Format("January 2, 2006") }</p>
+		</div>
+	} else {
+		<!-- border border is weird -->
+		<div class="py-3 border-b border-border last:border-0 bg-base rounded-md">
+			<p class="px-2 text-2xl font-medium mb-1">
+				<a href={ templ.SafeURL(post.Metadata.Link) } class="text-text hover:text-mauve">{ post.Metadata.Title } <span class="text-surface2">[{ index + 1 }]</span></a>
+			</p>
+			<p class="px-2 font-mono text-sm tracking-wide text-overlay0 mb-1">{ post.Metadata.Date.Format("January 2, 2006") }</p>
+		</div>
+	}
 }
 
 templ contentPage(title string, date string, body templ.Component) {

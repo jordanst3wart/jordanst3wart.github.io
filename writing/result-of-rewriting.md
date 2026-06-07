@@ -1,5 +1,5 @@
 ---
-title: Result of writing the website
+title: Result of rewriting the website
 date: '2026-06-06'
 tags: ['templ', 'react', 'Typescript']
 summary: 'Moved to simpler setup'

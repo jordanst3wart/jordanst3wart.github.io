@@ -170,7 +170,8 @@ templ indexPage(posts []Post, links []string) {
 }
 
 templ redirectPage(title, slug string) {
-	<html>
+	<!DOCTYPE html>
+	<html lang="en">
 		@headerComponent(title)
 		<body class="bg-crust text-text font-display text-lg leading-relaxed antialiased">
 			<main class="max-w-[680px] bg-mantle mx-auto px-6 pt-16 pb-24 rounded-lg">

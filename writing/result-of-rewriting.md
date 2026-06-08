@@ -7,6 +7,8 @@ summary: 'Moved to simpler setup'
 
 So I rewrote the blog from scratch. I used templ, and go to compile static html pages, and tailwind css v4 for the styling. The static html pages are then served with a web server.
 
+[![Some artwork](/silent_paths_of_japan_by_bogi380.jpg "Silent Paths of Japan by Bogi380")](https://www.deviantart.com/bogi380/art/Silent-Paths-of-Japan-1342210952)
+
 This is the result:
 - total lines of code from `1839` to `517`
 - number of dependencies from `1511` to `118` with depth of 2 for the old codebase, and about 50 dependencies coming in from `air` cli tool in go
@@ -18,6 +20,7 @@ So the number of lines of code was reduced by 4x... and the stewart.bot codebase
 I think this exercise was worth it. I went from having a broken next.js build, and not being able to publish blogs, to having a lot more minimistic styled "writings" website. I learnt a lot about styling blogs, and not just have a generic webpage. I found it interesting comparing my blog website to other dev blog websites with similar domains as me, such as [stewart.io](https://stewart.io) - minimistic and nice, and [stewart.dev](https://stewart.dev) - boring and plain consulting site. I didn't think i realised how many boring generic blog website there are. Here is another two nice blog website:
 - [k10s](https://blog.k10s.dev/im-going-back-to-writing-code-by-hand/)
 - [Mo Bitar](https://atmoio.substack.com/p/after-two-years-of-vibecoding-im)
+- [Bryan Cantrill](https://bcantrill.dtrace.org/2026/04/12/the-peril-of-laziness-lost/#)
 
 Both of those actually use blog templates, or 3rd parties.
 
@@ -42,8 +45,8 @@ Total: 1,839 lines
 #### Number of dependencies
 #### new codebase
 27 in my go.sum file
-109 in air (https://github.com/air-verse/air/blob/master/go.sum)
-24 in templ (https://github.com/a-h/templ/blob/main/go.sum)
+109 in [air](https://github.com/air-verse/air/blob/master/go.sum)
+24 in [templ](https://github.com/a-h/templ/blob/main/go.sum)
 160 in total, filtering out duplicates means there is 118 dependencies
 
 Or:

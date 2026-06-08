@@ -1,6 +1,8 @@
 TODO: gtag
+TODO: fix markdown quotes
+TODO: fix headings and things in markdown
 TODO: trial mocha theme for greater contrast
-TODO: trial a different font on the blog page like github's Mona Sans font
+
 
 Search details at:
 https://search.google.com/u/1/search-console?resource_id=sc-domain%3Astewart.bot&after_verification_success=

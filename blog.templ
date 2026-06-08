@@ -63,9 +63,9 @@ templ headerComponent(title string) {
 }
 
 templ contentComponent(title string, date string, body templ.Component) {
-	<h1 class="text-4xl font-medium tracking-tight leading-tight mb-1">{ title }</h1>
+	<h1 class="text-4xl mb-1 text-rosewater">{ title }</h1>
 	<hr/>
-	<h3 class="font-mono text-sm tracking-wide text-overlay0 mb-8">{ date }</h3>
+	<h3 class="font-mono text-sm tracking-wide text-overlay0 mb-8 mt-1">{ date }</h3>
 	<!-- could move this styling-->
 	<div class="content [&_ul]:list-disc [&_ul]:list-inside [&_ol]:list-decimal [&_ol]:list-inside [&_a]:text-blue [&_a:hover]:underline [&_h3]:text-xl font-mono">
 		@body

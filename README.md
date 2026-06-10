@@ -2,7 +2,9 @@ TODO: gtag
 TODO: fix markdown quotes
 TODO: fix headings and things in markdown
 TODO: trial mocha theme for greater contrast
-
+TODO: read more of this https://wiki.c2.com/?LazinessImpatienceHubris
+TODO: read this guys blog: https://bcantrill.dtrace.org/2026/04/12/the-peril-of-laziness-lost/#
+TODO: read more of Martin Fowler...
 
 Search details at:
 https://search.google.com/u/1/search-console?resource_id=sc-domain%3Astewart.bot&after_verification_success=

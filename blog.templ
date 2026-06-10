@@ -72,7 +72,8 @@ templ contentComponent(title string, date string, body templ.Component) {
 	<div
 		class="content [&_ul]:list-disc [&_ul]:list-inside [&_ol]:list-decimal [&_ol]:list-inside
 		[&_a]:text-blue [&_a:hover]:underline [&_h3]:text-xl [&_ul]:marker:text-lavender [&_ol]:marker:text-lavender
-	 	[&_strong]:text-lavender [&_code]:text-subtext0"
+	 	[&_strong]:text-lavender [&_code]:text-subtext0
+		[&_blockquote]:p-3 [&_blockquote]:mx-1 [&_blockquote]:border-s-4 [&_blockquote]:border-default [&_blockquote]:text-subtext0 [&_blockquote]:italic"
 	>
 		@body
 	</div>

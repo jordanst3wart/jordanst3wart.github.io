@@ -2,90 +2,94 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://stewart.bot/</loc>
-    <lastmod>2026-06-11</lastmod>
+    <lastmod>2026-06-13</lastmod>
+  </url>
+  <url>
+    <loc>https://stewart.bot/writing/say-the-line</loc>
+    <lastmod>2026-06-13</lastmod>
   </url>
   <url>
     <loc>https://stewart.bot/writing/error-handling-of-different-languages</loc>
-    <lastmod>2026-06-11</lastmod>
+    <lastmod>2026-06-13</lastmod>
   </url>
   <url>
     <loc>https://stewart.bot/writing/lines-spents</loc>
-    <lastmod>2026-06-11</lastmod>
+    <lastmod>2026-06-13</lastmod>
   </url>
   <url>
     <loc>https://stewart.bot/writing/result-of-rewriting-the-website</loc>
-    <lastmod>2026-06-11</lastmod>
+    <lastmod>2026-06-13</lastmod>
   </url>
   <url>
     <loc>https://stewart.bot/writing/markdown-styling</loc>
-    <lastmod>2026-06-11</lastmod>
+    <lastmod>2026-06-13</lastmod>
   </url>
   <url>
     <loc>https://stewart.bot/writing/rewriting-the-website</loc>
-    <lastmod>2026-06-11</lastmod>
+    <lastmod>2026-06-13</lastmod>
   </url>
   <url>
     <loc>https://stewart.bot/writing/why-open-banking-failed-in-australia-but-succeeded-in-the-uk</loc>
-    <lastmod>2026-06-11</lastmod>
-  </url>
-  <url>
-    <loc>https://stewart.bot/writing/terraform-map</loc>
-    <lastmod>2026-06-11</lastmod>
+    <lastmod>2026-06-13</lastmod>
   </url>
   <url>
     <loc>https://stewart.bot/writing/writing-a-terraform-variables-parser-and-writer</loc>
-    <lastmod>2026-06-11</lastmod>
+    <lastmod>2026-06-13</lastmod>
+  </url>
+  <url>
+    <loc>https://stewart.bot/writing/terraform-map</loc>
+    <lastmod>2026-06-13</lastmod>
   </url>
   <url>
     <loc>https://stewart.bot/writing/wordpress-dilemma</loc>
-    <lastmod>2026-06-11</lastmod>
+    <lastmod>2026-06-13</lastmod>
   </url>
   <url>
     <loc>https://stewart.bot/writing/exploring-the-strategy-pattern</loc>
-    <lastmod>2026-06-11</lastmod>
+    <lastmod>2026-06-13</lastmod>
   </url>
   <url>
     <loc>https://stewart.bot/writing/dont-use-terraform-workspaces</loc>
-    <lastmod>2026-06-11</lastmod>
+    <lastmod>2026-06-13</lastmod>
   </url>
   <url>
     <loc>https://stewart.bot/writing/alternative-jdk-project-layouts</loc>
-    <lastmod>2026-06-11</lastmod>
+    <lastmod>2026-06-13</lastmod>
   </url>
   <url>
     <loc>https://stewart.bot/writing/odd-things-with-terraform</loc>
-    <lastmod>2026-06-11</lastmod>
+    <lastmod>2026-06-13</lastmod>
   </url>
   <url>
     <loc>https://stewart.bot/writing/git-personal-and-company-profile</loc>
-    <lastmod>2026-06-11</lastmod>
+    <lastmod>2026-06-13</lastmod>
   </url>
   <url>
     <loc>https://stewart.bot/writing/python-programming-blog</loc>
-    <lastmod>2026-06-11</lastmod>
+    <lastmod>2026-06-13</lastmod>
   </url>
   <url>
     <loc>https://stewart.bot/writing/python-coding-challenges</loc>
-    <lastmod>2026-06-11</lastmod>
+    <lastmod>2026-06-13</lastmod>
   </url>
   <url>
     <loc>https://stewart.bot/writing/nushell-setup</loc>
-    <lastmod>2026-06-11</lastmod>
+    <lastmod>2026-06-13</lastmod>
   </url>
   <url>
     <loc>https://stewart.bot/writing/redux-is-not-needed-anymore</loc>
-    <lastmod>2026-06-11</lastmod>
+    <lastmod>2026-06-13</lastmod>
   </url>
   <url>
     <loc>https://stewart.bot/writing/typescript-has-a-terrible-developer-experience</loc>
-    <lastmod>2026-06-11</lastmod>
+    <lastmod>2026-06-13</lastmod>
   </url>
   <url>
     <loc>https://stewart.bot/writing/developer-experience-of-golang</loc>
-    <lastmod>2026-06-11</lastmod>
+    <lastmod>2026-06-13</lastmod>
   </url>
   <url>
     <loc>https://stewart.bot/writing/python-logger-gotcha</loc>
-    <lastmod>2026-06-11</lastmod>
+    <lastmod>2026-06-13</lastmod>
   </url>
 </urlset>

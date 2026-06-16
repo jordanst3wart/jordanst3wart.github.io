@@ -26,7 +26,7 @@ If has 7 lines of error handling code.
 
 Let's see what it looks like in different languages.
 
-Python:
+**Python:**
 ```python
 from typing import Optional
 
@@ -50,7 +50,7 @@ def convert_and_print_with_error(a: str, b: str):
 ```
 But that doesn't handle the error, which might be okay for short scripts. I would rather just handle the error though.
 
-TypeScript:
+**TypeScript:**
 ```TypeScript
 function convertAndPrint(a: string, b: string): void {
     const num1 = Number(a);
@@ -69,7 +69,7 @@ I normally associate a `NaN` with a float. It's weird having it with a int. I re
 
 Apparently, `parseInt("10px",10)` returns `10` as well... So you use `Number("10px")`. This might not be TypeScript's fault, it seems like poor JavaScript functions defined to not crash.
 
-Rust:
+**Rust:**
 ```rust
 use std::num::ParseIntError;
 
@@ -83,7 +83,7 @@ fn convert_and_print(a: &str, b: &str) -> Result<(), ParseIntError> {
 ```
 The type `Result<(), ParseIntError>` seems complicated already. The `?` seems nice, but i guess that leads you to optimistic error handling. I'm a bit confused with the `.parse()` not having a type as well.
 
-Zig:
+**Zig:**
 ```zig
 const std = @import("std");
 
@@ -98,7 +98,7 @@ fn convertAndPrint(a: []const u8, b: []const u8) !void {
 I don't like the namespace `std.fmt.parseInt`. I feel like you should just be able to import that function. I'm confused about a string being a `[]const u8` as well. I do like `!void` being neither an error, or nothing. I do like the `try` statement, better than `?` at the end. I don't get the `.{num1 + num2}`, why is it not just `num1 + num2`.
 
 
-Kotlin:
+**Kotlin:**
 ```kotlin
 fun convertAndPrint(a: String, b: String) {
     val num1 = a.toIntOrNull() ?: return
@@ -108,7 +108,7 @@ fun convertAndPrint(a: String, b: String) {
 }
 ```
 Or:
-```
+```kotlin
 @Throws(NumberFormatException::class)
 fun convertAndPrintOrThrow(a: String, b: String) {
     val num1 = a.toInt()
@@ -120,7 +120,7 @@ fun convertAndPrintOrThrow(a: String, b: String) {
 I guess the first isn't valid as it doesn't handle the error, and the second one doesn't explicity show where the error is coming from, which could make it harder with longer functions.
 
 
-Scala:
+**Scala:**
 ```scala
 def convertAndPrintEarlyReturn(a: String, b: String): Unit =
   val num1 = a.toIntOption.getOrElse(return)
@@ -131,8 +131,10 @@ def convertAndPrintEarlyReturn(a: String, b: String): Unit =
 Or
 ```scala
 def convertAndPrintEarlyReturn(a: String, b: String): Unit =
-  val num1 = a.toIntOption.getOrElse(throw new IllegalArgumentException("Failed to parse int a"))
-  val num2 = b.toIntOption.getOrElse(throw new IllegalArgumentException("Failed to parse int b"))
+  val num1 = a.toIntOption
+    .getOrElse(throw new IllegalArgumentException("Failed to parse int a"))
+  val num2 = b.toIntOption
+    .getOrElse(throw new IllegalArgumentException("Failed to parse int b"))
 
   println(num1 + num2)
 ```
@@ -142,7 +144,7 @@ I thought scala, and kotlin would be like rust, and zig, but they are all differ
 I don't feel like there is a clear winner, and loser. I might try to combine the best though... let's see.
 
 
-Best:
+**Best:**
 ```text
 fn convertAndPrint(a, b string) !void {
   num1 := try parseInt(a)

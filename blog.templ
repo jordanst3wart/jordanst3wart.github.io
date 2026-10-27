@@ -183,18 +183,3 @@ templ indexPage(posts []Post, links []string) {
 	</html>
 }
 
-templ redirectPage(title, slug string) {
-	<!DOCTYPE html>
-	<html lang="en">
-		@headerComponent(title)
-		<body class="bg-crust text-text font-display text-lg leading-relaxed antialiased">
-			<main class="max-w-[680px] bg-mantle mx-auto px-6 pt-16 pb-24 rounded-lg">
-				<!-- this back button has a lot of styles to it... -->
-			</main>
-			@footer()
-		</body>
-		<script>
-          window.location.href = "https://stewart.bot/{{ slug }}";
-		</script>
-	</html>
-}

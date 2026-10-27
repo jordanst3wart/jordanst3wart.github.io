@@ -5,7 +5,7 @@ clean_on_exit = true
 [build]
 # need to run server in cmd/server/main.go
 # don't need to delete public now, the main.go deletes that
-cmd = "templ generate && rm -rf public && go build -o ./tmp/main"
+cmd = "go tool templ generate && rm -rf public && go build -o ./tmp/main"
 entrypoint = "./tmp/main"
 exclude_dir = ["public"]
 include_ext = ["go", "templ"]

@@ -1,3 +1,17 @@
+# run
+
+```sh
+go get -tool github.com/air-verse/air@latest
+go get -tool github.com/a-h/templ/cmd/templ@latest
+go tool air -v
+
+```
+and you need a:
+```sh
+cd cmd/server; go run main.go 
+```
+
+
 TODO: gtag
 TODO: fix markdown quotes
 TODO: fix headings and things in markdown
